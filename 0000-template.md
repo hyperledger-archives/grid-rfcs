@@ -1,7 +1,7 @@
 - Feature Name: (fill me in with a unique identifier, my_awesome_feature)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: (leave this empty)
-- Grid Issue: (leave this empty)
+- Hyperledger Grid Issue: (leave this empty)
 
 # Summary
 [summary]: #summary
