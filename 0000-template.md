@@ -1,7 +1,7 @@
 - Feature Name: (fill me in with a unique identifier, my_awesome_feature)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: (leave this empty)
-- Sawtooth Issue: (leave this empty)
+- Grid Issue: (leave this empty)
 
 # Summary
 [summary]: #summary
@@ -17,18 +17,18 @@ outcome?
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-Explain the proposal as if it was already included in Sawtooth and you were
-teaching it to another Sawtooth programmer. That generally means:
+Explain the proposal as if it was already included in Grid and you were
+teaching it to another Grid programmer. That generally means:
 
 - Introducing new named concepts.
 - Explaining the feature largely in terms of examples.
-- Explaining how Sawtooth programmers should *think* about the feature, and how
-  it should impact the way they use Sawtooth. It should explain the impact as
+- Explaining how Grid programmers should *think* about the feature, and how it
+  should impact the way they use Grid. It should explain the impact as
   concretely as possible.
 - If applicable, provide sample error messages, deprecation warnings, or
   migration guidance.
 - If applicable, describe the differences between teaching this to existing
-  Sawtooth programmers and new Sawtooth programmers.
+  Grid programmers and new Grid programmers.
 - If applicable, describe any changes that may affect the security of
   communications or administration.
 
@@ -88,7 +88,7 @@ interesting to us whether they are brand new or if it is an adaptation.
 
 Note that while precedent set by other distributed ledgers is some motivation,
 it does not on its own motivate an RFC.  Please also take into consideration
-that Sawtooth sometimes intentionally diverges from common distributed
+that Grid sometimes intentionally diverges from common distributed
 ledger/blockchain features.
 
 # Unresolved questions
