@@ -450,7 +450,7 @@ Schemas are uniquely referenced by their unique schema name. For example:
     set_schema(schema_name, schema)
 ```
 
-### Schema Addressing in the Transact Merkle-Radix State System
+### Schema Addressing in the Merkle-Radix State System
 
 All Grid addresses start with the 6-hex-character namespace prefix "621dee".
 Schemas are further prefixed under the Grid namespace with reserved "01", which
