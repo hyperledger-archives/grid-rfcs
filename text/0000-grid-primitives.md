@@ -593,8 +593,11 @@ structures.
 # Prior Art
 [prior-art]: #prior-art
 
-These types are adapted from the original Sawtooth Supply Chain Transaction
-Family Specification and the expanded data types RFC, Sawtooth RFC 13.
+These types are adapted from the original [Sawtooth Supply Chain Transaction
+Family
+Specification](https://github.com/hyperledger/sawtooth-supply-chain/blob/master/docs/source/family_specification.rst)
+and the expanded data types RFC, [Sawtooth RFC
+0013](https://github.com/hyperledger/sawtooth-rfcs/blob/master/text/0013-supply-chain-expand-data-types.md).
 
 # Unresolved questions
 [unresolved]: #unresolved-questions
