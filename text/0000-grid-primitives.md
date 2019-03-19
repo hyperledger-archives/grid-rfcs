@@ -464,13 +464,23 @@ is (in Python):
     "621dee" + "01" + hashlib.sha512("Lightbulb").encode("utf-8")).hexdigest()[:62]
 ```
 
-## Transaction Payload and Execution
+## Transactions
 
-The following transaction payloads and execution rules are designed for the
-Hyperledger Sawtooth platform and may differ for other transaction execution
-platforms.
+In order to add Schemas to state, a transaction must be used.  The following
+transactions and their execution rules are designed for the Hyperledger Sawtooth
+platform and may differ for other transaction execution platforms.
 
-### SchemaPayload
+### Transaction Header
+
+The header for the transactions will include the following:
+
+- `family_name`: `"grid_schema"`
+- `family_version`: `"1.0"`
+- `namespaces`: `[ "621dee" ]`
+
+### Payloads and Execution Rules
+
+#### SchemaPayload
 
 SchemaPayload contains an action enum and the associated action payload.  This
 allows for the action payload to be dispatched to the appropriate logic.
@@ -493,7 +503,7 @@ message SchemaPayload {
 }
 ```
 
-### SchemaCreateAction
+#### SchemaCreateAction
 
 SchemaCreateAction adds a new Schema to state. 
 
@@ -527,7 +537,7 @@ The outputs for SchemaCreateAction must include:
 
 - Address of the Schema  
 
-### SchemaUpdateAction
+#### SchemaUpdateAction
 
 SchemaUpdateAction updates a Schema to state. This update only adds new
 Properties to the Schema.
