@@ -488,8 +488,8 @@ message SchemaPayload {
 
     Action action = 1;
 
-    SchemaCreateAction product_create = 2;
-    SchemaUpdateAction product_update = 3
+    SchemaCreateAction schema_create = 2;
+    SchemaUpdateAction schema_update = 3
 }
 ```
 
