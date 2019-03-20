@@ -658,3 +658,8 @@ It would be nice to provide validation functions to the Grid SDK that would
 validate that the data structure matches a schema. This would make use the
 schemas easier on a smart contract developer. The implementation for such
 functions are outside the scope of this RFC.
+
+As described in this RFC, complex data types, like Location, could be
+represented as structs.  In the case of Location, it is considered common enough
+to be promoted to a first-class data type.  How and when other structs are
+promoted to a first-class data type remains to be determined.
