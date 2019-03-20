@@ -95,6 +95,12 @@ transaction processor. As Properties are set in their entirety, either all of
 the struct is required or none of it is. In other words, partial structs are not
 allowed.
 
+### Locations
+
+Locations are represented as a pre-defined struct made up of a latitude,
+longitude pair.  Both latitude and longitude are represented as signed integers
+indicated millionths of degrees.
+
 ## Schemas
 
 Property definitions are collected into a Schema data type, which defines all
@@ -125,6 +131,7 @@ message PropertyDefinition {
         STRING = 4;
         ENUM = 5;
         STRUCT = 6;
+        LOCATION = 7;
     }
 
     // The name of the property
@@ -159,6 +166,12 @@ message Schema {
     repeated PropertyDefinition properties = 10;
 }
 
+message Location {
+      // Coordinates are expected to be in millionths of a degree
+      sint64 latitude = 1;
+      sint64 longitude = 2;
+}
+
 message PropertyValue {
     // The name of the property value.  Used to validate the property against a
     // Schema.
@@ -175,6 +188,7 @@ message PropertyValue {
     string string_value = 13;
     uint32 enum_value = 14;
     repeated PropertyValue struct_values = 15;
+    Location location_value = 16;
 }
 ```
 
@@ -372,6 +386,34 @@ The property value for a struct must contain all the struct values from the
 property definition, or it is invalid.  The defaults for the struct values
 themselves depend on their data types and/or the smart-contract implementer
 validation rules.
+
+### Location
+
+A location value would be represented as follows:
+
+```
+PropertyDefintion(
+    name='origin',
+    data_type=PropertyDefinition.DataType.LOCATIION,
+    required=True
+)
+```
+
+A locaton instance would be as follows:
+
+```
+PropertyValue(
+    name='origin',
+    data_type=PropertyDefinition.DataType.LOCATION,
+    location_value=Location(
+        latitude=44977753,
+        longitude=-93265015)
+)
+```
+
+Due to the use of protobuf, the default values for Locaton would be `(0, 0)`.
+While this is a valid location, it could be used to indicate an error, depending
+on the choice of the smart-contract implementer.
 
 ## Schema Example
 
