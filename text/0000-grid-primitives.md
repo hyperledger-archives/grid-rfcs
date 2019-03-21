@@ -166,6 +166,11 @@ message Schema {
     repeated PropertyDefinition properties = 10;
 }
 
+// A SchemaList is used to mitigate hash collisions.
+message SchemaList {
+    repeated Schema schemas = 1;
+}
+
 message Location {
       // Coordinates are expected to be in millionths of a degree
       sint64 latitude = 1;
@@ -505,6 +510,8 @@ is (in Python):
 ```
     "621dee" + "01" + hashlib.sha512("Lightbulb").encode("utf-8")).hexdigest()[:62]
 ```
+
+To avoid hash collisions, schemas must be stored in a `SchemaList`.
 
 ## Transactions
 
