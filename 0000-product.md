@@ -102,14 +102,14 @@ Schema.
 
 ```
 message Product {
-enum ProductType {
-UNSET_TYPE = 0;
-GS1 = 1;
-}
-ProductType product_type = 1;
-string identifier = 2;
-string owner = 3;
-repeated PropertyValue properties = 4;
+    enum ProductType {
+        UNSET_TYPE = 0;
+        GS1 = 1;
+    }
+    ProductType product_type = 1;
+    string identifier = 2;
+    string owner = 3;
+    repeated PropertyValue properties = 4;
 }
 ```
 
@@ -141,8 +141,8 @@ Prefix, on page 20 of the GS1 General Specifications.
 Products are uniquely referenced by their product type and identifier. 
 For GS1, Products are referenced by the GTIN identifier. For example:
 ```
-get_gs1_product(GTIN)
-set_gs1_product(GTIN, GS1Product)
+    get_gs1_product(GTIN)
+    set_gs1_product(GTIN, GS1Product)
 ```
 
 ### Product Addressing in the Merkle-Radix State System
@@ -158,7 +158,7 @@ indicating “Products” and an additional “01” indicating “GS1 Products�
 
 Therefore, all addresses starting with:
 ```
-“621dee” + “02” + “01”
+    “621dee” + “02” + “01”
 ```
 are Grid GS1 Products identified by a GTIN and are expected to contain a
 Product representation which conforms with the GS1 product schema.
@@ -175,14 +175,14 @@ storage associated with the GS1 Product representation,
 for example:
 
 ```
-“621dee” + “02” + “01” + “00000000000000000000000000000000000000000000” +
-14-character “numeric string” GTIN + “00”
+    “621dee” + “02” + “01” + “00000000000000000000000000000000000000000000” +
+    14-character “numeric string” GTIN + “00”
 ```
 
 A full GS1 Product address using the example GTIN from https://www.gtin.info/
 would therefore be:
 ```
-“621dee0201000000000000000000000000000000000000000000000001234560001200”
+    “621dee0201000000000000000000000000000000000000000000000001234560001200”
 ```
 
 ## Transaction Payload and Execution
@@ -197,18 +197,18 @@ defined in the ProductPayload.
 
 ```
 message ProductPayload {
-enum Actions {
-UNSET_ACTION = 0;
-PRODUCT_CREATE = 1;
-PRODUCT_UPDATE = 2;
-PRODUCT_DELETE = 3;
-}
+    enum Actions {
+        UNSET_ACTION = 0;
+        PRODUCT_CREATE = 1;
+        PRODUCT_UPDATE = 2;
+        PRODUCT_DELETE = 3;
+    }
 
-Action action = 1;
+    Action action = 1;
 
-ProductCreateAction product_create = 2;
-ProductUpdateAction product_update = 3;
-ProductDeleteAction product_delete = 4;
+    ProductCreateAction product_create = 2;
+    ProductUpdateAction product_update = 3;
+    ProductDeleteAction product_delete = 4;
 }
 ```
 
@@ -223,15 +223,15 @@ contract.)
 
 ```
 message ProductCreateAction {
-enum ProductType {
-UNSET_TYPE = 0;
-GS1 = 1;
-}
-// product_type and identifier are used in deriving the state address
-ProductType product_type = 1;
-string identifier = 2;
-string owner = 3;
-repeated PropertyValues properties = 4;
+    enum ProductType {
+        UNSET_TYPE = 0;
+        GS1 = 1;
+    }
+    // product_type and identifier are used in deriving the state address
+    ProductType product_type = 1;
+    string identifier = 2;
+    string owner = 3;
+    repeated PropertyValues properties = 4;
 }
 ```
 
@@ -272,15 +272,15 @@ behalf of an organization that corresponds to the owner in the product being
 updated. (Organizations and agents are defined by the Pike smart contract.)
 ```
 message ProductUpdateAction {
-enum ProductType {
-UNSET_TYPE = 0;
-GS1 = 1;
-}
-// product_type and identifier are used in deriving the state address
-ProductType product_type = 1;
-string identifier = 2;
-// this will replace all properties currently defined
-repeated PropertyValues properties = 3;
+    enum ProductType {
+        UNSET_TYPE = 0;
+        GS1 = 1;
+    }
+    // product_type and identifier are used in deriving the state address
+    ProductType product_type = 1;
+    string identifier = 2;
+    // this will replace all properties currently defined
+    repeated PropertyValues properties = 3;
 }
 ```
 
@@ -319,14 +319,14 @@ behalf of the organization that corresponds to the org_id in the product being
 updated. (Organizations and agents are defined by the Pike smart contract.)
 ```
 message ProductDeleteAction {
-enum ProductType {
-UNSET_TYPE = 0;
-GS1 = 1;
-}
-// product_type and identifier are used in deriving the state address
-ProductType product_type = 1;    
-string identifier = 2;
-}
+    enum ProductType {
+        UNSET_TYPE = 0;
+        GS1 = 1;
+    }
+    // product_type and identifier are used in deriving the state address
+    ProductType product_type = 1;	
+    string identifier = 2;
+ }
 ```
 If the grid setting grid.product.allow_delete is set to false, this transaction
 is invalid. The default value for grid.product.allow_delete is true.This
@@ -358,10 +358,10 @@ An initial set of GS1 properties will be predefined within Grid. Each property
 will have a property definition of the following format:
 ```
 PropertyDefinition(
-name="<GSI Application Identifier>",
-data_type=PropertyDefinition.DataType.STRING,
-required=False,
-description="A description of the GS1 data."
+    name="<GSI Application Identifier>",
+    data_type=PropertyDefinition.DataType.STRING,
+    required=False,
+    description="A description of the GS1 data."
 )
 ```
 
