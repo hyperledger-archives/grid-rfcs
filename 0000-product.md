@@ -1,3 +1,7 @@
+Feature Name: Product
+Start Date: TBD
+RFC PR: TBD
+
 # Summary
 [summary]: #summary
 
@@ -324,7 +328,7 @@ message ProductDeleteAction {
         GS1 = 1;
     }
     // product_type and identifier are used in deriving the state address
-    ProductType product_type = 1;	
+    ProductType product_type = 1;
     string identifier = 2;
  }
 ```
