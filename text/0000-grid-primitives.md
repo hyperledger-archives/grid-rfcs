@@ -16,7 +16,7 @@ Several components within Grid will store and retrieve properties which are
 defined at runtime. To properly store and validate these properties, we need
 property definitions which minimally include the property’s type (integer,
 string, enum, etc.). In addition, the properties (for example, product
-description, GPS location, or product dimensions) should always be stored and
+description, GPS lat/long, or product dimensions) should always be stored and
 exchanged using the same format within Grid components.
 
 # Guide-Level Explanation
@@ -26,7 +26,7 @@ exchanged using the same format within Grid components.
 
 A property is defined using a `PropertyDefinition` which includes the following:
 
-- Data type (one of: BYTES, BOOLEAN, NUMBER, STRING, ENUM, STRUCT, LOCATION)
+- Data type (one of: BYTES, BOOLEAN, NUMBER, STRING, ENUM, STRUCT, LAT_LONG)
 - Name
 - Type description
 - Optionality (whether or not the field is required)
@@ -95,11 +95,11 @@ transaction processor. As Properties are set in their entirety, either all of
 the struct is required or none of it is. In other words, partial structs are not
 allowed.
 
-### Locations
+### Latitude/Longitude
 
-Locations are represented as a pre-defined struct made up of a latitude,
-longitude pair.  Both latitude and longitude are represented as signed integers
-indicated millionths of degrees.
+Latitude/Longitude (Lat/Long) values are represented as a pre-defined struct
+made up of a latitude, longitude pair.  Both latitude and longitude are
+represented as signed integers indicated millionths of degrees.
 
 ## Schemas
 
@@ -131,7 +131,7 @@ message PropertyDefinition {
         STRING = 4;
         ENUM = 5;
         STRUCT = 6;
-        LOCATION = 7;
+        LAT_LONG = 7;
     }
 
     // The name of the property
@@ -171,7 +171,7 @@ message SchemaList {
     repeated Schema schemas = 1;
 }
 
-message Location {
+message LatLong {
       // Coordinates are expected to be in millionths of a degree
       sint64 latitude = 1;
       sint64 longitude = 2;
@@ -193,7 +193,7 @@ message PropertyValue {
     string string_value = 13;
     uint32 enum_value = 14;
     repeated PropertyValue struct_values = 15;
-    Location location_value = 16;
+    LatLong lat_long_value = 16;
 }
 ```
 
@@ -392,9 +392,9 @@ property definition, or it is invalid.  The defaults for the struct values
 themselves depend on their data types and/or the smart-contract implementer
 validation rules.
 
-### Location
+### Latitude/Longitude
 
-A location value would be represented as follows:
+A latitude/longitude (lat/long) value would be represented as follows:
 
 ```
 PropertyDefintion(
@@ -404,20 +404,20 @@ PropertyDefintion(
 )
 ```
 
-A locaton instance would be as follows:
+A lat/long instance would be as follows:
 
 ```
 PropertyValue(
     name='origin',
-    data_type=PropertyDefinition.DataType.LOCATION,
-    location_value=Location(
+    data_type=PropertyDefinition.DataType.LAT_LONG,
+    lat_long_value=LatLong(
         latitude=44977753,
         longitude=-93265015)
 )
 ```
 
-Due to the use of protobuf, the default values for Locaton would be `(0, 0)`.
-While this is a valid location, it could be used to indicate an error, depending
+Due to the use of protobuf, the default values for `LatLong` would be `(0, 0)`.
+While this is a valid lat/long, it could be used to indicate an error, depending
 on the choice of the smart-contract implementer.
 
 ## Schema Example
@@ -666,8 +666,8 @@ validate that the data structure matches a schema. This would make use the
 schemas easier on a smart contract developer. The implementation for such
 functions are outside the scope of this RFC.
 
-As described in this RFC, complex data types, like Location, could be
-represented as structs.  In the case of Location, it is considered common enough
+As described in this RFC, complex data types, like Lat/Long, could be
+represented as structs.  In the case of Lat/Long, it is considered common enough
 to be promoted to a first-class data type.  How and when other structs are
 promoted to a first-class data type remains to be determined.
 
