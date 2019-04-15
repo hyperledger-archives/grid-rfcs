@@ -399,7 +399,7 @@ A latitude/longitude (lat/long) value would be represented as follows:
 ```
 PropertyDefintion(
     name='origin',
-    data_type=PropertyDefinition.DataType.LOCATIION,
+    data_type=PropertyDefinition.DataType.LAT_LONG,
     required=True
 )
 ```
