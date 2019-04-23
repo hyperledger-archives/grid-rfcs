@@ -332,20 +332,19 @@ PropertyDefinition(
 )
 ``` 
 
-An instance of this enum would be as follows:
+An instance of this enum, indicating "red", would be as follows:
 
 ```
 PropertyValue(
     name='color',
     data_type=PropertyDefinition.DataType.ENUM,
-    enum_value='white'
+    enum_value=1
 )
 ```
 
-Due to the use of protobuf, there is no valid default value, so not setting this
-value can either result in an error or can initialize the `enum_value` to one of
-the options in the property definition.  This detail is left to the
-smart-contract implementer.
+Due to the use of protobuf, the default value for this property instance is `0`.
+It is left to the smart-contract implementer to determine if this would result
+in an error condition.
 
 ### Struct
 
