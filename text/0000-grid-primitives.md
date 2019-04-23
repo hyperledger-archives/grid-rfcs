@@ -441,6 +441,7 @@ Schema(
             name="size",
             data_type=PropertyDefinition.DataType.NUMBER,
             description="Lightbulb radius, in millimeters",
+            number_exponent=0,
             required=True
         ),
         PropertyDefinition(
@@ -452,7 +453,8 @@ Schema(
         PropertyDefinition(
             name="energy_rating",
             data_type=PropertyDefinition.DataType.NUMBER,
-            description="EnergyStar energy rating",
+            number_exponent=-2,
+            description="EnergyStar energy rating (percent)",
         )
         PropertyDefinition(
             name="color",
