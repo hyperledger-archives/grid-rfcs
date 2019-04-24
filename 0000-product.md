@@ -255,14 +255,14 @@ if GS1, otherwise the transaction is invalid.
 The properties must be valid for the product type. For example, if the product
 is GS1 product, its properties must only 
 contain properties that are included in the GS1 Schema. If it includes a
-property not in the GS1 Scheme the transaction is invalid. 
+property not in the GS1 Schema the transaction is invalid. 
 
 The product will be set in state.
 
 The inputs for ProductCreateAction must include:
 * Address of the Agent submitting the transaction
 * Address of the Organization the Product is being created for
-* Address of the Product Type Scheme the  product’s properties must match 
+* Address of the Product Type Schema the  product’s properties must match 
 * Address of the Product to be created
 
 The outputs for ProductCreateAction must include:
@@ -310,7 +310,7 @@ updated product will be set in state.
 The inputs for ProductUpdateAction must include:
 * Address of the Agent submitting the transaction
 * Address of the Organization the Product is being updated for
-* Address of the Product Type Scheme the product’s properties must match 
+* Address of the Product Type Schema the product’s properties must match 
 * Address of the Product to be updated
 
 The outputs for ProductUpdateAction must include:
