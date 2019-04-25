@@ -676,5 +676,5 @@ Schemas are currently have no version stored in state.  Given that the schemas
 are only created and updated in an additive fashion, a new version of a schema
 is equivalent to creating a new schema with a new name.  For example,
 `my_schema-1.0` could be replaced by `my_schema-1.1`.  This does not answer the
-question of how structs verified by differnt schema versions are migrated, nor
+question of how structs verified by different schema versions are migrated, nor
 whether or not this is a strong enough pattern for versioning.
