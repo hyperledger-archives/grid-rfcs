@@ -500,7 +500,7 @@ Schemas are uniquely referenced by their unique schema name. For example:
 
 ### Schema Addressing in the Merkle-Radix State System
 
-Grid Schemas are stored under the Grid namespace 621dee. For each schemas, the
+Grid Schemas are stored under the Grid namespace 621dee. For each schema, the
 address is formed by concatenating the namespace, the special policy namespace
 of 01, and the first 62 characters of the SHA-256 hash of the schema name.
 
