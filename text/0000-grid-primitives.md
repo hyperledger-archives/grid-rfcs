@@ -500,10 +500,9 @@ Schemas are uniquely referenced by their unique schema name. For example:
 
 ### Schema Addressing in the Merkle-Radix State System
 
-All Grid addresses start with the 6-hex-character namespace prefix "621dee".
-Schemas are further prefixed under the Grid namespace with reserved "01", which
-indicates "Schemas".  The remainder of the address is computed from a portion of
-a SHA-512 hash of the Schema name. 
+Grid Schemas are stored under the Grid namespace 621dee. For each schemas, the
+address is formed by concatenating the namespace, the special policy namespace
+of 01, and the first 62 characters of the SHA-256 hash of the schema name.
 
 For example, the address of the "Lightbulb" schema defined in the example above
 is (in Python): 
