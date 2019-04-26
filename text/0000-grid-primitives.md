@@ -99,7 +99,7 @@ allowed.
 
 Latitude/Longitude (Lat/Long) values are represented as a pre-defined struct
 made up of a latitude, longitude pair.  Both latitude and longitude are
-represented as signed integers indicated millionths of degrees.
+represented as signed integers indicating millionths of degrees.
 
 ## Schemas
 
@@ -639,7 +639,7 @@ updating a collection of property values.
 This design provides a reusable pattern for arbitrary properties in data
 structures defined in Grid smart contracts. Providing a common language across
 all data structures built with the schemas will allow for the creation of a
-common set of tools, such as REST APIs and Sawtooth State Delta Export.
+common set of tools, such as REST APIs and Sawtooth state delta export.
 
 Alternatively, the reusable components could be implemented at the message
 level, but this provides little in the way of pre-defined primitives.  They
