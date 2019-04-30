@@ -1,7 +1,7 @@
 - Feature Name: governance
 - Start Date: 2019-04-30
 - RFC PR: N/A
-- Sawtooth Issue: N/A
+- Grid Issue: N/A
 
 # Summary
 [summary]: #summary
@@ -44,7 +44,7 @@ particular repository.
 
 ## Project Team Hierarchy
 
-The Sawtooth governance model consists of a root team and a number of subteams.
+The Grid governance model consists of a root team and a number of subteams.
 Team rosters should be kept public and easily accessible.
 
 ### Root Team
