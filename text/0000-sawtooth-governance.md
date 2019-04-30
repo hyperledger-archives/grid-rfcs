@@ -1,22 +1,22 @@
 - Feature Name: governance
-- Start Date: 2018-03-16
-- RFC PR: [hyperledger/sawtooth-rfcs#6](https://github.com/hyperledger/sawtooth-rfcs/pull/6)
+- Start Date: 2019-04-30
+- RFC PR: N/A
 - Sawtooth Issue: N/A
 
 # Summary
 [summary]: #summary
 
-This RFC proposes an explicit governance structure for the Hyperledger Sawtooth
-project and an initial list of teams that make up this structure. It also
-defines several levels of contributor status for component repositories.
+This RFC proposes an explicit governance structure for the Hyperledger Grid
+project. It also defines several levels of contributor status for component
+repositories.
 
 # Motivation
 [motivation]: #motivation
 
-Many important aspects of the Sawtooth governance model have been based on
-implicit norms and expectations. As the project continues to grow, it is
-important that this governance model be made explicit with respect to decision
-making authority, repository ownership, and the establishment of the project's
+Many important aspects of the Grid governance model have been based on implicit
+norms and expectations. As the project continues to grow, it is important that
+this governance model be made explicit with respect to decision making
+authority, repository ownership, and the establishment of the project's
 direction and vision. To this end, this RFC seeks to make explicit existing
 norms that can be carried forward as the project grows and to establish new
 policies and procedures where additional structure is needed.
@@ -24,7 +24,7 @@ policies and procedures where additional structure is needed.
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-At a high-level, the Sawtooth governance model consists of two arms:
+At a high-level, the Grid governance model consists of two arms:
 
 1. A hierarchy of teams responsible for the continued growth and success of the
    project
@@ -49,12 +49,12 @@ Team rosters should be kept public and easily accessible.
 
 ### Root Team
 
-The root team serves as leadership for the Sawtooth project as a whole. In
+The root team serves as leadership for the Grid project as a whole. In
 particular, it:
 
 * Sets the overall direction and vision for the project. This means setting the
   core values that are used when making decisions about technical tradeoffs. It
-  means steering the project toward specific use cases where Sawtooth can have
+  means steering the project toward specific use cases where Grid can have
   a major impact. It means leading the discussion, and writing RFCs for, major
   initiatives in the project.
 
@@ -74,7 +74,7 @@ particular, it:
 * Resolving conflicts in rare cases where subteams are unable to reach
   consensus.
 
-The root team includes stakeholders who are actively involved in the Sawtooth
+The root team includes stakeholders who are actively involved in the Grid
 community and have expertise within the project. Subteam leaders are chosen
 from the root team.
 
@@ -84,7 +84,7 @@ excluding the member being removed.
 
 ### Subteams
 
-Each of the subteams has responsibility over a specific domain of the Sawtooth
+Each of the subteams has responsibility over a specific domain of the Grid
 project, which is established at its inception. Specifically, subteams are
 responsible for:
 
@@ -101,16 +101,16 @@ responsible for:
 Subteams make it possible to involve a larger, more diverse group in the
 decision-making process. In particular, they should involve a mix of:
 
-* Sawtooth project leadership, in the form of at least one root team member
-  (the leader of the subteam).
+* Grid project leadership, in the form of at least one root team member (the
+  leader of the subteam).
 
 * Area experts: people who have a lot of interest and expertise in the subteam
   area, but who may be far less engaged with other areas of the project.
 
 * Stakeholders: people who are strongly affected by decisions in the subteam
   area, but who may not be experts in the design or implementation of that
-  area. Whenever possible, it is crucial that users of Sawtooth have a seat at
-  the table, to make sure we are actually addressing real-world needs.
+  area. Whenever possible, it is crucial that users of Grid have a seat at the
+  table, to make sure we are actually addressing real-world needs.
 
 Members should have demonstrated a good sense for design and dealing with
 tradeoffs, an ability to work within a framework of consensus, and of course
@@ -166,8 +166,8 @@ subteam to decide, but:
 
 #### Consensus
 
-Sawtooth uses a form of [consensus decision-making][consensus]. In a nutshell
-the premise is that a successful outcome is not where one side of a debate has
+Grid uses a form of [consensus decision-making][consensus]. In a nutshell the
+premise is that a successful outcome is not where one side of a debate has
 "won", but rather where concerns from *all* sides have been addressed in some
 way. **This emphatically does not entail design by committee, nor compromised
 design**. Rather, it's a recognition that
@@ -254,36 +254,9 @@ to weight tradeoffs. The decision should be communicated in these terms,
 pointing out the tradeoffs that were raised and explaining how they were
 weighted, and **never introducing new arguments**.
 
-### Initial Subteams
-
-The following is a proposed list of initial subteams which is subject to change
-at the discretion of the root team, once it has formed.
-
-**Core** - Responsible for the design, architecture, performance, stability,
- and security of the core Sawtooth platform
-
-**Application SDKs** - Responsible for the design and consistency of
-user-facing SDKs for application development
-
-**Consensus** - Responsible for the supported consensus algorithms and
-the consensus interface
-
-**Seth** - Responsible for the Sawtooth integration with Ethereum
-
-**Community Outreach** - Responsible for writing and hosting documentation,
-managing the main Sawtooth website, promoting Sawtooth to the public, managing
-demos, and providing the community with training and support
-
-**Release Management** - Responsible for release related issues such as
-dependency management, license compliance, version control, and upgrade and
-backwards compatibility
-
-**Continuous Integration** - Responsible for test and build environments and
-deployment artifacts
-
 ## Contributor Permission Levels
 
-The Sawtooth community encourages contributions to the project from all
+The Grid community encourages contributions to the project from all
 interested individuals. The project defines three levels of permissions that
 determine what actions a contributor can perform on a particular repository.
 
@@ -313,7 +286,7 @@ maintainers. Maintainers lose their status due to:
 
 ## Code of Conduct
 
-Members of the Sawtooth community are expected to abide by the [Hyperledger Code of Conduct][hyperledger-coc].
+Members of the Grid community are expected to abide by the [Hyperledger Code of Conduct][hyperledger-coc].
 Violations of this code of conduct by any community member may result in
 disciplinary action at the discretion of the root team (by unanimous vote,
 excluding the offending member if applicable).
@@ -331,6 +304,10 @@ placed on a team whose domain they feel responsible for.
 # Rationale and alternatives
 [alternatives]: #alternatives
 
+The selection of a governance model substantially similar to that used by
+Hyperledger Sawtooth is desirable to create a uniform experience across the
+projects.
+
 The [Mozilla governance model](https://www.mozilla.org/en-US/about/governance/policies/module-ownership/ )
 was also considered, however a hierarchical model was focused on ensuring the
 project maintained a consistent vision was preferred.
@@ -345,10 +322,10 @@ file from the original repository is included as LICENSE in this repository.
 
 [rust-gov]: https://github.com/rust-lang/rfcs/blob/master/text/1068-rust-governance.md
 
-The contributor statuses proposed in this RFC are loosely based on ideas from the [Hyperledger Fabric Contributor Guide](https://hyperledger-fabric.readthedocs.io/en/release-1.0/CONTRIBUTING.html)
-and preexisting community norms within the Sawtooth project.
+The contributor statuses proposed in this RFC are the same as used by
+Hyperledger Sawtooth's governance model.
 
 # Unresolved questions
 [unresolved]: #unresolved-questions
 
-- Who should be on the initial root team roster?
+None.
