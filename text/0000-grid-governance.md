@@ -328,4 +328,4 @@ Hyperledger Sawtooth's governance model.
 # Unresolved questions
 [unresolved]: #unresolved-questions
 
-None.
+None at this time.
