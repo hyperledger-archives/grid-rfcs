@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" version="1.1" viewBox="3947 2381 230.5 149" width="230.5" height="149">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 9 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="-750" x-height="517" cap-height="714" ascent="957.0007" descent="-212.99744" font-style="italic" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue-Italic"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.10.2 
+    <dc:date>2019-05-06 16:28:40 +0000</dc:date>
+  </metadata>
+  <g id="Grid_Slowly_Chaning_Dimensions" stroke-dasharray="none" fill="none" fill-opacity="1" stroke="none" stroke-opacity="1">
+    <title>Grid Slowly Chaning Dimensions</title>
+    <g id="Grid_Slowly_Chaning_Dimensions: Layer 1">
+      <title>Layer 1</title>
+      <g id="Graphic_97">
+        <rect x="3947.5" y="2381.5" width="119.5" height="37" fill="#ffd394"/>
+        <rect x="3947.5" y="2381.5" width="119.5" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(3952.5 2390)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="35.038" y="15">name</tspan>
+        </text>
+      </g>
+      <g id="Graphic_96">
+        <rect x="4067" y="2381.5" width="110" height="37" fill="#ffd394"/>
+        <rect x="4067" y="2381.5" width="110" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(4072 2390)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="29.696" y="15">count</tspan>
+        </text>
+      </g>
+      <g id="Graphic_87">
+        <rect x="3947.5" y="2418.5" width="119.5" height="37" fill="white"/>
+        <rect x="3947.5" y="2418.5" width="119.5" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(3952.5 2427)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="26.302" y="15">mangos</tspan>
+        </text>
+      </g>
+      <g id="Graphic_86">
+        <rect x="4067" y="2418.5" width="110" height="37" fill="white"/>
+        <rect x="4067" y="2418.5" width="110" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(4072 2427)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="45.552" y="15">5</tspan>
+        </text>
+      </g>
+      <g id="Graphic_72">
+        <rect x="3947.5" y="2455.5" width="119.5" height="37" fill="white"/>
+        <rect x="3947.5" y="2455.5" width="119.5" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(3952.5 2464)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="27.502" y="15">cookies</tspan>
+        </text>
+      </g>
+      <g id="Graphic_71">
+        <rect x="4067" y="2455.5" width="110" height="37" fill="white"/>
+        <rect x="4067" y="2455.5" width="110" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(4072 2464)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="41.104" y="15">42</tspan>
+        </text>
+      </g>
+      <g id="Graphic_67">
+        <rect x="3947.5" y="2492.5" width="119.5" height="37" fill="white"/>
+        <rect x="3947.5" y="2492.5" width="119.5" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(3952.5 2501)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="33.718" y="15">shoes</tspan>
+        </text>
+      </g>
+      <g id="Graphic_66">
+        <rect x="4067" y="2492.5" width="110" height="37" fill="white"/>
+        <rect x="4067" y="2492.5" width="110" height="37" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(4072 2501)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-style="italic" font-weight="400" fill="black" x="36.656" y="15">701</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>
