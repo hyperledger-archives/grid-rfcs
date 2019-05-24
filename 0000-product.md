@@ -11,7 +11,7 @@ GS1 is a widely used data standard in enterprises and, given that positioning
 and familiarity, Grid support feels natural. 
 Additional implementations of Product for specialized industries or use cases
 may derive from or extend this implementation. _For the base implementation of a
-product on grid, there will be 2 fields. Gtin and a repeated key-value field._
+product on grid, there will be 3 fields. An identifier (gtin), a type (GS1), and a repeated key-value field._
 
 
 # Motivation
@@ -37,7 +37,7 @@ A **__product__** is an archetype of an item that is transacted, traded, or
 referenced in a supply chain. 
 Each product has a **__product type__**. This RFC defines a single product type
 for GS1; a product of the GS1 product type is called a GS1 product. 
-Note that this design supports adding additional product types in the future.
+Note that this design supports extending additional product types in the future.
 
 A product is referenced using a **__product identifier__**. 
 For GS1 products, the product identifier is a Global Trade Item Number (GTIN),
