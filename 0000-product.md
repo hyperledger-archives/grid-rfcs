@@ -148,8 +148,8 @@ Prefix, on page 20 of the GS1 General Specifications.
 Products are uniquely referenced by their product type and identifier. 
 For GS1, Products are referenced by the GTIN identifier. For example:
 ```
-    get_gs1_product(GTIN)
-    set_gs1_product(GTIN, GS1Product)
+    get_product(GTIN)
+    set_product(GTIN, GS1Product)
 ```
 
 ### Product Addressing in the Merkle-Radix State System
@@ -292,8 +292,10 @@ message ProductUpdateAction {
     // product_type and identifier are used in deriving the state address
     ProductType product_type = 1;
     string identifier = 2;
+    // product owner is used to validate the signing agents organization
+    string owner = 3;
     // this will replace all properties currently defined
-    repeated PropertyValues properties = 3;
+    repeated PropertyValues properties = 4;
 }
 ```
 
@@ -339,6 +341,8 @@ message ProductDeleteAction {
     // product_type and identifier are used in deriving the state address
     ProductType product_type = 1;
     string identifier = 2;
+    // product owner is used to validate the signing agents organization
+    string owner = 3;
  }
 ```
 If the grid setting grid.product.allow_delete is set to false, this transaction
@@ -444,6 +448,10 @@ The total number of separately packaged components comprising a single trade
 item.
 
 Look at section 3.5.7 Packaging component number AI (243)
+
+### Possible payload modifications:
+
+The owner field is not a _HARD_ requirement for ProductUpdateAction and ProductDeleteAction in the product_payload. The owner (organization) could later be derived from the gtin, as we learn more about gtins and integrate some type of lookup functionality. That functionality is not included in this RFC. Would be a nice to have, but certainly not a MVP requirement.
 
 
 # Prior Art
