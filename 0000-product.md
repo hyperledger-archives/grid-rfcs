@@ -11,7 +11,7 @@ GS1 is a widely used data standard in enterprises and, given that positioning
 and familiarity, Grid support feels natural. 
 Additional implementations of Product for specialized industries or use cases
 may derive from or extend this implementation. _For the base implementation of a
-product on grid, there will be 3 fields. An identifier (gtin), a type (GS1), and a repeated key-value field._
+product on grid, there will be 4 fields. An identifier (gtin), a type (GS1), an owner (organization) and a repeated key-value field._
 
 
 # Motivation
@@ -292,8 +292,6 @@ message ProductUpdateAction {
     // product_type and identifier are used in deriving the state address
     ProductType product_type = 1;
     string identifier = 2;
-    // product owner is used to validate the signing agents organization
-    string owner = 3;
     // this will replace all properties currently defined
     repeated PropertyValues properties = 4;
 }
@@ -341,8 +339,6 @@ message ProductDeleteAction {
     // product_type and identifier are used in deriving the state address
     ProductType product_type = 1;
     string identifier = 2;
-    // product owner is used to validate the signing agents organization
-    string owner = 3;
  }
 ```
 If the grid setting grid.product.allow_delete is set to false, this transaction
@@ -451,7 +447,7 @@ Look at section 3.5.7 Packaging component number AI (243)
 
 ### Possible payload modifications:
 
-The owner field is not a _HARD_ requirement for ProductUpdateAction and ProductDeleteAction in the product_payload. The owner (organization) could later be derived from the gtin, as we learn more about gtins and integrate some type of lookup functionality. That functionality is not included in this RFC. Would be a nice to have, but certainly not a MVP requirement.
+The owner field is not a _HARD_ requirement in in the product_state.prito. The owner (organization) could later be derived from the gtin, as we learn more about gtins and integrate some type of lookup functionality. That functionality is not included in this RFC. Would be a nice to have, but certainly not a MVP requirement.
 
 
 # Prior Art
