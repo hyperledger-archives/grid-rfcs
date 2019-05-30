@@ -11,7 +11,8 @@ GS1 is a widely used data standard in enterprises and, given that positioning
 and familiarity, Grid support feels natural. 
 Additional implementations of Product for specialized industries or use cases
 may derive from or extend this implementation. _For the base implementation of a
-product on grid, there will be 4 fields. An identifier (gtin), a type (GS1), an owner (organization) and a repeated key-value field._
+product on grid, there will be 4 fields. An identifier (gtin), a type (GS1), an 
+owner (organization) and a repeated key-value field._
 
 
 # Motivation
@@ -91,6 +92,15 @@ enabled/disabled by a Grid administrator.
 Disabling delete is useful because external systems may have references to
 these products and deleting them could leave dangling references.
 
+## GTIN Validation
+Creation of a resuable gtin validation function to programmatically express the 
+equation used to validate a GTIN. It validates gtin format to avoid mistype 
+errors similar to a credit card validation. Implemented as an extensible 
+function if further validation steps are needed.
+Check digit validation: 
+(https://www.gs1.org/services/how-calculate-check-digit-manually)
+
+
 
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
@@ -128,7 +138,8 @@ supported in the future.)
 The GS1 GTIN specification is documented in section 3.3.2, Identification of a
 trade item (GTIN): AI (01), on page 140 of the **GS1 General Specification**: 
 
-https://www.gs1.org/sites/default/files/docs/barcodes/GS1_General_Specifications.pdf
+https://www.gs1.org/sites/default/files/docs/barcodes/GS1_General_Specifications
+.pdf
 
 The GS1-8 prefix is a unique string of 3 digits, and the GS1 company prefix
 consists of 4-12 digits. 
@@ -345,7 +356,8 @@ If the grid setting grid.product.allow_delete is set to false, this transaction
 is invalid. The default value for grid.product.allow_delete is true.This
 setting is stored using the Sawtooth Settings smart contract, more information
 can be found here
-https://sawtooth.hyperledger.org/docs/core/releases/latest/transaction_family_specifications/settings_transaction_family.html
+https://sawtooth.hyperledger.org/docs/core/releases/latest/transaction_family_sp
+ecifications/settings_transaction_family.html
 
 If a product with identifier does not exist the transaction is invalid.
 
@@ -422,7 +434,8 @@ clothing, furniture, etc.
 
 Some details on products that can be used for a future iteration: 
 [GS1 Apparel and General
-Merchandise](https://www.gs1us.org/DesktopModules/Bring2mind/DMX/Download.aspx?Command=Core_Download&EntryId=1067&language=en-US&PortalId=0&TabId=134)
+Merchandise](https://www.gs1us.org/DesktopModules/Bring2mind/DMX/Download.aspx?C
+ommand=Core_Download&EntryId=1067&language=en-US&PortalId=0&TabId=134)
 
 ### Clothing:
 Material content:  
@@ -447,18 +460,24 @@ Look at section 3.5.7 Packaging component number AI (243)
 
 ### Possible payload modifications:
 
-The owner field is not a _HARD_ requirement in in the product_state.prito. The owner (organization) could later be derived from the gtin, as we learn more about gtins and integrate some type of lookup functionality. That functionality is not included in this RFC. Would be a nice to have, but certainly not a MVP requirement.
+The owner field is not a _HARD_ requirement in in the product_state.prito. The 
+owner (organization) could later be derived from the gtin, as we learn more 
+about gtins and integrate some type of lookup functionality. That functionality 
+is not included in this RFC. Would be a nice to have, but certainly not a MVP 
+requirement.
 
 
 # Prior Art
 [prior-art]: #prior-art
 
 [Pike Transaction Family
-Specification](https://github.com/hyperledger/sawtooth-sabre/blob/master/contracts/sawtooth-pike/docs/source/pike_transaction_family.rst)
+Specification](https://github.com/hyperledger/sawtooth-sabre/blob/master/contrac
+ts/sawtooth-pike/docs/source/pike_transaction_family.rst)
 
 The Sawtooth Supply Chain mechanism to define field types.
 [Sawtooth Supply Chain Expanded Data
-Types](https://github.com/hyperledger/sawtooth-rfcs/blob/master/text/0013-supply-chain-expand-data-types.md)
+Types](https://github.com/hyperledger/sawtooth-rfcs/blob/master/text/0013-supply
+-chain-expand-data-types.md)
 
 
 
