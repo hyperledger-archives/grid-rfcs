@@ -26,7 +26,8 @@ exchanged using the same format within Grid components.
 
 A property is defined using a `PropertyDefinition` which includes the following:
 
-- Data type (one of: BYTES, BOOLEAN, NUMBER, STRING, ENUM, STRUCT, LAT_LONG)
+- Data type (one of: BYTES, BOOLEAN, NUMBER, STRING, ENUM, STRUCT, LAT_LONG,
+  DATETIME)
 - Name
 - Type description
 - Optionality (whether or not the field is required)
@@ -101,6 +102,12 @@ Latitude/Longitude (Lat/Long) values are represented as a pre-defined struct
 made up of a latitude, longitude pair.  Both latitude and longitude are
 represented as signed integers indicating millionths of degrees.
 
+### Datetime
+
+Datetime values are represented as an
+[ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) combined date-time formats.
+For example, "2007-04-05T14:30Z" or "2007-04-05T12:30-02:00".
+
 ## Schemas
 
 Property definitions are collected into a Schema data type, which defines all
@@ -132,6 +139,7 @@ message PropertyDefinition {
         ENUM = 5;
         STRUCT = 6;
         LAT_LONG = 7;
+        DATETIME = 8;
     }
 
     // The name of the property
@@ -194,6 +202,7 @@ message PropertyValue {
     uint32 enum_value = 14;
     repeated PropertyValue struct_values = 15;
     LatLong lat_long_value = 16;
+    string datetime_value = 17;
 }
 ```
 
@@ -418,6 +427,30 @@ PropertyValue(
 Due to the use of protobuf, the default values for `LatLong` would be `(0, 0)`.
 While this is a valid lat/long, it could be used to indicate an error, depending
 on the choice of the smart-contract implementer.
+
+### Datetime
+
+A datetime value would be represented as follows:
+```
+PropertyDefinition(
+    name='created_at',
+    data_type=PropertyDefinition.DataType.DATETIME,
+    required=True
+)
+```
+
+A datetime instance for this definition would be as follows:
+```
+PropertyValue(
+    name='created_at',
+    data_type-PropertyDefinition.DataType.DATETIME,
+    datetime_value='2019-05-31T14:53:18+0000'
+)
+```
+
+Due to the use of protobuf, the default value for `datetime_value` is an empty
+string, and therefore an invalid value.  This field must be set for the
+`DATETIME` data type.
 
 ## Schema Example
 
