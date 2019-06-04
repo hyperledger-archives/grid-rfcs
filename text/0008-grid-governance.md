@@ -1,6 +1,6 @@
 - Feature Name: governance
 - Start Date: 2019-04-30
-- RFC PR: N/A
+- RFC PR: https://github.com/hyperledger/grid-rfcs/pull/8
 - Grid Issue: N/A
 
 # Summary
