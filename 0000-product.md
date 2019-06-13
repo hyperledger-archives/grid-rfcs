@@ -456,7 +456,7 @@ Look at section 3.5.7 Packaging component number AI (243)
 
 ### Possible payload modifications:
 
-The owner field is not a _HARD_ requirement in in the product_state.prito. The 
+The owner field is not a _HARD_ requirement in in the product_state.proto. The 
 owner (organization) could later be derived from the gtin, as we learn more 
 about gtins and integrate some type of lookup functionality. That functionality 
 is not included in this RFC. Would be a nice to have, but certainly not a MVP 
