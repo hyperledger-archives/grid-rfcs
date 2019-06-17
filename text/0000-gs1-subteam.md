@@ -52,7 +52,11 @@ Therefore, the initial membership of the GS1 subteam is made up of the
 following members:
 
 - @davececchi, Dave Cecchi, team lead
-- TBD
+- @MattP007, Matt Perron
+- @jsmitchell, James Mitchell
+- @adeebahmed, Adeeb Ahmed
+- Gina Morgan
+- Melanie Nuce
 
 While members of this subteam have decision making capability, it is critical
 to the health of the project that the wider community is involved in
