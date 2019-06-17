@@ -6,13 +6,13 @@
 # Summary
 [summary]: #summary
 
-Create a new Core subteam to shepherd technical RFCs through the RFC process,
-and make technical governance decisions; technical topics include those related
-to the design and architecture of Grid. This team is responsible for ensuring
-long-term architectural consistency with the existing Grid code and overall
-project direction adopted by the Root team.
+Create a new Grid Core subteam to shepherd technical RFCs through the RFC
+process, and make technical governance decisions; technical topics include
+those related to the design and architecture of Grid. This team is responsible
+for ensuring long-term architectural consistency with the existing Grid code
+and overall project direction adopted by the Grid Root team.
 
-The Core subteam shall be the default subteam for technical decisions in
+The Grid Core subteam shall be the default subteam for technical decisions in
 absence of another appropriate subteam.
 
 # Motivation
@@ -22,31 +22,31 @@ absence of another appropriate subteam.
 introduced an explicit governance model for Hyperledger Grid, including
 a framework for creation of subteams.  The RFC process generates many
 technical RFCs (some are currently pending) which are appropriate for the
-Core subteam to shepherd and approve.
+Grid Core subteam to shepherd and approve.
 
 In order to ensure that we always have a functional technical decision making
-process, the Core subteam will serve as the default subteam for technical
+process, the Grid Core subteam will serve as the default subteam for technical
 decisions.
 
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-The Core subteam is Responsible for the design, architecture, performance,
+The Grid Core subteam is Responsible for the design, architecture, performance,
 stability, and security of the core Grid platform.
 
-The Core subteam exists for the purpose of technical review and decision
+The Grid Core subteam exists for the purpose of technical review and decision
 making, in particular those which are in the form of an RFC.
 
-Non-technical decisions should be left to the Root subteam or other subteam as
-appropriate.  For example, as new components are added to Grid, the Core
-subteam may act in a capacity of technical review of the potentially incoming
-components. However, the decision on whether to add the component may be left
-with the Root subteam as a wider project decision. Thus it is possible that
-RFCs may require approval from both the Root and Core subteams, if that is
-deemed appropriate.
+Non-technical decisions should be left to the Grid Root subteam or other
+subteam as appropriate.  For example, as new components are added to Grid, the
+Grid Core subteam may act in a capacity of technical review of the potentially
+incoming components. However, the decision on whether to add the component may
+be left with the Grid Root subteam as a wider project decision. Thus it is
+possible that RFCs may require approval from both the Grid Root and Grid Core
+subteams, if that is deemed appropriate.
 
 As with the other subteams detailed in the governance RFC, the specific
-decisions the Core subteam will be tasked with include:
+decisions the Grid Core subteam will be tasked with include:
 
 - Shepherding applicable RFCs
 - Coming to consensus on whether to accept or reject RFCs
@@ -58,14 +58,15 @@ decisions the Core subteam will be tasked with include:
 [reference-level-explanation]: #reference-level-explanation
 
 In order to achieve the long-term architectural consistency, membership in the
-Core team should consist of individuals who have a fairly long history with the
-project. For the subteam to be able to properly evaluate RFCs or decisions with
-the proper context, the subteam membership should consist of members who have
-a working knowledge of the existing code and/or overall existing architecture.
+Grid Core team should consist of individuals who have a fairly long history
+with the project. For the subteam to be able to properly evaluate RFCs or
+decisions with the proper context, the subteam membership should consist of
+members who have a working knowledge of the existing code and/or overall
+existing architecture.
 
-Therefore, the initial membership of the Core subteam is made up of Root team
-members who are Grid maintainers and/or are have a history of providing input
-into Grid technical issues:
+Therefore, the initial membership of the Grid Core subteam is made up of Grid
+Root team members who are Grid maintainers and/or are have a history of
+providing input into Grid technical issues:
 
 - @vaporos, Shawn Amundson, team lead
 - @peterschwarz, Peter Schwarz
