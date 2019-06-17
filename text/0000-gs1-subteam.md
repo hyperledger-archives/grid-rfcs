@@ -25,7 +25,7 @@ entity for GS1-related RFCs.
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-The GS1 subteam is responsible for discussion, reviewk, and decision making on
+The GS1 subteam is responsible for discussion, review, and decision making on
 topics related to GS1 standards support, including RFCs.
 
 When overlap occurs between the GS1 subteam and Core subteam, such as when
