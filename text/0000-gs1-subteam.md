@@ -29,7 +29,7 @@ The GS1 subteam is responsible for discussion, review, and decision making on
 topics related to GS1 standards support, including RFCs.
 
 When overlap occurs between the GS1 subteam and Core subteam, such as when
-voting on and RFC which is GS1-related and highly technical, members of both
+voting on an RFC which is GS1-related and highly technical, members of both
 subteams should make the decision as a larger unified subteam.
 
 As with the other subteams detailed in the governance RFC, the specific
