@@ -55,7 +55,7 @@ following members:
 - @MattP007, Matt Perron
 - @jsmitchell, James Mitchell
 - @adeebahmed, Adeeb Ahmed
-- Gina Morgan
+- Gena Morgan
 - Melanie Nuce
 
 While members of this subteam have decision making capability, it is critical
