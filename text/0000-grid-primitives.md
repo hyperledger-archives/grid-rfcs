@@ -459,8 +459,8 @@ messages, and instances can be represented by constructing items with the
 property value messages.  
 
 Suppose there is a requirement to store different types of light bulbs as part
-of an application. A lightbulb may consist of the properties size, bulb type,
-energy rating, and color.
+of an application. A lightbulb may consist of the following properties: size,
+bulb type, energy rating, and color.
 
 We could define a Lightbulb schema as follows:
 
@@ -507,7 +507,8 @@ Schema(
 Note: This example looks very similar to defining a struct property, but the
 fields in a schema may be optional.
 
-We can define a data structure that uses this schema for validation as follows:
+We can define a data structure that uses this schema in order to validate its
+dynamic properties as follows:
 
 ```
 message Lightbulb {
@@ -517,8 +518,8 @@ message Lightbulb {
 } 
 ```
 
-A Lightbulb smart contract would be responsible for validating the properties
-against the Lightbulb schema.
+A Lightbulb smart contract would then be responsible for validating the
+`properties` field  against the Lightbulb schema.
 
 ## Addressing
 
