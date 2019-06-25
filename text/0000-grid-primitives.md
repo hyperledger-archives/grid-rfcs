@@ -86,14 +86,14 @@ represents two or more intrinsically linked values, like X/Y coordinates or RGB
 colors. These values can be of any Supply Chain data type, including STRUCT,
 allowing nesting to an arbitrary depth. Although versatile and powerful, structs
 are heavyweight and should be used conservatively; restrict struct use to
-linking values that must always be updated together. The transaction processor
-will enforce this usage, rejecting any transactions that do not have a value for
+linking values that must always be updated together. The smart contract will
+enforce this usage, rejecting any transactions that do not have a value for
 every property in a struct.
 
 Note that although structs are built using a list of PropertyDefinitions, any
 nested use of the required property is meaningless and will be rejected by the
-transaction processor. As Properties are set in their entirety, either all of
-the struct is required or none of it is. In other words, partial structs are not
+smart contract. As Properties are set in their entirety, either all of the
+struct is required or none of it is. In other words, partial structs are not
 allowed.
 
 ### Latitude/Longitude
