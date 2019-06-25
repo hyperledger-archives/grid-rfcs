@@ -507,19 +507,66 @@ Schema(
 Note: This example looks very similar to defining a struct property, but the
 fields in a schema may be optional.
 
-We can define a data structure that uses this schema in order to validate its
-dynamic properties as follows:
+In order to store a lightbulb in global state, we can define a data structure
+with several fixed fields, namely identifiers, as well as the set of dynamic
+property values that will conform to the schema:
 
 ```
 message Lightbulb {
+    // The lightbulb identifier
     string id = 1;
+
+    // the production facility organization id
     string production_org = 2;
-    repeated PropertyValues properties = 3;
+
+    // the properties that conform to the Lightbulb schema
+    repeated PropertyValue properties = 3;
 } 
 ```
 
 A Lightbulb smart contract would then be responsible for validating the
-`properties` field  against the Lightbulb schema.
+`properties` field against the Lightbulb schema at run-time.
+
+An lightbulb entry, with all optional properties, would then look like the
+following:
+
+```
+Lightbulb(
+    id="12344",
+    production_org='philipsbulbfactory',
+    properties=[
+        PropertyValue(
+            name="size",
+            data_type=PropertyDefinition.DataType.NUMBER,
+            number_value=10,
+        ),
+        PropertyValue(
+            name="bulb_type"
+            data_type=PropertyDefinition.DataType.ENUM,
+            enum_value=2,  # LED
+        ),
+        PropertyValue(
+            name="energy_rating",
+            data_type=PropertyDefinition.DataType.NUMBER,
+            number_value=89,
+        ),
+        PropertyValue(
+            name="color",
+            data_type=PropertyDefinition.DataType.STRUCT,
+            struct_values=[
+                PropertyValue(
+                    name="name",
+                    data_type=PropertyDefinition.DataType.STRING,
+                    string_value="White",
+                ),
+                PropertyValue(
+                    name="rgb_hex",
+                    data_type=PropertyDefinition.DataType.STRING,
+                    string_value="000000",
+                ),
+           ]),
+    ])
+```
 
 ## Addressing
 
