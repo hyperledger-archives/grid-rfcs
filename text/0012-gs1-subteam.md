@@ -1,6 +1,6 @@
 - Feature Name: gs1_subteam
 - Start Date: 2019-05-04
-- RFC PR:
+- RFC PR: [hyperledger/grid-rfcs#19](https://github.com/hyperledger/grid-rfcs/pull/12)
 - Hyperledger Grid Issue:
 
 # Summary
