@@ -5,7 +5,7 @@ topics related to GS1 standards support, including RFCs.
 | --- | --- | --- |
 | Adeeb Ahmed | adeebahmed | adeebahmed |
 | Dave Cecchi | davececchi | cecchi |
-| Gena Morgan | | Gena |
+| Gena Morgan | genasmorgan | Gena |
 | James Mitchell | jsmitchell | jsmitchell |
 | Matt Perron | MattP007 | mattp |
 | Melanie Nuce | auntmelmel | MelanieNuce |
