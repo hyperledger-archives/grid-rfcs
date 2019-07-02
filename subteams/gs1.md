@@ -8,7 +8,7 @@ topics related to GS1 standards support, including RFCs.
 | Gena Morgan | | Gena |
 | James Mitchell | jsmitchell | jsmitchell |
 | Matt Perron | MattP007 | mattp |
-| Melanie Nuce | | MelanieNuce |
+| Melanie Nuce | auntmelmel | MelanieNuce |
 
 The team lead is Dave Cecchi.
 

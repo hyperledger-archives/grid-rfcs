@@ -54,9 +54,9 @@ following members:
 - @davececchi, Dave Cecchi, team lead
 - @MattP007, Matt Perron
 - @jsmitchell, James Mitchell
+- @auntmelmel, Melanie Nuce
 - @adeebahmed, Adeeb Ahmed
 - Gena Morgan
-- Melanie Nuce
 
 While members of this subteam have decision making capability, it is critical
 to the health of the project that the wider community is involved in
