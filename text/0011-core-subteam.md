@@ -1,6 +1,6 @@
 - Feature Name: core_subteam
 - Start Date: 2019-05-04
-- RFC PR: [hyperledger/grid-rfcs#19](https://github.com/hyperledger/grid-rfcs/pull/11)
+- RFC PR: [hyperledger/grid-rfcs#11](https://github.com/hyperledger/grid-rfcs/pull/11)
 - Hyperledger Grid Issue:
 
 # Summary
