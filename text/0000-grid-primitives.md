@@ -443,7 +443,7 @@ A datetime instance for this definition would be as follows:
 ```
 PropertyValue(
     name='created_at',
-    data_type-PropertyDefinition.DataType.DATETIME,
+    data_type=PropertyDefinition.DataType.DATETIME,
     datetime_value='2019-05-31T14:53:18+0000'
 )
 ```
