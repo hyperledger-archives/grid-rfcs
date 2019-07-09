@@ -83,7 +83,7 @@ possible state of the enum.
 
 A struct is a recursively defined collection of other named properties that
 represents two or more intrinsically linked values, like X/Y coordinates or RGB
-colors. These values can be of any Supply Chain data type, including STRUCT,
+colors. These values can be of any Grid primitive data type, including STRUCT,
 allowing nesting to an arbitrary depth. Although versatile and powerful, structs
 are heavyweight and should be used conservatively; restrict struct use to
 linking values that must always be updated together. The smart contract will
