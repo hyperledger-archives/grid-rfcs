@@ -5,20 +5,31 @@
 # Summary
 [summary]: #summary
 
-This RFC proposes a GS1-compatible implementation of Product for Hyperledger
-Grid.  GS1 is a widely used data standard in enterprises and, given that
+
+This RFC proposes a generic and extensible framework for a Hyperledger Grid Product entity as well as a more specific - and fully encapsulated - GS1 compliant Product.
+
+GS1 is a widely used data standard in enterprises and, given that
 positioning and familiarity, Grid support feels natural.  Additional
 implementations of Product for specialized industries or use cases may derive
-from or extend this implementation. _For the base implementation of a product
-on grid, there will be 4 fields. An identifier (gtin), a type (GS1), an owner
-(organization) and a repeated key-value field._
+from or extend this implementation. 
+
+_For the base implementation of a product
+on grid, there will be 4 fields. An identifier, a type, an owner, and a repeated key-value field._
 
 
 # Motivation
 [motivation]: #motivation
 
 The Grid Product implementation is designed for sharing product master data
-between participants.  It is also useful to use product information as
+between participants. Product is a near universal concept within supply chains solutions and would naturally be one of the highest areas of re-use across Grid applications. 
+
+The design will address use cases including:
+
+- Sharing of Product master data across a network
+- Including Product in other business transactions (track and trace events, purchases, sales, etc)
+- Enriching UX experiences by including additional attribution of a Product such as names or descriptions
+
+It is also useful to use product information as
 auxiliary data in other supply chain solutions.  For example, in track and
 trace, the location and temperature of an item (an instance of a product) is
 stored.  When presenting this information later to a human user, it is useful
@@ -114,7 +125,7 @@ message Product {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    ProductType product_type = 1;
+    ProductType type = 1;
     string identifier = 2;
     string owner = 3;
     repeated PropertyValue properties = 4;
@@ -233,8 +244,8 @@ message ProductCreateAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // product_type and identifier are used in deriving the state address
-    ProductType product_type = 1;
+    // type and identifier are used in deriving the state address
+    ProductType type = 1;
     string identifier = 2;
     string owner = 3;
     repeated PropertyValues properties = 4;
@@ -284,8 +295,8 @@ message ProductUpdateAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // product_type and identifier are used in deriving the state address
-    ProductType product_type = 1;
+    // type and identifier are used in deriving the state address
+    ProductType type = 1;
     string identifier = 2;
     // this will replace all properties currently defined
     repeated PropertyValues properties = 4;
@@ -335,8 +346,8 @@ message ProductDeleteAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // product_type and identifier are used in deriving the state address
-    ProductType product_type = 1;
+    // type and identifier are used in deriving the state address
+    ProductType type = 1;
     string identifier = 2;
  }
 ```
