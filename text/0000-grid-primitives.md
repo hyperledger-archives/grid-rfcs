@@ -108,16 +108,17 @@ Datetime values are represented as an
 [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) combined date-time formats.
 For example, "2007-04-05T14:30Z" or "2007-04-05T12:30-02:00".
 
-## Schemas
+## Schema
 
 Property definitions are collected into a Schema data type, which defines all
-the possible properties for an item that belongs to a given schema.  These
-schemas include the following:
+the possible properties for an item that belongs to a given Schema. A Schema
+includes the following:
 
-- a name
-- a description
-- an owner
-- a list of `PropertyDefinitions`
+- *name* - the name and identifier for the Schema
+- *description* - description of the Schema
+- *owner* - the Pike compatible org identifier for the owning org of the Schema
+- *properties* - a list of `PropertyDefinitions` that define the attributes of
+  the entity being defined by the Schema
 
 Schemas are used to validate a collection of property values defined in a data
 structure.
