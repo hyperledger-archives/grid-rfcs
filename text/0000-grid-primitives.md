@@ -463,7 +463,7 @@ Suppose there is a requirement to store different types of light bulbs as part
 of an application. A lightbulb may consist of the following properties: size,
 bulb type, energy rating, and color.
 
-We could define a Lightbulb schema as follows:
+We could define a `Lightbulb` schema as follows:
 
 ```
 Schema(
@@ -525,10 +525,10 @@ message Lightbulb {
 } 
 ```
 
-A Lightbulb smart contract would then be responsible for validating the
+A `Lightbulb` smart contract would then be responsible for validating the
 `properties` field against the Lightbulb schema at run-time.
 
-An lightbulb entry, with all optional properties, would then look like the
+An `Lightbulb` entry, with all optional properties, would then look like the
 following:
 
 ```
