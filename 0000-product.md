@@ -99,8 +99,8 @@ references to these products and deleting them could leave dangling references.
 
 Creation of a resuable gtin validation function to programmatically express the
 equation used to validate a GTIN. It validates gtin format to avoid mistype
-errors similar to a credit card validation. Implemented as an extensible
-function if further validation steps are needed.  Check digit validation:
+errors similar to a credit card validation. It's implemented as an extensible
+function such that further validation steps can be added, if needed.  Check digit validation:
 (https://www.gs1.org/services/how-calculate-check-digit-manually)
 
 
@@ -159,8 +159,8 @@ Products are uniquely referenced by their product type and identifier.  For
 GS1, Products are referenced by the GTIN identifier. For example:
 
 ```
-    get_product(GTIN)
-    set_product(GTIN, GS1Product)
+    get_product(identifier) // GTIN
+    set_product(identifier, product) // GTIN, gs1Product
 ```
 
 ### Product Addressing in the Merkle-Radix State System
@@ -194,7 +194,7 @@ representation, for example:
 
 ```
     “621dee” + “02” + “01” +“00000000000000000000000000000000000000000000” +
-    14-character “numeric string” GTIN + “00”
+    14-character “numeric string” identifier + “00” // identifier == GTIN
 ```
 
 A full GS1 Product address using the example GTIN from https://www.gtin.info/
@@ -462,8 +462,7 @@ Look at section 3.5.7 Packaging component number AI (243)
 The owner field is not a _HARD_ requirement in in the product_state.proto. The
 owner (organization) could later be derived from the gtin, as we learn more
 about gtins and integrate some type of lookup functionality. That functionality
-is not included in this RFC. Would be a nice to have, but certainly not a MVP
-requirement.
+is not included in this RFC and could be implemented at a later time.
 
 # Prior Art
 [prior-art]: #prior-art
