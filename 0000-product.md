@@ -14,7 +14,7 @@ implementations of Product for specialized industries or use cases may derive
 from or extend this implementation. 
 
 _For the base implementation of a product
-on grid, there will be 4 fields. An identifier, a type, an owner, and a repeated key-value field._
+on grid, there will be 4 fields. A product_id, a product_type, an owner, and properties (a repeated key-value field)._
 
 
 # Motivation
@@ -43,13 +43,13 @@ within Grid.
 ## Entities
 
 A **__product__** is an archetype of an item that is transacted, traded, or
-referenced in a supply chain.  Each product has a **__product type__**. This
-RFC defines a single product type for GS1; a product of the GS1 product type is
+referenced in a supply chain.  Each product has a **__product_type__**. This
+RFC defines a single product_type for GS1; a product of the GS1 product_type is
 called a GS1 product.  Note that this design supports extending additional
 product types in the future.
 
-A product is referenced using a **__product identifier__**.  For GS1 products,
-the product identifier is a Global Trade Item Number (GTIN), which is part of
+A product is referenced using a **product_id**.  For GS1 products,
+the product_id is a Global Trade Item Number (GTIN), which is part of
 the GS1 specifications.
 
 Each product has an **__owner__**, which is the identifier of the organization
@@ -59,8 +59,8 @@ can perform.  Organizations and agents are defined and managed by Pike (another
 component of Grid).
 
 A product has one or more **properties**.  Properties are described in the Grid
-Primitives RFC.  A **property namespace** contains multiple **property
-schema**.  A property schema associates a name (such as “length”) with a type
+Primitives RFC.  A *property namespace* contains multiple *property
+schemas*.  A property schema associates a name (such as “length”) with a data type
 (such as integer).  GS1 products may only include properties defined in the GS1
 product property namespace.
 
@@ -87,7 +87,7 @@ a product is created, its owning organization is stored with the project in an
 
 Updates to products is restricted to agents acting on behalf of the
 organization stored in the product’s owner field.  Only property fields can be
-updated. Product type, identifier, and owner fields are immutable.
+updated. Product_id, product_type, and owner fields are immutable.
 
 Deletion of products is restricted to agents acting on behalf of the
 organization in the product’s owner field.  A setting will turn off deletion
@@ -112,7 +112,7 @@ function such that further validation steps can be added, if needed.  Check digi
 ### Product Representation
 
 The primary object stored in state is “Product”, which consists of an
-identifier (GS1 GTIN), an owner (organization identifier compatible w/Pike),
+product_id (GS1 GTIN), an owner (org_id compatible w/Pike),
 and a list of property name/value pairs.  The properties available are defined
 by the Grid Property Schema Transaction Family and are restricted to the fields
 and rules of the GS1 Product schema.  Transactions which are responsible for
@@ -125,14 +125,14 @@ message Product {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    ProductType type = 1;
-    string identifier = 2;
+    string product_id = 1;
+    ProductType product_type = 2;
     string owner = 3;
     repeated PropertyValue properties = 4;
 }
 ```
 
-The GS1 GTIN is an identifier used to identify trade items.  A GTIN is the data
+The GS1 GTIN is an identifier (product_id) used to identify trade items.  A GTIN is the data
 transmitted from a barcode scan and is made up of a company prefix (or GS1-8
 prefix) and item reference.  We will initially support GTIN-12, GTIN-13, and
 GTIN-14. (GTIN-8 may be supported in the future.) The GS1 GTIN specification is
@@ -155,12 +155,12 @@ GS1 Company Prefix, on page 20 of the GS1 General Specifications.
 
 ### Referencing Products
 
-Products are uniquely referenced by their product type and identifier.  For
+Products are uniquely referenced by their product_id and product_type.  For
 GS1, Products are referenced by the GTIN identifier. For example:
 
 ```
-    get_product(identifier) // GTIN
-    set_product(identifier, product) // GTIN, gs1Product
+    get_product(product_id) // GTIN
+    set_product(product_id, product) // GTIN, gs1Product
 ```
 
 ### Product Addressing in the Merkle-Radix State System
@@ -194,7 +194,7 @@ representation, for example:
 
 ```
     “621dee” + “02” + “01” +“00000000000000000000000000000000000000000000” +
-    14-character “numeric string” identifier + “00” // identifier == GTIN
+    14-character “numeric string” product_id + “00” // product_id == GTIN
 ```
 
 A full GS1 Product address using the example GTIN from https://www.gtin.info/
@@ -244,27 +244,27 @@ message ProductCreateAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // type and identifier are used in deriving the state address
-    ProductType type = 1;
-    string identifier = 2;
+    // product_type and product_id are used in deriving the state address
+    ProductType product_type = 1;
+    string product_id = 2;
     string owner = 3;
     repeated PropertyValues properties = 4;
 }
 ```
 
-If a product with identifier already exists the transaction is invalid.
+If a product with product_id already exists the transaction is invalid.
 
 The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
 The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
 
-If the product type is GS1, the organization must contain a GS1 Company Prefix
+If the product_type is GS1, the organization must contain a GS1 Company Prefix
 in its metadata (gs1_company_prefixes), and the prefix must match the company
-prefix in the identifier, which is a gtin if GS1, otherwise the transaction is
+prefix in the product_id, which is a gtin if GS1, otherwise the transaction is
 invalid.
 
-The properties must be valid for the product type. For example, if the product
+The properties must be valid for the product_type. For example, if the product
 is GS1 product, its properties must only contain properties that are included
 in the GS1 Schema. If it includes a property not in the GS1 Schema the
 transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
@@ -295,15 +295,15 @@ message ProductUpdateAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // type and identifier are used in deriving the state address
-    ProductType type = 1;
-    string identifier = 2;
+    // product_type and product_id are used in deriving the state address
+    ProductType product_type = 1;
+    string product_id = 2;
     // this will replace all properties currently defined
     repeated PropertyValues properties = 4;
 }
 ```
 
-If a product with identifier does not exist the transaction is invalid.
+If a product with product_id does not exist the transaction is invalid.
 
 The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -314,7 +314,7 @@ otherwise the transaction is invalid.
 The agent must have the permission can_update_prouduct for the organization,
 otherwise the transaction is invalid.
 
-The new properties must be valid for the product type. For example, if the
+The new properties must be valid for the product_type. For example, if the
 product is GS1 product, its properties must only contain properties that are
 included in the GS1 Schema. If it includes a property not in the GS1 Scheme the
 transaction is invalid.
@@ -346,9 +346,9 @@ message ProductDeleteAction {
         UNSET_TYPE = 0;
         GS1 = 1;
     }
-    // type and identifier are used in deriving the state address
-    ProductType type = 1;
-    string identifier = 2;
+    // product_type and product_id are used in deriving the state address
+    ProductType product_type = 1;
+    string product_id = 2;
  }
 ```
 
@@ -358,7 +358,7 @@ setting is stored using the Sawtooth Settings smart contract, more information
 can be found here:
 https://sawtooth.hyperledger.org/docs/core/releases/latest/transaction_family_specifications/settings_transaction_family.html
 
-If a product with identifier does not exist the transaction is invalid.
+If a product with product_id does not exist the transaction is invalid.
 
 The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -461,7 +461,7 @@ Look at section 3.5.7 Packaging component number AI (243)
 
 The owner field is not a _HARD_ requirement in in the product_state.proto. The
 owner (organization) could later be derived from the gtin, as we learn more
-about gtins and integrate some type of lookup functionality. That functionality
+about gtins and integrate some kind of lookup functionality. That functionality
 is not included in this RFC and could be implemented at a later time.
 
 # Prior Art
