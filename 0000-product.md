@@ -6,28 +6,35 @@
 [summary]: #summary
 
 
-This RFC proposes a generic and extensible framework for a Hyperledger Grid Product entity as well as a more specific - and fully encapsulated - GS1 compliant Product.
+This RFC proposes a generic and extensible framework for a Hyperledger Grid
+Product entity as well as a more specific - and fully encapsulated - GS1
+compliant Product.
 
 GS1 is a widely used data standard in enterprises and, given that
 positioning and familiarity, Grid support feels natural.  Additional
 implementations of Product for specialized industries or use cases may derive
-from or extend this implementation. 
+from or extend this implementation.
 
 _For the base implementation of a product
-on grid, there will be 4 fields. A product_id, a product_type, an owner, and properties (a repeated key-value field)._
+on grid, there will be 4 fields. A product_id, a product_type, an owner, and
+properties (a repeated key-value field)._
 
 
 # Motivation
 [motivation]: #motivation
 
 The Grid Product implementation is designed for sharing product master data
-between participants. Product is a near universal concept within supply chains solutions and would naturally be one of the highest areas of re-use across Grid applications. 
+between participants. Product is a near universal concept within supply chains
+solutions and would naturally be one of the highest areas of re-use across Grid
+applications.
 
 The design will address use cases including:
 
 - Sharing of Product master data across a network
-- Including Product in other business transactions (track and trace events, purchases, sales, etc)
-- Enriching UX experiences by including additional attribution of a Product such as names or descriptions
+- Including Product in other business transactions (track and trace events,
+purchases, sales, etc)
+- Enriching UX experiences by including additional attribution of a Product
+such as names or descriptions
 
 It is also useful to use product information as
 auxiliary data in other supply chain solutions.  For example, in track and
@@ -60,7 +67,8 @@ component of Grid).
 
 A product has one or more **properties**.  Properties are described in the Grid
 Primitives RFC.  A *property namespace* contains multiple *property
-schemas*.  A property schema associates a name (such as “length”) with a data type
+schemas*.  A property schema associates a name (such as “length”) with a data
+type
 (such as integer).  GS1 products may only include properties defined in the GS1
 product property namespace.
 
@@ -100,7 +108,8 @@ references to these products and deleting them could leave dangling references.
 Creation of a resuable gtin validation function to programmatically express the
 equation used to validate a GTIN. It validates gtin format to avoid mistype
 errors similar to a credit card validation. It's implemented as an extensible
-function such that further validation steps can be added, if needed.  Check digit validation:
+function such that further validation steps can be added, if needed.  Check
+digit validation:
 (https://www.gs1.org/services/how-calculate-check-digit-manually)
 
 
@@ -132,7 +141,8 @@ message Product {
 }
 ```
 
-The GS1 GTIN is an identifier (product_id) used to identify trade items.  A GTIN is the data
+The GS1 GTIN is an identifier (product_id) used to identify trade items.  A
+GTIN is the data
 transmitted from a barcode scan and is made up of a company prefix (or GS1-8
 prefix) and item reference.  We will initially support GTIN-12, GTIN-13, and
 GTIN-14. (GTIN-8 may be supported in the future.) The GS1 GTIN specification is
