@@ -90,7 +90,7 @@ organization that is associated with the GS1 company prefix encoded in the
 GTIN.  An organization must have the GS1 company prefix in the
 “gs1_company_prefixes” metadata field for its Pike organization.
 (Organization-level metadata will need to be implemented in Pike.) When
-a product is created, its owning organization is stored with the project in an
+a product is created, its owning organization is stored with the product in an
 “owner” field.
 
 Updates to products is restricted to agents acting on behalf of the
