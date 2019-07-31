@@ -157,7 +157,7 @@ message PropertyDefinition {
     // The list of values for an ENUM property; must not be empty/ for
     // properties of that type.
     repeated string enum_options = 11;
-    // The list of property definitions for a STRUCT property; must  not be
+    // The list of property definitions for a STRUCT property; must not be
     // empty for properties of that type.
     repeated PropertyDefinition struct_properties = 12;
 }
@@ -190,7 +190,7 @@ message PropertyValue {
     // The name of the property value.  Used to validate the property against a
     // Schema.
     string name = 1;
-    // The data type of the property.  Indicates which value field the actual
+    // The data type of the property.  Indicates in which value field the actual
     // value may be found.  Must not be set to `UNSET_DATA_TYPE`.
     PropertyDefinition.DataType data_type = 2;
 
@@ -220,7 +220,7 @@ A bytes value would be represented as follows:
 ```
 PropertyDefinition(
     name="user_data",
-    data_type=PropertyDefinition.DataType.Bytes,
+    data_type=PropertyDefinition.DataType.BYTES,
     description="Arbitrary serialized user data."
 )
 ```
@@ -311,7 +311,7 @@ PropertyDefinition(
     data_type=PropertyDefinition.DataType.NUMBER,
     number_exponent=-2,
     required=True,
-    description="The the price this object"
+    description="The price of this object"
 )
 
 ```
@@ -744,7 +744,7 @@ and the expanded data types RFC, [Sawtooth RFC
 [unresolved]: #unresolved-questions
 
 It would be nice to provide validation functions to the Grid SDK that would
-validate that the data structure matches a schema. This would make use the
+validate that the data structure matches a schema. This would make the use of
 schemas easier on a smart contract developer. The implementation for such
 functions are outside the scope of this RFC.
 
@@ -753,9 +753,9 @@ represented as structs.  In the case of Lat/Long, it is considered common enough
 to be promoted to a first-class data type.  How and when other structs are
 promoted to a first-class data type remains to be determined.
 
-Schemas are currently have no version stored in state.  Given that the schemas
-are only created and updated in an additive fashion, a new version of a schema
-is equivalent to creating a new schema with a new name.  For example,
+Schemas currently have no version stored in state.  Given that the schemas are
+only created and updated in an additive fashion, a new version of a schema is
+equivalent to creating a new schema with a new name.  For example,
 `my_schema-1.0` could be replaced by `my_schema-1.1`.  This does not answer the
 question of how structs verified by different schema versions are migrated, nor
 whether or not this is a strong enough pattern for versioning.
