@@ -76,8 +76,8 @@ Standard integers are represented with the exponent set to zero.
 ### Enums
 
 An enum data type restricts values to a limited set of possible values. The
-definition for this data type includes a list of strings names describing a
-possible state of the enum. 
+definition for this data type includes a list of string names describing all the
+possible variants of the enum.
 
 ### Structs
 
