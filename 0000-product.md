@@ -107,9 +107,8 @@ references to these products and deleting them could leave dangling references.
 Creation of a resuable gtin validation function to programmatically express the
 equation used to validate a GTIN. It validates gtin format to avoid mistype
 errors similar to a credit card validation. It's implemented as an extensible
-function such that further validation steps can be added, if needed.  Check
-digit validation:
-(https://www.gs1.org/services/how-calculate-check-digit-manually)
+function such that further validation steps can be added, if needed. For details on the equation see: [Check
+digit validation](https://www.gs1.org/services/how-calculate-check-digit-manually).
 
 
 # Reference-level explanation
@@ -261,21 +260,15 @@ message ProductCreateAction {
 }
 ```
 
-If a product with product_id already exists the transaction is invalid.
+Validation requirements:
 
-The signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id already exists the transaction is invalid.
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
 The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
-
-If the product_namespace is GS1, the organization must contain a GS1 Company Prefix
-in its metadata (gs1_company_prefixes), and the prefix must match the company
-prefix in the product_id, which is a gtin if GS1, otherwise the transaction is
-invalid.
-
-The properties must be valid for the product_namespace. For example, if the product
-is GS1 product, its properties must only contain properties that are included
-in the GS1 Schema. If it includes a property not in the GS1 Schema the
+* If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a gtin if GS1, otherwise the transaction is invalid.
+* The properties must be valid for the product_namespace. For example, if the productis GS1 product, its properties must only contain properties that are includedin the GS1 Schema. If it includes a property not in the GS1 Schema the
 transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
 
 The product will be set in state.
@@ -312,19 +305,15 @@ message ProductUpdateAction {
 }
 ```
 
-If a product with product_id does not exist the transaction is invalid.
+Validation requirements:
 
-The signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id does not exist the transaction is invalid.
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-
-The owner in the product must match the organization that the agent belongs to,
+* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.
+* The agent must have the permission can_update_prouduct for the organization,
 otherwise the transaction is invalid.
-
-The agent must have the permission can_update_prouduct for the organization,
-otherwise the transaction is invalid.
-
-The new properties must be valid for the product_namespace. For example, if the
-product is GS1 product, its properties must only contain properties that are
+* The new properties must be valid for the product_namespace. For example, if theproduct is GS1 product, its properties must only contain properties that are
 included in the GS1 Schema. If it includes a property not in the GS1 Scheme the
 transaction is invalid.
 
@@ -364,18 +353,15 @@ message ProductDeleteAction {
 If the grid setting grid.product.allow_delete is set to false, this transaction
 is invalid. The default value for grid.product.allow_delete is true. This
 setting is stored using the Sawtooth Settings smart contract, more information
-can be found here:
-https://sawtooth.hyperledger.org/docs/core/releases/latest/transaction_family_specifications/settings_transaction_family.html
+can be found [here](https://sawtooth.hyperledger.org/docs/core/releases/latest/transaction_family_specifications/settings_transaction_family.html).
 
-If a product with product_id does not exist the transaction is invalid.
+Validation requirements:
 
-The signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id does not exist the transaction is invalid.
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-
-The owner in the product must match the organization that the agent belongs to,
-otherwise the transaction is invalid.
-
-The agent must have the permission “can_delete_product” for the organization,
+* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.
+* The agent must have the permission “can_delete_product” for the organization,
 otherwise the transaction is invalid.
 
 The inputs for ProductDeleteAction must include:
