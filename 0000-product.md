@@ -49,10 +49,7 @@ within Grid.
 ## Entities
 
 A **__product__** is an archetype of an item that is transacted, traded, or
-referenced in a supply chain.  Each product has a **__product_type__**. This
-RFC defines a single product_namespace for GS1; a product of the GS1 product_namespace is
-called a GS1 product.  Note that this design supports extending additional
-product types in the future.
+referenced in a supply chain.  Each product has a **__product_namespace__**. This RFC defines a single product_namespace for GS1; a product in the GS1 product_namespace is called a GS1 product.  Note that this design supports extending additional product namespaces in the future.
 
 A product is referenced using a **product_id**.  For GS1 products,
 the product_id is a Global Trade Item Number (GTIN), which is part of
@@ -67,9 +64,7 @@ component of Grid).
 A product has one or more **properties**.  Properties are described in the Grid
 Primitives RFC.  A *property namespace* contains multiple *property
 schemas*.  A property schema associates a name (such as “length”) with a data
-type
-(such as integer).  GS1 products may only include properties defined in the GS1
-product property namespace.
+type (such as integer).  GS1 products may only include properties defined in the GS1 product property namespace.
 
 ## Transactions
 
@@ -277,7 +272,7 @@ The inputs for ProductCreateAction must include:
 
 * Address of the Agent submitting the transaction
 * Address of the Organization the Product is being created for
-* Address of the Product Type Schema the  product’s properties must match
+* Address of the Product Namespace Schema the product’s properties must match
 * Address of the Product to be created
 
 The outputs for ProductCreateAction must include:
@@ -324,7 +319,7 @@ The inputs for ProductUpdateAction must include:
 
 * Address of the Agent submitting the transaction
 * Address of the Organization the Product is being updated for
-* Address of the Product Type Schema the product’s properties must match
+* Address of the Product Namespace Schema the product’s properties must match
 * Address of the Product to be updated
 
 The outputs for ProductUpdateAction must include:
