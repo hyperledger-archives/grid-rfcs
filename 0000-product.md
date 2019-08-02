@@ -16,8 +16,7 @@ implementations of Product for specialized industries or use cases may derive
 from or extend this implementation.
 
 _For the base implementation of a product
-on grid, there will be 4 fields. A product_id, a product_type, an owner, and
-properties (a repeated key-value field)._
+on grid, there will be 4 fields. A product_id, a product_namespace, an owner, and properties (a repeated key-value field)._
 
 
 # Motivation
@@ -51,7 +50,7 @@ within Grid.
 
 A **__product__** is an archetype of an item that is transacted, traded, or
 referenced in a supply chain.  Each product has a **__product_type__**. This
-RFC defines a single product_type for GS1; a product of the GS1 product_type is
+RFC defines a single product_namespace for GS1; a product of the GS1 product_namespace is
 called a GS1 product.  Note that this design supports extending additional
 product types in the future.
 
@@ -95,7 +94,7 @@ a product is created, its owning organization is stored with the product in an
 
 Updates to products is restricted to agents acting on behalf of the
 organization stored in the product’s owner field.  Only property fields can be
-updated. Product_id, product_type, and owner fields are immutable.
+updated. Product_id, product_namespace, and owner fields are immutable.
 
 Deletion of products is restricted to agents acting on behalf of the
 organization in the product’s owner field.  A setting will turn off deletion
@@ -130,12 +129,12 @@ requirements of the GS1 Product Property Schema.
 
 ```
 message Product {
-    enum ProductType {
-        UNSET_TYPE = 0;
+    enum ProductNamespace {
+        UNSET_NAMESPACE = 0;
         GS1 = 1;
     }
     string product_id = 1;
-    ProductType product_type = 2;
+    ProductNamespace product_namespace = 2;
     string owner = 3;
     repeated PropertyValue properties = 4;
 }
@@ -165,7 +164,7 @@ GS1 Company Prefix, on page 20 of the GS1 General Specifications.
 
 ### Referencing Products
 
-Products are uniquely referenced by their product_id and product_type.  For
+Products are uniquely referenced by their product_id and product_namespace.  For
 GS1, Products are referenced by the GTIN identifier. For example:
 
 ```
@@ -250,12 +249,12 @@ of the organization that corresponds to the owner in the create transaction.
 
 ```
 message ProductCreateAction {
-    enum ProductType {
-        UNSET_TYPE = 0;
+    enum Product_Namespace {
+        UNSET_NAMESPACE = 0;
         GS1 = 1;
     }
-    // product_type and product_id are used in deriving the state address
-    ProductType product_type = 1;
+    // product_namespace and product_id are used in deriving the state address
+    Product_Namespace product_namespace = 1;
     string product_id = 2;
     string owner = 3;
     repeated PropertyValues properties = 4;
@@ -269,12 +268,12 @@ belong to an organization in Pike state, otherwise the transaction is invalid.
 The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
 
-If the product_type is GS1, the organization must contain a GS1 Company Prefix
+If the product_namespace is GS1, the organization must contain a GS1 Company Prefix
 in its metadata (gs1_company_prefixes), and the prefix must match the company
 prefix in the product_id, which is a gtin if GS1, otherwise the transaction is
 invalid.
 
-The properties must be valid for the product_type. For example, if the product
+The properties must be valid for the product_namespace. For example, if the product
 is GS1 product, its properties must only contain properties that are included
 in the GS1 Schema. If it includes a property not in the GS1 Schema the
 transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
@@ -301,12 +300,12 @@ updated. (Organizations and agents are defined by the Pike smart contract.)
 
 ```
 message ProductUpdateAction {
-    enum ProductType {
-        UNSET_TYPE = 0;
+    enum Product_Namespace {
+        UNSET_NAMESPACE = 0;
         GS1 = 1;
     }
-    // product_type and product_id are used in deriving the state address
-    ProductType product_type = 1;
+    // product_namespace and product_id are used in deriving the state address
+    Product_Namespace product_namespace = 1;
     string product_id = 2;
     // this will replace all properties currently defined
     repeated PropertyValues properties = 4;
@@ -324,7 +323,7 @@ otherwise the transaction is invalid.
 The agent must have the permission can_update_prouduct for the organization,
 otherwise the transaction is invalid.
 
-The new properties must be valid for the product_type. For example, if the
+The new properties must be valid for the product_namespace. For example, if the
 product is GS1 product, its properties must only contain properties that are
 included in the GS1 Schema. If it includes a property not in the GS1 Scheme the
 transaction is invalid.
@@ -352,12 +351,12 @@ updated. (Organizations and agents are defined by the Pike smart contract.)
 
 ```
 message ProductDeleteAction {
-    enum ProductType {
-        UNSET_TYPE = 0;
+    enum Product_Namespace {
+        UNSET_NAMESPACE = 0;
         GS1 = 1;
     }
-    // product_type and product_id are used in deriving the state address
-    ProductType product_type = 1;
+    // product_namespace and product_id are used in deriving the state address
+    Product_Namespace product_namespace = 1;
     string product_id = 2;
  }
 ```
