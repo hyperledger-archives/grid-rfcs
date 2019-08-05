@@ -124,10 +124,19 @@ Schema Transaction Family and are restricted to the fields and rules of the GS1
 Product schema.  Transactions which are responsible for setting product state
 values must ensure that the properties conform with the requirements of the GS1
 Product Property Schema.
-
-``` message Product { enum ProductNamespace { UNSET_NAMESPACE = 0; GS1 = 1; }
-string product_id = 1; ProductNamespace product_namespace = 2; string owner = 3;
-repeated PropertyValue properties = 4; } ```
+sadfds
+``` 
+message Product { 
+    enum ProductNamespace { 
+        UNSET_NAMESPACE = 0; 
+        GS1 = 1; 
+    }
+    string product_id = 1; 
+    ProductNamespace product_namespace = 2; 
+    string owner = 3;
+    repeated PropertyValue properties = 4; 
+} 
+```
 
 The GS1 GTIN is an identifier (product_id) used to identify trade items.  A GTIN
 is the data transmitted from a barcode scan and is made up of a company prefix
@@ -155,8 +164,10 @@ page 20 of the GS1 General Specifications.
 Products are uniquely referenced by their product_id and product_namespace.  For
 GS1, Products are referenced by the GTIN identifier. For example:
 
-``` get_product(product_id) // GTIN set_product(product_id, product) // GTIN,
-gs1Product ```
+``` 
+get_product(product_id) // GTIN 
+set_product(product_id, product) // GTIN, gs1Product 
+```
 
 ### Product Addressing in the Merkle-Radix State System
 
@@ -171,7 +182,9 @@ indicating “Products” and an additional “01” indicating “GS1 Products�
 
 Therefore, all addresses starting with:
 
-``` “621dee” + “02” + “01” ```
+``` 
+“621dee” + “02” + “01” 
+```
 
 are Grid GS1 Products identified by a GTIN and are expected to contain a Product
 representation which conforms with the GS1 product schema.
@@ -185,13 +198,17 @@ remaining in the address.  The 14 digits of the GTIN can be left padded with
 accommodate potential future storage associated with the GS1 Product
 representation, for example:
 
-``` “621dee” + “02” + “01” +“00000000000000000000000000000000000000000000” +
-14-character “numeric string” product_id + “00” // product_id == GTIN ```
+``` 
+“621dee” + “02” + “01” +“00000000000000000000000000000000000000000000” +
+14-character “numeric string” product_id + “00” // product_id == GTIN 
+```
 
 A full GS1 Product address using the example GTIN from https://www.gtin.info/
 would therefore be:
 
-``` “621dee0201000000000000000000000000000000000000000000000001234560001200” ```
+``` 
+“621dee0201000000000000000000000000000000000000000000000001234560001200” 
+```
 
 ## Transaction Payload and Execution
 
@@ -203,13 +220,22 @@ allows for the action payload to be dispatched to the appropriate logic.
 Only the defined actions are available and only one action payload should be
 defined in the ProductPayload.
 
-``` message ProductPayload { enum Actions { UNSET_ACTION = 0; PRODUCT_CREATE =
-1; PRODUCT_UPDATE = 2; PRODUCT_DELETE = 3; }
+``` 
+message ProductPayload { 
+    enum Actions { 
+        UNSET_ACTION = 0; 
+        PRODUCT_CREATE = 1; 
+        PRODUCT_UPDATE = 2; 
+        PRODUCT_DELETE = 3; 
+    }
 
     Action action = 1;
 
-    ProductCreateAction product_create = 2; ProductUpdateAction product_update =
-3; ProductDeleteAction product_delete = 4; } ```
+    ProductCreateAction product_create = 2; 
+    ProductUpdateAction product_update = 3; 
+    ProductDeleteAction product_delete = 4; 
+} 
+```
 
 ### ProductCreateAction
 
@@ -218,27 +244,29 @@ submitted by an agent, which is identified by its signing key, acting on behalf
 of the organization that corresponds to the owner in the create transaction.
 (Organizations and agents are defined by the Pike smart contract.)
 
-``` message ProductCreateAction { enum Product_Namespace { UNSET_NAMESPACE = 0;
-GS1 = 1; }
+``` 
+message ProductCreateAction { 
+    enum Product_Namespace { 
+        UNSET_NAMESPACE = 0;
+        GS1 = 1; 
+    }
     // product_namespace and product_id are used in deriving the state address
-    Product_Namespace product_namespace = 1; string product_id = 2; string owner
-= 3; repeated PropertyValues properties = 4; } ```
+    Product_Namespace product_namespace = 1; 
+    string product_id = 2; 
+    string owner = 3; 
+    repeated PropertyValues properties = 4; 
+} 
+```
 
 Validation requirements:
 
-* If a product with product_id already exists the transaction is invalid.  The
-* signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id already exists the transaction is invalid.  
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-The agent must have the permission can_create_product for the organization,
+* The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
-* If the product_namespace is GS1, the organization must contain a GS1 Company
-* Prefix in its metadata (gs1_company_prefixes), and the prefix must match the
-* company prefix in the product_id, which is a gtin if GS1, otherwise the
-* transaction is invalid.  The properties must be valid for the
-* product_namespace. For example, if the productis GS1 product, its properties
-* must only contain properties that are includedin the GS1 Schema. If it
-* includes a property not in the GS1 Schema the
-transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
+* If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a gtin if GS1, otherwise the transaction is invalid.  
+* The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are includedin the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
 
 The product will be set in state.
 
@@ -259,12 +287,19 @@ be submitted by an agent, identified by its signing key, acting on behalf of an
 organization that corresponds to the owner in the product being updated.
 (Organizations and agents are defined by the Pike smart contract.)
 
-``` message ProductUpdateAction { enum Product_Namespace { UNSET_NAMESPACE = 0;
-GS1 = 1; }
+``` 
+message ProductUpdateAction { 
+    enum Product_Namespace { 
+            UNSET_NAMESPACE = 0;
+            GS1 = 1; 
+    }
     // product_namespace and product_id are used in deriving the state address
-    Product_Namespace product_namespace = 1; string product_id = 2;
+    Product_Namespace product_namespace = 1; 
+    string product_id = 2;
     // this will replace all properties currently defined
-    repeated PropertyValues properties = 4; } ```
+    repeated PropertyValues properties = 4; 
+} 
+```
 
 Validation requirements:
 
@@ -272,14 +307,11 @@ Validation requirements:
 * signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
 * The owner in the product must match the organization that the agent belongs
-* to, otherwise the transaction is invalid.  The agent must have the permission
-* can_update_prouduct for the organization,
+* to, otherwise the transaction is invalid.  
+* The agent must have the permission can_update_prouduct for the organization,
 otherwise the transaction is invalid.
-* The new properties must be valid for the product_namespace. For example, if
-* theproduct is GS1 product, its properties must only contain properties that
-* are
-included in the GS1 Schema. If it includes a property not in the GS1 Scheme the
-transaction is invalid.
+* The new properties must be valid for the product_namespace. 
+* For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Scheme the transaction is invalid.
 
 The properties in the product will be swapped for the new properties and the
 updated product will be set in state.
@@ -301,10 +333,17 @@ should be submitted by an agent, identified by its signing key, acting on behalf
 of the organization that corresponds to the org_id in the product being updated.
 (Organizations and agents are defined by the Pike smart contract.)
 
-``` message ProductDeleteAction { enum Product_Namespace { UNSET_NAMESPACE = 0;
-GS1 = 1; }
+``` 
+message ProductDeleteAction { 
+    enum Product_Namespace { 
+        UNSET_NAMESPACE = 0;
+        GS1 = 1; 
+    }
     // product_namespace and product_id are used in deriving the state address
-    Product_Namespace product_namespace = 1; string product_id = 2; } ```
+    Product_Namespace product_namespace = 1; 
+    string product_id = 2; 
+} 
+```
 
 If the grid setting grid.product.allow_delete is set to false, this transaction
 is invalid. The default value for grid.product.allow_delete is true. This
@@ -317,9 +356,8 @@ Validation requirements:
 * If a product with product_id does not exist the transaction is invalid.  The
 * signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-* The owner in the product must match the organization that the agent belongs
-* to, otherwise the transaction is invalid.  The agent must have the permission
-* “can_delete_product” for the organization,
+* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
+* The agent must have the permission “can_delete_product” for the organization,
 otherwise the transaction is invalid.
 
 The inputs for ProductDeleteAction must include:
@@ -336,9 +374,13 @@ The outputs for ProductUpdateAction must include:
 An initial set of GS1 properties will be predefined within Grid. Each property
 will have a property definition of the following format:
 
-``` PropertyDefinition( name="<GS1 Property>",
-data_type=PropertyDefinition.DataType.STRING, required=False, description="A
-description of the GS1 data.") ```
+``` 
+PropertyDefinition( 
+    name="<GS1 Property>",
+    data_type=PropertyDefinition.DataType.STRING, 
+    required=False, 
+    description="A description of the GS1 data.") 
+```
 
 # Drawbacks
 [drawbacks]: #drawbacks
