@@ -353,8 +353,8 @@ can be found
 
 Validation requirements:
 
-* If a product with product_id does not exist the transaction is invalid.  The
-* signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id does not exist the transaction is invalid.  
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
 * The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
 * The agent must have the permission “can_delete_product” for the organization,
