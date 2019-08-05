@@ -76,8 +76,8 @@ Products are managed by submitting transactions to Hyperledger Grid, which will
 process them with the Grid Product smart contract. The following transactions
 are supported:
 
-* ProductCreate - create a Product and store it in state.  ProductUpdate -
-* update (replace) the properties of a Product already in
+* ProductCreate - create a Product and store it in state.  
+* ProductUpdate - update (replace) the properties of a Product already in
   state.
 * ProductDelete - remove a Product from state.
 
