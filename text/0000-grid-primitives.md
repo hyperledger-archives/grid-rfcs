@@ -168,7 +168,7 @@ message Schema {
     string name = 1;
     // An optional description of the schema.
     string description = 2;
-    // The Pike organization that has rights to modify the schema.
+    // The Pike organization identifier that has rights to modify the schema.
     string owner = 3;
 
     // The property definitions that make up the Schema; must not be empty.
