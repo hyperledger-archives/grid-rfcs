@@ -24,11 +24,11 @@ field)._
 [motivation]: #motivation
 
 The Grid Product implementation is designed for sharing product master data
-between participants. Product is a near universal concept within supply chains
+between participants. Product is a near universal concept within supply chain
 solutions and would naturally be one of the highest areas of re-use across Grid
 applications.
 
-The design will address use cases including:
+The desgn will address use cases including:
 
 - Sharing of Product master data across a network
 - Including Product in other business transactions (track and trace events,
@@ -124,7 +124,7 @@ Schema Transaction Family and are restricted to the fields and rules of the GS1
 Product schema.  Transactions which are responsible for setting product state
 values must ensure that the properties conform with the requirements of the GS1
 Product Property Schema.
-sadfds
+
 ``` 
 message Product { 
     enum ProductNamespace { 
