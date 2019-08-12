@@ -81,6 +81,8 @@ are supported:
   state.
 * ProductDelete - remove a Product from state.
 
+*Disclaimer: ProductDelete does not remove the record of existance of a product. The history and record of existance of that product will remain. This is simply a mechanism to free up memory in state when it is known that a product will no longer be in existance.*
+
 ## Permissions
 
 Creation of GS1 products is restricted to agents acting on behalf of the
@@ -139,11 +141,7 @@ message Product {
 ```
 
 The GS1 GTIN is an identifier (product_id) used to identify trade items.  A GTIN
-is the data transmitted from a barcode scan and is made up of a company prefix
-(or GS1-8 prefix) and item reference.  We will initially support GTIN-12,
-GTIN-13, and GTIN-14. (GTIN-8 may be supported in the future.) The GS1 GTIN
-specification is documented in section 3.3.2, Identification of a trade item
-(GTIN): AI (01), on page 140 of the **GS1 General Specification**:
+is the data transmitted from a data carrier (barcode, rfid, etc) scan and is made up of a company prefix (or GS1-8 prefix) and item reference.  We will initially support GTIN-12, GTIN-13, and GTIN-14. (GTIN-8 may be supported in the future.) The GS1 GTIN specification is documented in section 3.3.2, Identification of a trade item (GTIN): AI (01), on page 140 of the **GS1 General Specification**:
 
 https://www.gs1.org/sites/default/files/docs/barcodes/GS1_General_Specifications.pdf
 
@@ -390,11 +388,7 @@ PropertyDefinition(
 [drawbacks]: #drawbacks
 
 
-Each GTIN format, except GTIN-8, contains an GS1 Company Prefix organizational
-identifier encoded into it. and this RFC duplicates the organization
-identification with a Grid-specific owner field to tie the product to
-organizations managed in Pike. In the future, it may be good to use the GTIN’s
-organizational identifier directly.
+Each GTIN is derived from three components. A GS1 Global Company Prefix (which also identifies the owner of the GTIN), and item reference number, and a check digit. This RFC duplicates the organization identification with a Grid-specific owner field to tie the product to organizations managed in Pike. In the future, it may be good to use the GTIN’s organizational identifier directly.
 
 Currently, Pike does not provide a place to store a GS1 Company Prefix, and the
 permissions around who is authorized to provide this prefix is complicated and
