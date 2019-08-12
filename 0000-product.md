@@ -231,9 +231,13 @@ message ProductPayload {
 
     Action action = 1;
 
-    ProductCreateAction product_create = 2; 
-    ProductUpdateAction product_update = 3; 
-    ProductDeleteAction product_delete = 4; 
+    // Approximately when transaction was submitted, as a Unix UTC
+    // timestamp
+    uint64 timestamp = 2;
+
+    ProductCreateAction product_create = 3; 
+    ProductUpdateAction product_update = 4; 
+    ProductDeleteAction product_delete = 5; 
 } 
 ```
 
