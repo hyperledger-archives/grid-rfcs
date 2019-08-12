@@ -28,7 +28,7 @@ between participants. Product is a near universal concept within supply chain
 solutions and would naturally be one of the highest areas of re-use across Grid
 applications.
 
-The desgn will address use cases including:
+The design will address use cases including:
 
 - Sharing of Product master data across a network
 - Including Product in other business transactions (track and trace events,
@@ -389,8 +389,9 @@ PropertyDefinition(
 # Drawbacks
 [drawbacks]: #drawbacks
 
+
 Each GTIN format, except GTIN-8, contains an GS1 Company Prefix organizational
-identifier encoded into it, and this RFC duplicates the organization
+identifier encoded into it. and this RFC duplicates the organization
 identification with a Grid-specific owner field to tie the product to
 organizations managed in Pike. In the future, it may be good to use the GTIN’s
 organizational identifier directly.
@@ -406,15 +407,23 @@ The GS1 Company Prefix will be stored in the metadata under
 “gs1_company_prefix”.
 
 Solving how to properly provide GS1 Company Prefixes to a Pike Organization will
-be solved in a future RFC.
+be solved in a future RFC. This future RFC should integrate the concepts of GLN and the smart contract associated with grid gs1 product should be updated to reflect that integration.
+`
 
 Trade items can include non-material goods, such as services, which will also
 need to be represented within Grid. This is not covered by this RFC.
+
+Some examples of non-material goods: 
+
+- Batch/Lot (LGTIN) or Serialized (SGTIN) 
+- Logistical Cases/Pallets - Higher levels of packaging of the items - some of which are the trade unit between to parties although not necessarily the consumer unit. Identified sometimes with a GTIN but often times, due to their heterogeneous nature, with another GS1 identifier (SSCC).
+- Assets (returnable or fixed) - Identified with GRAI or GIAI - I presume like services (GSRN) OUT
 
 To expand the product schema to support all GS1 properties as well as keeping it
 all organized, there will need to be some refactoring done at the grid primitive
 level to support lists in the schema.
 
+This implementation does not account for transfer-of-ownership scenarios, and should be implemented as a supplemental RFC at a later time. See: https://github.com/hyperledger/grid-rfcs/pull/5#discussion_r312211331
 
 # Rationale and alternatives
 [alternatives]: #alternatives
