@@ -81,7 +81,10 @@ are supported:
   state.
 * ProductDelete - remove a Product from state.
 
-*Disclaimer: ProductDelete does not remove the record of existance of a product. The history and record of existance of that product will remain. This is simply a mechanism to free up memory in state when it is known that a product will no longer be in existance.*
+*Disclaimer: ProductDelete does not remove the record of existance of a product.
+The history and record of existance of that product will remain. This is simply
+a mechanism to free up memory in state when it is known that a product will no
+longer be in existance.*
 
 ## Permissions
 
@@ -133,15 +136,21 @@ message Product {
         UNSET_NAMESPACE = 0; 
         GS1 = 1; 
     }
-    string product_id = 1; 
-    ProductNamespace product_namespace = 2; 
+    
+    ProductNamespace product_namespace = 1; 
+    string product_id = 2; 
     string owner = 3;
     repeated PropertyValue properties = 4; 
 } 
 ```
 
 The GS1 GTIN is an identifier (product_id) used to identify trade items.  A GTIN
-is the data transmitted from a data carrier (barcode, rfid, etc) scan and is made up of a company prefix (or GS1-8 prefix) and item reference.  We will initially support GTIN-12, GTIN-13, and GTIN-14. (GTIN-8 may be supported in the future.) The GS1 GTIN specification is documented in section 3.3.2, Identification of a trade item (GTIN): AI (01), on page 140 of the **GS1 General Specification**:
+is the data transmitted from a data carrier (barcode, rfid, etc) scan and is
+made up of a company prefix (or GS1-8 prefix) and item reference.  We will
+initially support GTIN-12, GTIN-13, and GTIN-14. (GTIN-8 may be supported in the
+future.) The GS1 GTIN specification is documented in section 3.3.2,
+Identification of a trade item (GTIN): AI (01), on page 140 of the **GS1 General
+Specification**:
 
 https://www.gs1.org/sites/default/files/docs/barcodes/GS1_General_Specifications.pdf
 
@@ -181,8 +190,8 @@ indicating “Products” and an additional “01” indicating “GS1 Products�
 Therefore, all addresses starting with:
 
 ``` 
-“621dee” + “02” + “01” 
-```
+“621dee” + “02” + “01”
+ ```
 
 are Grid GS1 Products identified by a GTIN and are expected to contain a Product
 representation which conforms with the GS1 product schema.
@@ -229,8 +238,7 @@ message ProductPayload {
 
     Action action = 1;
 
-    // Approximately when transaction was submitted, as a Unix UTC
-    // timestamp
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
     uint64 timestamp = 2;
 
     ProductCreateAction product_create = 3; 
@@ -267,16 +275,20 @@ Validation requirements:
 belong to an organization in Pike state, otherwise the transaction is invalid.
 * The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
-* If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a gtin if GS1, otherwise the transaction is invalid.  
-* The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are includedin the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.  _The base GS1 schema will be defined in a future RFC._
+* If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a gtin if GS1, otherwise the
+transaction is invalid.  
+* The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are includedin the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.  
 
-The product will be set in state.
+_The base GS1 schema will be defined in a future RFC._
+
+If all requirements are met, the transaction will be accepted, the batch will be written to a block, and the product will be created in state.
 
 The inputs for ProductCreateAction must include:
 
-* Address of the Agent submitting the transaction Address of the Organization
-* the Product is being created for Address of the Product Namespace Schema the
-* product’s properties must match Address of the Product to be created
+* Address of the Agent submitting the transaction 
+* Address of the Organization the Product is being created for 
+* Address of the Product Namespace Schema the product’s properties must match 
+* Address of the Product to be created
 
 The outputs for ProductCreateAction must include:
 
@@ -289,11 +301,10 @@ be submitted by an agent, identified by its signing key, acting on behalf of an
 organization that corresponds to the owner in the product being updated.
 (Organizations and agents are defined by the Pike smart contract.)
 
-``` 
-message ProductUpdateAction { 
+``` message ProductUpdateAction { 
     enum Product_Namespace { 
-            UNSET_NAMESPACE = 0;
-            GS1 = 1; 
+        UNSET_NAMESPACE = 0;
+        GS1 = 1; 
     }
     // product_namespace and product_id are used in deriving the state address
     Product_Namespace product_namespace = 1; 
@@ -305,24 +316,25 @@ message ProductUpdateAction {
 
 Validation requirements:
 
-* If a product with product_id does not exist the transaction is invalid.  The
-* signer of the transaction must be an agent in the Pike state and must
+* If a product with product_id does not exist the transaction is invalid.  
+* The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-* The owner in the product must match the organization that the agent belongs
-* to, otherwise the transaction is invalid.  
-* The agent must have the permission can_update_prouduct for the organization,
+* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
+* The agent must have the permission can_update_product for the organization,
 otherwise the transaction is invalid.
-* The new properties must be valid for the product_namespace. 
-* For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Scheme the transaction is invalid.
+* The new properties must be valid for the product_namespace.  For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Scheme the transaction is invalid.
+  
+_The base GS1 schema will be defined in a future RFC._
 
 The properties in the product will be swapped for the new properties and the
 updated product will be set in state.
 
 The inputs for ProductUpdateAction must include:
 
-* Address of the Agent submitting the transaction Address of the Organization
-* the Product is being updated for Address of the Product Namespace Schema the
-* product’s properties must match Address of the Product to be updated
+* Address of the Agent submitting the transaction 
+* Address of the Organization the Product is being updated for 
+* Address of the Product Namespace Schema the product’s properties must match
+* Address of the Product to be updated
 
 The outputs for ProductUpdateAction must include:
 
@@ -335,7 +347,7 @@ should be submitted by an agent, identified by its signing key, acting on behalf
 of the organization that corresponds to the org_id in the product being updated.
 (Organizations and agents are defined by the Pike smart contract.)
 
-``` 
+```
 message ProductDeleteAction { 
     enum Product_Namespace { 
         UNSET_NAMESPACE = 0;
@@ -359,13 +371,12 @@ Validation requirements:
 * The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
 * The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
-* The agent must have the permission “can_delete_product” for the organization,
-otherwise the transaction is invalid.
+* The agent must have the permission “can_delete_product” for the organization otherwise the transaction is invalid.
 
 The inputs for ProductDeleteAction must include:
 
-* Address of the Agent submitting the transaction Address of the Organization
-* the Product is being deleted for Address of the Product to be deleted
+* Address of the Agent submitting the transaction 
+* Address of the Organization the Product is being deleted for Address of the Product to be deleted
 
 The outputs for ProductUpdateAction must include:
 
@@ -388,7 +399,11 @@ PropertyDefinition(
 [drawbacks]: #drawbacks
 
 
-Each GTIN is derived from three components. A GS1 Global Company Prefix (which also identifies the owner of the GTIN), and item reference number, and a check digit. This RFC duplicates the organization identification with a Grid-specific owner field to tie the product to organizations managed in Pike. In the future, it may be good to use the GTIN’s organizational identifier directly.
+Each GTIN is derived from three components. A GS1 Global Company Prefix (which
+also identifies the owner of the GTIN), and item reference number, and a check
+digit. This RFC duplicates the organization identification with a Grid-specific
+owner field to tie the product to organizations managed in Pike. In the future,
+it may be good to use the GTIN’s organizational identifier directly.
 
 Currently, Pike does not provide a place to store a GS1 Company Prefix, and the
 permissions around who is authorized to provide this prefix is complicated and
@@ -401,8 +416,9 @@ The GS1 Company Prefix will be stored in the metadata under
 “gs1_company_prefix”.
 
 Solving how to properly provide GS1 Company Prefixes to a Pike Organization will
-be solved in a future RFC. This future RFC should integrate the concepts of GLN and the smart contract associated with grid gs1 product should be updated to reflect that integration.
-`
+be solved in a future RFC. This future RFC should integrate the concepts of GLN
+and the smart contract associated with grid gs1 product should be updated to
+reflect that integration.  `
 
 Trade items can include non-material goods, such as services, which will also
 need to be represented within Grid. This is not covered by this RFC.
@@ -410,14 +426,20 @@ need to be represented within Grid. This is not covered by this RFC.
 Some examples of non-material goods: 
 
 - Batch/Lot (LGTIN) or Serialized (SGTIN) 
-- Logistical Cases/Pallets - Higher levels of packaging of the items - some of which are the trade unit between to parties although not necessarily the consumer unit. Identified sometimes with a GTIN but often times, due to their heterogeneous nature, with another GS1 identifier (SSCC).
-- Assets (returnable or fixed) - Identified with GRAI or GIAI - I presume like services (GSRN) OUT
+- Logistical Cases/Pallets - Higher levels of packaging of the items - some of
+  which are the trade unit between to parties although not necessarily the
+consumer unit. Identified sometimes with a GTIN but often times, due to their
+heterogeneous nature, with another GS1 identifier (SSCC).
+- Assets (returnable or fixed) - Identified with GRAI or GIAI - I presume like
+  services (GSRN) OUT
 
 To expand the product schema to support all GS1 properties as well as keeping it
 all organized, there will need to be some refactoring done at the grid primitive
 level to support lists in the schema.
 
-This implementation does not account for transfer-of-ownership scenarios, and should be implemented as a supplemental RFC at a later time. See: https://github.com/hyperledger/grid-rfcs/pull/5#discussion_r312211331
+This implementation does not account for transfer-of-ownership scenarios, and
+should be implemented as a supplemental RFC at a later time. See:
+https://github.com/hyperledger/grid-rfcs/pull/5#discussion_r312211331
 
 # Rationale and alternatives
 [alternatives]: #alternatives
