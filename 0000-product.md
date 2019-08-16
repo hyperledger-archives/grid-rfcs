@@ -81,10 +81,8 @@ are supported:
   state.
 * ProductDelete - remove a Product from state.
 
-*Disclaimer: ProductDelete does not remove the record of existance of a product.
-The history and record of existance of that product will remain. This is simply
-a mechanism to free up memory in state when it is known that a product will no
-longer be in existance.*
+*Disclaimer: ProductDelete is a potentially hazardous operation and needs to be 
+done with care. 
 
 ## Permissions
 
@@ -275,15 +273,19 @@ Validation requirements:
 belong to an organization in Pike state, otherwise the transaction is invalid.
 * The agent must have the permission can_create_product for the organization,
 otherwise the transaction is invalid.
-* If the product_namespace is GS1, the organization must contain a GS1 Company
-
-Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a GTIN if GS1, otherwise the
+* If the product_namespace is GS1, the organization must contain a GS1 Company 
+Prefix in its metadata (gs1_company_prefixes), and the prefix must match the 
+company prefix in the product_id, which is a GTIN if GS1, otherwise the
 transaction is invalid.  
-* The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are includedin the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.  
+* The properties must be valid for the product_namespace. For example, if the 
+product is GS1 product, its properties must only contain properties that are 
+included in the GS1 Schema. If it includes a property not in the GS1 Schema 
+the transaction is invalid.  
 
 _The base GS1 schema will be defined in a future RFC._
 
-If all requirements are met, the transaction will be accepted, the batch will be written to a block, and the product will be created in state.
+If all requirements are met, the transaction will be accepted, the batch will 
+be written to a block, and the product will be created in state.
 
 The inputs for ProductCreateAction must include:
 
@@ -321,10 +323,14 @@ Validation requirements:
 * If a product with product_id does not exist the transaction is invalid.  
 * The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
+* The owner in the product must match the organization that the agent belongs to, 
+* otherwise the transaction is invalid.  
 * The agent must have the permission can_update_product for the organization,
 otherwise the transaction is invalid.
-* The new properties must be valid for the product_namespace.  For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Scheme the transaction is invalid.
+* The new properties must be valid for the product_namespace.  For example, if the 
+product is GS1 product, its properties must only contain properties that are 
+included in the GS1 Schema. If it includes a property not in the GS1 Scheme the 
+transaction is invalid.
   
 _The base GS1 schema will be defined in a future RFC._
 
@@ -372,8 +378,10 @@ Validation requirements:
 * If a product with product_id does not exist the transaction is invalid.  
 * The signer of the transaction must be an agent in the Pike state and must
 belong to an organization in Pike state, otherwise the transaction is invalid.
-* The owner in the product must match the organization that the agent belongs to, otherwise the transaction is invalid.  
-* The agent must have the permission “can_delete_product” for the organization otherwise the transaction is invalid.
+* The owner in the product must match the organization that the agent belongs to, 
+  otherwise the transaction is invalid.  
+* The agent must have the permission “can_delete_product” for the organization 
+  otherwise the transaction is invalid.
 
 The inputs for ProductDeleteAction must include:
 
