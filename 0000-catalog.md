@@ -15,7 +15,7 @@ catalog, and a repeated field of PropertyValues for custom fields.
 
 In addition any grid product added to a catalog will need to contain a
 ***status*** field and can include an optional ***prices*** field, which will be 
-enforced by a grid schema.
+enforced by the catalog_product grid schema.
 
 # Motivation
 [motivation]: #motivation
@@ -233,6 +233,73 @@ would therefore be:
 
 ``` 
 “621dee0201010000000000000000000000000000000000000000000001234560001200” 
+```
+
+### Catalog Product Schema Definition
+
+This schema defines the additional attributes required of a grid product, such that it may be considered a "catalog product". Catalog products should be grouped with other catalog products. Once grouped, the grid catalog can be shared with other participants in a grid network.
+
+
+Any grid product added to a catalog will need to contain a _required_ ***status*** field and can include an _optional_ ***prices*** field, which will be 
+enforced by the catalog_product grid schema.
+
+```
+Schema(
+    name="Catalog Product",
+    description="A grid product that can be grouped with other products via grid catalog",
+    owner = "Target"
+    properties=[
+        PropertyDefinition(
+            name="status",
+            data_type=PropertyDefinition.DataType.ENUM,
+            description="The current state of the catalog product",
+            enum_options=["ACTIVE", "INACTIVE"])
+            required=True
+        ),
+        PropertyDefinition(
+            name="price",
+            data_type=PropertyDefinition.DataType.STRING,
+            description="The price of the catalog product"
+            required=False
+        )])
+```
+
+In order to store a catalog product in global state, we will extend from the definition of a grid product with several fixed fields, namely identifiers, as well as the set of dynamic property values that will conform to the catalog product shema definition.
+
+```
+message Product { 
+    enum ProductNamespace { 
+        UNSET_NAMESPACE = 0; 
+        GS1 = 1; 
+    }
+    
+    ProductNamespace product_namespace = 1; 
+    string product_id = 2; 
+    string owner = 3;
+    repeated PropertyValue properties = 4; 
+}
+```
+
+The catalog product smart contract would then be responsible for validating the properties field against the Lightbulb schema at run-time.
+
+An Catalog Product entry, with all optional properties, would then look like the following:
+```
+CatalogProduct(
+    product_id="gtin",
+    product_namespace="GS1"
+    owner='Target',
+    properties=[
+        PropertyValue(
+            name="status",
+            data_type=PropertyDefinition.DataType.ENUM,
+            enum_value=1, # ACTIVE (default)
+        ),
+        PropertyValue(
+            name="price"
+            data_type=PropertyDefinition.DataType.STRING,
+            string_value="1-10:$50, 10-50:$40, 50+:$30"  # price windows
+        ),
+    ])
 ```
 
 # Rationale and alternatives
