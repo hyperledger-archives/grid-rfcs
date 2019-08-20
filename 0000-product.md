@@ -15,7 +15,7 @@ and familiarity, Grid support feels natural.  Additional implementations of
 Product for specialized industries or use cases may derive from or extend this
 implementation.
 
-_For the base implementation of a product on grid, there will be 4 fields. A
+_For the base implementation of a product on Grid, there will be 4 fields. A
 product_id, a product_namespace, an owner, and properties (a repeated key-value
 field)._
 
@@ -367,7 +367,7 @@ message ProductDeleteAction {
 } 
 ```
 
-If the grid setting grid.product.allow_delete is set to false, this transaction
+If the Grid setting `grid.product.allow_delete` is set to `false`, this transaction
 is invalid. The default value for grid.product.allow_delete is true. This
 setting is stored using the Sawtooth Settings smart contract, more information
 can be found
@@ -427,7 +427,7 @@ The GS1 Company Prefix will be stored in the metadata under
 
 Solving how to properly provide GS1 Company Prefixes to a Pike Organization will
 be solved in a future RFC. This future RFC should integrate the concepts of GLN
-and the smart contract associated with grid gs1 product should be updated to
+and the smart contract associated with Grid gs1 product should be updated to
 reflect that integration.  `
 
 Trade items can include non-material goods, such as services, which will also
@@ -444,7 +444,7 @@ heterogeneous nature, with another GS1 identifier (SSCC).
   services (GSRN) OUT
 
 To expand the product schema to support all GS1 properties as well as keeping it
-all organized, there will need to be some refactoring done at the grid primitive
+all organized, there will need to be some refactoring done at the Grid primitive
 level to support lists in the schema.
 
 This implementation does not account for transfer-of-ownership scenarios, and
