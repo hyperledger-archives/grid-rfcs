@@ -433,7 +433,11 @@ reflect that integration.  `
 Trade items can include non-material goods, such as services, which will also
 need to be represented within Grid. This is not covered by this RFC.
 
-Some examples of non-material goods: 
+GS1 identifiers not specified for trade items are not included in Grid. (Assets, 
+services) While logistical items (typically identified with an SSCC) may not be 
+in this RFC, I would not exclude it entirely from Grid.
+
+Some examples of material goods: 
 
 - Batch/Lot (LGTIN) or Serialized (SGTIN) 
 - Logistical Cases/Pallets - Higher levels of packaging of the items - some of
