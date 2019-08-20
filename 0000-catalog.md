@@ -31,7 +31,7 @@ network.
 
 ## Entities
 
-A **catalog** is a high level construct that products adhereing to the 
+A **catalog** is a high-level construct that products adhering to the 
 "catalog_product" schema can reference as an additional field.  A catalog can be 
 referenced, or used to do business in a supply chain. A catalog is referenced by 
 a "catalog_product" via its **catalog_id**. A catalog also has an **owner** (the 
@@ -113,7 +113,7 @@ DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog
 
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** ([UUID](https://crates.io/crates/uuid)), an **owner** (org_id 
-compatible w/Pike), an **expiry_date** (unix timestamp), a **Name**, and a 
+compatible w/Pike), an **expiry_date** (unix timestamp), a **name**, and a 
 repeated field of **PropertyValues**.  The properties available are defined by 
 the Grid Property Schema Transaction Family and are restricted to the fields and 
 rules of the GS1 Catalog schema (which will be defined at a later time).  
