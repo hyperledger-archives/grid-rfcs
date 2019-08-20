@@ -104,7 +104,7 @@ represented as signed integers indicating millionths of degrees.
 
 ### Datetime
 
-Datetime values are represented as an
+Datetime values are represented using the
 [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) combined date-time formats.
 For example, "2007-04-05T14:30Z" or "2007-04-05T12:30-02:00".
 
@@ -116,7 +116,8 @@ includes the following:
 
 - *name* - the name and identifier for the Schema
 - *description* - description of the Schema
-- *owner* - the Pike compatible org identifier for the owning org of the Schema
+- *owner* - the Pike compatible organization identifier for the owning
+  organization of the Schema
 - *properties* - a list of `PropertyDefinitions` that define the attributes of
   the entity being defined by the Schema
 
@@ -154,7 +155,7 @@ message PropertyDefinition {
 
     // The exponent for a NUMBER property
     sint32 number_exponent = 10;
-    // The list of values for an ENUM property; must not be empty/ for
+    // The list of values for an ENUM property; must not be empty for
     // properties of that type.
     repeated string enum_options = 11;
     // The list of property definitions for a STRUCT property; must not be
@@ -459,7 +460,7 @@ A complete object representation can be built from the property definition
 messages, and instances can be represented by constructing items with the
 property value messages.  
 
-Suppose there is a requirement to store different types of light bulbs as part
+Suppose there is a requirement to store different types of lightbulbs as part
 of an application. A lightbulb may consist of the following properties: size,
 bulb type, energy rating, and color.
 
@@ -657,7 +658,7 @@ The action is validated according to the following rules:
   otherwise the transaction is invalid.  
 
 The schema is created with the provided fields, in addition to the Pike
-organization ID as the `owner_id`. The schema is then stored in state,
+organization ID as the `owner_id`. The schema is then stored in state.
 
 The inputs for SchemaCreateAction must include:
 
@@ -685,7 +686,7 @@ The action is validated according to the following rules:
 - If a Schema does not exist, the transaction is invalid.
 - If the property list is empty, the transaction is invalid.
 - If one of the new properties has the same name as a property already defined
-  in the scheme, the  transaction is invalid.
+  in the schema, the  transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
 - The signer of the transaction must belong to the same organization matching
