@@ -86,7 +86,7 @@ organization. The purpose of replication is to enable agents to duplicate a
 catalog, or a subset of "catalog_products" in state with the intention of 
 modifying the catalog_products to fit a different scheme. It reduces the 
 overhead needed to recreate a catalog. Generally organizations have a single 
-"master" catalog that they use to build "subcatalogs" customized for their 
+"master" catalog that they use to build "sub-catalogs" customized for their 
 business partners. 
 
 To perform any of the **catalog actions** agents will need the following 
@@ -113,7 +113,7 @@ DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog
 
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** ([UUID](https://crates.io/crates/uuid)), an **owner** (org_id 
-compatible w/Pike), an **expiry_date** (unix timestamp), a **name**, and a 
+compatible w/Pike), an **expiry_date** (unix timestamp), a **Name**, and a 
 repeated field of **PropertyValues**.  The properties available are defined by 
 the Grid Property Schema Transaction Family and are restricted to the fields and 
 rules of the GS1 Catalog schema (which will be defined at a later time).  
@@ -133,8 +133,7 @@ message Catalog {
 
 ### Referencing a Catalog
 
-Products are uniquely referenced by their product_id and product_namespace.  For
-GS1, Products are referenced by the GTIN identifier. For example:
+Catalogs are uniquely referenced by their catalog_id (UUID). For example:
 
 ``` 
 get_catalog(catalog_id) // UUID 
@@ -150,7 +149,7 @@ representation.
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
 "621dee",  Catalogs are further prefixed under the Grid namespace with reserved
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
-indicating "Catalogs" and an additional "01" indicating "GS1 Catalog".
+indicating "Grid Catalogs" and an additional "01" indicating "GS1 Catalog".
 
 Therefore, all addresses starting with:
 
@@ -220,8 +219,7 @@ namespace prefix, the product namespace prefix, GS1 namespce prefix, and catalog
 product namespace prefix, there are 58 hex characters remaining in the address.  
 The 14 digits of the GTIN can be left padded with 42-hex-character zeroes and 
 right padded with 2-hex-character zeroes to accommodate potential future storage 
-associated with the GS1 Product
-representation, for example:
+associated with the GS1 Product representation, for example:
 
 ``` 
 “621dee” + “02” + “01” + "01" + “000000000000000000000000000000000000000000” 
@@ -250,10 +248,16 @@ Schema(
     owner = "Target"
     properties=[
         PropertyDefinition(
+            name="catalog_id",
+            data_type=PropertyDefinition.DataType.STRING,
+            description="The the id of the catalog this 'catalog product' belongs to",
+            required=True,
+        ),
+        PropertyDefinition(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
             description="The current state of the catalog product",
-            enum_options=["ACTIVE", "INACTIVE"])
+            enum_options=["ACTIVE", "INACTIVE"],
             required=True
         ),
         PropertyDefinition(
@@ -264,7 +268,7 @@ Schema(
         )])
 ```
 
-In order to store a catalog product in global state, we will extend from the definition of a grid product with several fixed fields, namely identifiers, as well as the set of dynamic property values that will conform to the catalog product shema definition.
+In order to store a catalog product in global state, we will extend from the definition of a grid product with several fixed fields, namely identifiers, as well as the set of dynamic property values that will conform to the catalog product schema definition.
 
 ```
 message Product { 
@@ -280,7 +284,7 @@ message Product {
 }
 ```
 
-The catalog product smart contract would then be responsible for validating the properties field against the Lightbulb schema at run-time.
+The catalog smart contract would then be responsible for validating the properties field against the CatalogProduct schema at run-time.
 
 An Catalog Product entry, with all optional properties, would then look like the following:
 ```
@@ -289,6 +293,11 @@ CatalogProduct(
     product_namespace="GS1"
     owner='Target',
     properties=[
+        PropertyDefinition(
+            name="catalog_id",
+            data_type=PropertyDefinition.DataType.STRING,
+            string_value="9db5fcec-dcab-5b04-b31b-765ccbf2bc3a"
+        ),
         PropertyValue(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
