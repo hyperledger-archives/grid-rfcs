@@ -33,7 +33,7 @@ network.
 
 A **catalog** is a high-level construct that products adhering to the 
 "catalog_product" schema can reference as an additional field.  A catalog can be 
-referenced, or used to do business in a supply chain. A catalog is referenced by 
+referenced, or used to do business in a supply chain. A catalog is referenced by
 a "catalog_product" via its **catalog_id**. A catalog also has an **owner** (the 
 organization that creates the catalog).  It also contains an **expiry_date** as 
 a mechanism for clients to exipire the catalog. Also a **Name** for the catalog. 
@@ -112,11 +112,11 @@ DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog
 [reference-level-explanation]: #reference-level-explanation
 
 The primary object stored in state is **Catalog**, which consists of a
-**catalog_id** ([UUID](https://crates.io/crates/uuid)), an **owner** (org_id 
+**catalog_id** (hash of the catalog_name), an **owner** (org_id 
 compatible w/Pike), an **expiry_date** (unix timestamp), a **Name**, and a 
 repeated field of **PropertyValues**.  The properties available are defined by 
-the Grid Property Schema Transaction Family and are restricted to the fields and 
-rules of the GS1 Catalog schema (which will be defined at a later time).  
+the Grid Property Schema Transaction Family and are restricted to the fields 
+and rules of the GS1 Catalog schema (which will be defined at a later time).  
 Transactions which are responsible for setting product state values must ensure 
 that those properties conform with the requirements of the GS1 Catalog Property 
 Schema (to be defined at a later time).
@@ -126,18 +126,18 @@ message Catalog {
     string catalog_id = 1; 
     string owner = 2; 
     string expiry_date = 3; 
-    name = 4; 
-    repeated PropertyValue properties = 6; 
+    string name = 4; 
+    repeated PropertyValue properties = 5; 
 } 
 ```
 
 ### Referencing a Catalog
 
-Catalogs are uniquely referenced by their catalog_id (UUID). For example:
+Catalogs are uniquely referenced by their catalog_id. For example:
 
 ``` 
-get_catalog(catalog_id) // UUID 
-set_catalog(catalog_id, catalog) // UUID, catalog 
+get_catalog(catalog_id) // hash(catalog_name) 
+set_catalog(catalog_id, catalog) // hash(catalog_name), catalog 
 ```
 
 ### Catalog Addressing in the Merkle-Radix State System
@@ -157,39 +157,48 @@ Therefore, all addresses starting with:
 "621dee" + "03" + "01" 
 ```
 
-are Grid GS1 Catalogs identified by a UUID which can be reference by a 
-"catalog_product" to group products to a specific catalog. 
+are Grid GS1 Catalogs identified by the hash of the catalog name which can be
+referenced by a "catalog_product" to group products to a specific catalog. 
 
-UUID formats consist of 36-digit "alphanumeric strings" which include a fixed 
-amount of internal "0" padding.  After the 10-hex-characters that are consumed 
-by the grid namespace prefix, the catalog, and GS1 prefixes, there are 60 hex 
-characters remaining in the address.  The 36 digits of the GTIN can be left 
-padded with 24-hex-character zeroes and right padded with 2-hex-character zeroes 
-to accommodate potential future storage associated with the GS1 Catalog
-representation, for example:
+The catalog_id format consists of 15-digit "alphanumeric string" which include 
+a fixed amount of internal "0" padding.  After the 10-hex-characters that are 
+consumed by the grid namespace prefix, the catalog, and GS1 prefixes, there 
+are 60 hex characters remaining in the address.  The 36 digits of the GTIN can 
+be left padded with 24-hex-character zeroes and right padded with 
+2-hex-character zeroes to accommodate potential future storage associated with 
+the GS1 Catalog representation, for example:
 
 ``` 
-"621dee" + "03" + "01" + 0000000000000000000000 +
-36-character "numeric string" catalog_id + "00" // catalog_id == UUID 
+"621dee" + "03" + "01" + 0000000000000000000000000000000000000000000 +
+15-character "numeric string" catalog_id + "00" // catalog_id == UUID 
 ```
 
 Using the v5 constructer in the UUID crate we can tie the catalog_id to 
-catalog_name will prevent duplication of catalogs when invoking the 
+catalog_name to prevent duplication of catalogs when invoking the 
 catalog_replicate action.  
 ```
-use uuid::Uuid;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+
 
 fn main() {
-    let my_uuid = Uuid::new_v5(&Uuid::new_v4(), b"catalog_name");
-    println!("{}", my_uuid);
+    let catalog_name_hash = hash("catalog_name");
+    println!("catalog name hash: {:x}", catalog_name_hash)
 }
 
->> 9db5fcec-dcab-5b04-b31b-765ccbf2bc3a
+fn hash(s: &str) -> u64 {
+    let mut hasher = DefaultHasher::new();
+    s.hash(&mut hasher);
+    println!("Hash is {:x}!", hasher.finish());
+    return hasher.finish();
+}
+
+>> 7d1734adfee4927
 ```
 
 The full catalog address would look like:
 ``` 
-"621dee030100000000000000000000009db5fcec-dcab-5b04-b31b-765ccbf2bc3a00" 
+"621dee030100000000000000000000000000000000000000000007d1734adfee492700" 
 ```
 
 
@@ -235,11 +244,15 @@ would therefore be:
 
 ### Catalog Product Schema Definition
 
-This schema defines the additional attributes required of a grid product, such that it may be considered a "catalog product". Catalog products should be grouped with other catalog products. Once grouped, the grid catalog can be shared with other participants in a grid network.
+This schema defines the additional attributes required of a grid product, such that 
+it may be considered a "catalog product". Catalog products should be grouped with 
+other catalog products. Once grouped, the grid catalog can be shared with other 
+participants in a grid network.
 
 
-Any grid product added to a catalog will need to contain a _required_ ***status*** field and can include an _optional_ ***prices*** field, which will be 
-enforced by the catalog_product grid schema.
+Any grid product added to a catalog will need to contain a _required_ ***status*** 
+field and can include an _optional_ ***prices*** field, which will be enforced by 
+the catalog_product grid schema.
 
 ```
 Schema(
@@ -268,7 +281,10 @@ Schema(
         )])
 ```
 
-In order to store a catalog product in global state, we will extend from the definition of a grid product with several fixed fields, namely identifiers, as well as the set of dynamic property values that will conform to the catalog product schema definition.
+In order to store a catalog product in global state, we will extend from the 
+definition of a grid product with several fixed fields, namely identifiers, as 
+well as the set of dynamic property values that will conform to the catalog 
+product schema definition.
 
 ```
 message Product { 
@@ -284,7 +300,8 @@ message Product {
 }
 ```
 
-The catalog smart contract would then be responsible for validating the properties field against the CatalogProduct schema at run-time.
+The catalog smart contract would then be responsible for validating the 
+properties field against the CatalogProduct schema at run-time.
 
 An Catalog Product entry, with all optional properties, would then look like the following:
 ```
