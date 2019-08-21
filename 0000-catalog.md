@@ -163,8 +163,8 @@ referenced by a "catalog_product" to group products to a specific catalog.
 The catalog_id format consists of 15-digit "alphanumeric string" which include 
 a fixed amount of internal "0" padding.  After the 10-hex-characters that are 
 consumed by the grid namespace prefix, the catalog, and GS1 prefixes, there 
-are 60 hex characters remaining in the address.  The 36 digits of the GTIN can 
-be left padded with 24-hex-character zeroes and right padded with 
+are 60 hex characters remaining in the address.  The 15 digits of the catalog_id can 
+be left padded with 43-hex-character zeroes and right padded with 
 2-hex-character zeroes to accommodate potential future storage associated with 
 the GS1 Catalog representation, for example:
 
@@ -264,7 +264,7 @@ Schema(
             name="catalog_id",
             data_type=PropertyDefinition.DataType.STRING,
             description="The the id of the catalog this 'catalog product' belongs to",
-            required=True,
+            required=True
         ),
         PropertyDefinition(
             name="status",
@@ -303,7 +303,7 @@ message Product {
 The catalog smart contract would then be responsible for validating the 
 properties field against the CatalogProduct schema at run-time.
 
-An Catalog Product entry, with all optional properties, would then look like the following:
+A catalog product entry, with all optional properties, would then look like the following:
 ```
 CatalogProduct(
     product_id="gtin",
