@@ -8,7 +8,7 @@
 
 This RFC proposes a generic implementation for a Hyperledger Grid *Catalog*. The
 implementation of *Catalog* will materialize as an assortment of grid products
-that can be shared with one or more organizations, as well as implementaion of
+that can be shared with one or more organizations, as well as implementation of
 catalog related functions. The Catalog on grid will contain 5 fields. A
 **catalog_id**, a **catalog_owner**, an **expiry_date**, a **Name** for the 
 catalog, and a repeated field of PropertyValues for custom fields.
@@ -111,6 +111,10 @@ DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
 
+## State
+
+### Catalog Representation
+
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** (hash of the catalog_name), an **owner** (org_id 
 compatible w/Pike), an **expiry_date** (unix timestamp), a **Name**, and a 
@@ -149,31 +153,31 @@ representation.
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
 "621dee",  Catalogs are further prefixed under the Grid namespace with reserved
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
-indicating "Grid Catalogs" and an additional "01" indicating "GS1 Catalog".
+indicating "Grid Catalogs" and an additional [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/) derived from the org_id. This composite address will enable inexpensive catalog actions and operations.
 
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "03" + "01" 
+"621dee" + "03" + "gs1_company_prefix" 
 ```
 
 are Grid GS1 Catalogs identified by the hash of the catalog name which can be
 referenced by a "catalog_product" to group products to a specific catalog. 
 
 The catalog_id format consists of 15-digit "alphanumeric string" which include 
-a fixed amount of internal "0" padding.  After the 10-hex-characters that are 
-consumed by the grid namespace prefix, the catalog, and GS1 prefixes, there 
-are 60 hex characters remaining in the address.  The 15 digits of the catalog_id can 
-be left padded with 43-hex-character zeroes and right padded with 
+a fixed amount of internal "0" padding.  After the 12 to 18-hex-characters that are 
+consumed by the grid namespace prefix, the catalog, and gs1_company_prefix there 
+are 52-58 hex characters remaining in the address.  The 15 digits of the catalog_id can 
+be left padded with 37 to 43-hex-character zeroes and right padded with 
 2-hex-character zeroes to accommodate potential future storage associated with 
 the GS1 Catalog representation, for example:
 
 ``` 
-"621dee" + "03" + "01" + 0000000000000000000000000000000000000000000 +
-15-character "numeric string" catalog_id + "00" // catalog_id == UUID 
+"621dee" + "03" + "123456" + "000000000000000000000000000000000000000" +
+15-character "numeric string" catalog_id + "00" // catalog_id == hash(catalog_name) 
 ```
 
-Using the v5 constructer in the UUID crate we can tie the catalog_id to 
+Using the generic hash std crate we can tie the catalog_id to 
 catalog_name to prevent duplication of catalogs when invoking the 
 catalog_replicate action.  
 ```
@@ -198,7 +202,7 @@ fn hash(s: &str) -> u64 {
 
 The full catalog address would look like:
 ``` 
-"621dee030100000000000000000000000000000000000000000007d1734adfee492700" 
+"621dee031234560000000000000000000000000000000000000007d1734adfee492700" 
 ```
 
 
@@ -206,18 +210,16 @@ The full catalog address would look like:
 
 The Grid GS1 Catalog Product state address will be prefixed with the Grid 
 namespace of "621dee", in addition to "02" (product namespace), "01" for (gs1 
-product namespace), and and additional "01" to specify that it is a grid gs1 
-catalog product namespace.
+product namespace), and the catalog_id.
 
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "02" + "01" + "01"
+"621dee" + "02" + "01 + "7d1734adfee4927" // catalog_id
 ```
 
-are Grid GS1 Catalog Products identified by a gtin and are expected to contain 
-the catalog_id of the catalog they are associated with, as well as extra 
-PropertyValues that are defined in the GS1 catalog product schema. These 
+are Grid GS1 Catalog Products and are expected to contain the standard attributes of a Grid GS1 Product as well as the extra 
+PropertyValues that are defined in the  catalog product schema. These 
 PropertyValues are in addition to the expected PropertyValues of a [Grid GS1 
 Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1e87146c5fc56771/0000-product.md).
 
@@ -226,12 +228,12 @@ internal “0” padding depending on the specific GTIN format (GTIN-12,
 GTIN-13, or GTIN-14).  After the 12-hex-characters that are consumed by the grid
 namespace prefix, the product namespace prefix, GS1 namespce prefix, and catalog 
 product namespace prefix, there are 58 hex characters remaining in the address.  
-The 14 digits of the GTIN can be left padded with 42-hex-character zeroes and 
+The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character zeroes and 
 right padded with 2-hex-character zeroes to accommodate potential future storage 
 associated with the GS1 Product representation, for example:
 
 ``` 
-“621dee” + “02” + “01” + "01" + “000000000000000000000000000000000000000000” 
+“621dee” + “02” + “01” + "7d1734adfee4927" + “00000000000000000000000000000” 
 + 14-character “numeric string” product_id + “00” // product_id == GTIN 
 ```
 
@@ -239,7 +241,7 @@ A full GS1 Product address using the example GTIN from https://www.gtin.info/
 would therefore be:
 
 ``` 
-“621dee0201010000000000000000000000000000000000000000000001234560001200” 
+“621dee02017d1734adfee4927000000000000000000000000000000001234560001200” 
 ```
 
 ### Catalog Product Schema Definition
@@ -313,7 +315,7 @@ CatalogProduct(
         PropertyDefinition(
             name="catalog_id",
             data_type=PropertyDefinition.DataType.STRING,
-            string_value="9db5fcec-dcab-5b04-b31b-765ccbf2bc3a"
+            string_value="7d1734adfee4927"
         ),
         PropertyValue(
             name="status",
@@ -327,6 +329,58 @@ CatalogProduct(
         ),
     ])
 ```
+
+## Transaction Payload and Execution (catalog operations)
+
+CatalogPayload Transaction
+CatalogPayload contains an action enum and the associated action payload. This allows for the action payload to be dispatched to the appropriate logic.
+
+Only the defined actions are available and only one action payload should be defined in the CatalogPayload.
+
+message CatalogPayload { 
+    enum Actions { 
+        UNSET_ACTION = 0; 
+        CATALOG_CREATE = 1; 
+        CATALOG_DELETE = 2; 
+        CATALOG_REPLICATE = 3; 
+    }
+
+    Action action = 1;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 2;
+
+    CatalogCreateAction catalog_create = 3; 
+    CatalogDeleteAction catalog_delete = 4; 
+    CatalogReplicateAction catalog_replicate = 5; 
+} 
+
+### CatalogCreateAction
+CatalogCreateAction adds a new catalog to state. The transaction should be submitted by an agent, which is identified by its signing key, acting on behalf of the organization that corresponds to the owner in the create transaction. (Organizations and agents are defined by the Pike smart contract.)
+
+message CatalogCreateAction { 
+    // GS1 Company Prefix from owner + catalog_id are use as 
+    // a composite key for determining the state address
+    string owner = 1;
+    string catalog_id = 2;
+    string name = 3;
+    string expiry_date = 4;
+    repeated PropertyValues properties = 4; 
+} 
+
+Validation requirements:
+
+- If a catalog with catalog_id already exists the transaction is invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to an organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_create_catalog for the organization, otherwise the transaction is invalid.
+- If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a GTIN if GS1, otherwise the transaction is invalid.
+- The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.
+
+AddProductsToCatalog
+RemoveProductsFromCatalog
+ActivateProduct
+DeactivateProduct
+DiscontinueProduct
 
 # Rationale and alternatives
 [alternatives]: #alternatives
