@@ -63,6 +63,8 @@ to the catalog (as a list)
 * DeactivateProduct - toggles the "status" of a catalog_product to an inactive state
 * DiscontinueProduct - removes a catalog_product from all catalogs it's in
 
+The catalog_product operations scope will be local and global. Meaning AddProductsToCatalog will support adding products to a single, multiple, or all catalogs that an organization has. Same idea RemoveProductsFromCatalog, ActivateProduct, DeactiveProduct.
+
 ## Permissions
 
 Creation of a Grid Catalog is restricted to agents acting on behalf of the
@@ -153,12 +155,12 @@ representation.
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
 "621dee",  Catalogs are further prefixed under the Grid namespace with reserved
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
-indicating "Grid Catalogs" and an additional [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/) derived from the org_id. This composite address will enable inexpensive catalog actions and operations.
+indicating "Grid Catalogs" and an additional org_id. Currently in Grid Product, org_ids are a [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/). This composite address will enable inexpensive catalog operations.
 
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "03" + "gs1_company_prefix" 
+"621dee" + "03" + "123456" // org_id (in this case a gs1_company_prefix)
 ```
 
 are Grid GS1 Catalogs identified by the hash of the catalog name which can be
