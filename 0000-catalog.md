@@ -63,7 +63,10 @@ to the catalog (as a list)
 * DeactivateProduct - toggles the "status" of a catalog_product to an inactive state
 * DiscontinueProduct - removes a catalog_product from all catalogs it's in
 
-The catalog_product operations scope will be local and global. Meaning AddProductsToCatalog will support adding products to a single, multiple, or all catalogs that an organization has. Same idea RemoveProductsFromCatalog, ActivateProduct, DeactiveProduct.
+The catalog_product operations scope will be local and global. Meaning 
+AddProductsToCatalog will support adding products to a single, multiple, or all 
+catalogs that an organization has. Same idea RemoveProductsFromCatalog, 
+ActivateProduct, DeactiveProduct.
 
 ## Permissions
 
@@ -155,22 +158,26 @@ representation.
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
 "621dee",  Catalogs are further prefixed under the Grid namespace with reserved
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
-indicating "Grid Catalogs" and an additional org_id. Currently in Grid Product, org_ids are a [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/). This composite address will enable inexpensive catalog operations.
+indicating "Grid Catalogs" and an additional org_id. Currently in Grid Product, 
+org_ids are a [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/). 
+To keep the prefix length consistant, any GS1 company prefix less than 10 digits will 
+be left padded with the hexidecimal representation of the number 10 ("a") until it is 
+10 digits in length. This composite address will enable inexpensive catalog operations.
 
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "03" + "123456" // org_id (in this case a gs1_company_prefix)
+"621dee" + "03" + "aaaa123456" // org_id (in this case a gs1_company_prefix)
 ```
 
 are Grid GS1 Catalogs identified by the hash of the catalog name which can be
 referenced by a "catalog_product" to group products to a specific catalog. 
 
 The catalog_id format consists of 15-digit "alphanumeric string" which include 
-a fixed amount of internal "0" padding.  After the 12 to 18-hex-characters that are 
+a fixed amount of internal "0" padding.  After the 18-hex-characters that are 
 consumed by the grid namespace prefix, the catalog, and gs1_company_prefix there 
-are 52-58 hex characters remaining in the address.  The 15 digits of the catalog_id can 
-be left padded with 37 to 43-hex-character zeroes and right padded with 
+are 52 hex characters remaining in the address.  The 15 digits of the catalog_id can 
+be left padded with 60-hex-character zeroes and right padded with 
 2-hex-character zeroes to accommodate potential future storage associated with 
 the GS1 Catalog representation, for example:
 
@@ -179,32 +186,36 @@ the GS1 Catalog representation, for example:
 15-character "numeric string" catalog_id + "00" // catalog_id == hash(catalog_name) 
 ```
 
-Using the generic hash std crate we can tie the catalog_id to 
+Using SHA-3 from the rust-crypto crate we can tie the catalog_id to 
 catalog_name to prevent duplication of catalogs when invoking the 
 catalog_replicate action.  
 ```
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
+extern crate crypto;
+use self::crypto::digest::Digest;
+use self::crypto::sha3::Sha3;
 
+fn main(){
+  // create a SHA3-256 object
+  let mut hasher = Sha3::sha3_256();
 
-fn main() {
-    let catalog_name_hash = hash("catalog_name");
-    println!("catalog name hash: {:x}", catalog_name_hash)
+  // write input message
+  hasher.input_str("catalog_name ");
+
+  // read hash digest
+  let hex = hasher.result_str();
+  let hex_15 = &hex[0..15];
+
+  println!("SHA3 Hash is: {:?}", hex);
+  println!("SHA3 Hash (15): {:?}", hex_15);
 }
 
-fn hash(s: &str) -> u64 {
-    let mut hasher = DefaultHasher::new();
-    s.hash(&mut hasher);
-    println!("Hash is {:x}!", hasher.finish());
-    return hasher.finish();
-}
-
->> 7d1734adfee4927
+>> SHA3 Hash is: 846e4a25c881f5643b4fb4a775fc679ef2dbf44e5c67f48ba3573ccb9ddcaca1
+>> SHA3 Hash (15): 846e4a25c881f56
 ```
 
 The full catalog address would look like:
 ``` 
-"621dee031234560000000000000000000000000000000000000007d1734adfee492700" 
+"621dee03123456000000000000000000000000000000000000000846e4a25c881f5600" 
 ```
 
 
@@ -217,13 +228,13 @@ product namespace), and the catalog_id.
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "02" + "01 + "7d1734adfee4927" // catalog_id
+"621dee" + "02" + "01 + "846e4a25c881f56" // catalog_id
 ```
 
-are Grid GS1 Catalog Products and are expected to contain the standard attributes of a Grid GS1 Product as well as the extra 
-PropertyValues that are defined in the  catalog product schema. These 
-PropertyValues are in addition to the expected PropertyValues of a [Grid GS1 
-Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1e87146c5fc56771/0000-product.md).
+are Grid GS1 Catalog Products and are expected to contain the standard 
+attributes of a Grid GS1 Product as well as the extra PropertyValues that 
+are defined in the  catalog product schema. These PropertyValues are in 
+addition to the expected PropertyValues of a [Grid GS1 Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1e87146c5fc56771/0000-product.md).
 
 GTIN formats consist of 14-digit “numeric strings” which include some amount of
 internal “0” padding depending on the specific GTIN format (GTIN-12,
@@ -235,15 +246,14 @@ right padded with 2-hex-character zeroes to accommodate potential future storage
 associated with the GS1 Product representation, for example:
 
 ``` 
-“621dee” + “02” + “01” + "7d1734adfee4927" + “00000000000000000000000000000” 
+“621dee” + “02” + “01” + "846e4a25c881f56" + “00000000000000000000000000000” 
 + 14-character “numeric string” product_id + “00” // product_id == GTIN 
 ```
 
-A full GS1 Product address using the example GTIN from https://www.gtin.info/
-would therefore be:
+A full Catalog Product address using the example GTIN from https://www.gtin.info/ would therefore be:
 
 ``` 
-“621dee02017d1734adfee4927000000000000000000000000000000001234560001200” 
+“621dee0201846e4a25c881f56000000000000000000000000000000001234560001200” 
 ```
 
 ### Catalog Product Schema Definition
@@ -307,7 +317,9 @@ message Product {
 The catalog smart contract would then be responsible for validating the 
 properties field against the CatalogProduct schema at run-time.
 
-A catalog product entry, with all optional properties, would then look like the following:
+A catalog product entry would inherit from a Grid Product. In addition to 
+the properties definied in the CatalogProduct schema. The data model 
+would look like this:
 ```
 CatalogProduct(
     product_id="gtin",
@@ -317,7 +329,7 @@ CatalogProduct(
         PropertyDefinition(
             name="catalog_id",
             data_type=PropertyDefinition.DataType.STRING,
-            string_value="7d1734adfee4927"
+            string_value="846e4a25c881f56"
         ),
         PropertyValue(
             name="status",
@@ -335,10 +347,11 @@ CatalogProduct(
 ## Transaction Payload and Execution (catalog operations)
 
 CatalogPayload Transaction
-CatalogPayload contains an action enum and the associated action payload. This allows for the action payload to be dispatched to the appropriate logic.
-
-Only the defined actions are available and only one action payload should be defined in the CatalogPayload.
-
+CatalogPayload contains an action enum and the associated action payload. 
+This allows for the action payload to be dispatched to the appropriate logic.
+Only the defined actions are available and only one action payload should be 
+defined in the CatalogPayload.
+```
 message CatalogPayload { 
     enum Actions { 
         UNSET_ACTION = 0; 
@@ -356,7 +369,7 @@ message CatalogPayload {
     CatalogDeleteAction catalog_delete = 4; 
     CatalogReplicateAction catalog_replicate = 5; 
 } 
-
+```
 ### CatalogCreateAction
 CatalogCreateAction adds a new catalog to state. The transaction should be submitted by an agent, which is identified by its signing key, acting on behalf of the organization that corresponds to the owner in the create transaction. (Organizations and agents are defined by the Pike smart contract.)
 
@@ -396,7 +409,7 @@ RFC. A GS1 pricing standard that can be leveraged in the writing of such an RFC
 would be [GS1 Price 
 Sync](https://www.gs1.org/docs/gdsn/3.1BMS_Price_Sync_r3p1p3_i1p3p5_23May2017.pdf).
 
-Ideally the catalog_id should be dervied from the org_id and perhaps the catalog_name
+Ideally the catalog_id should be a composite key dervied from the org_id and perhaps the catalog_name. In this current implementation catalogs/catalog_products simply maintain references to eachother. There is no concept of "list of products" within a catalog. This design makes catalog actions/operations less expensive to perform. 
 
 # Prior art
 [prior-art]: #prior-art
