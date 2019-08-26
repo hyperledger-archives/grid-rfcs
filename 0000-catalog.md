@@ -13,9 +13,9 @@ catalog related functions. The Catalog on grid will contain 5 fields. A
 **catalog_id**, a **catalog_owner**, an **expiry_date**, a **Name** for the 
 catalog, and a repeated field of PropertyValues for custom fields.
 
-In addition any grid product added to a catalog will need to contain a
-***status*** field and can include an optional ***prices*** field, which will be 
-enforced by the catalog_product grid schema.
+In addition any grid product added to a catalog will need to contain a 
+***catalog_id*** field, ***status*** field and can include an optional 
+***prices*** field, which will be enforced by the catalog_product grid schema.
 
 # Motivation
 [motivation]: #motivation
