@@ -55,6 +55,11 @@ are supported:
 * CatalogReplicate - creates a full copy of a catalog, or a sub catalog from 
 catalog_products that already exist in state
 
+**catalog_product actions:**
+* CatalogProductCreate - create a catalog_product and stores it in state
+* CatalogProductUpdate - updates a catalog_product in state
+* CatalogProductDelete - removes a catalog_product from state
+
 **catalog_product operations:**
 * AddProductsToCatalog - adds catalog_product(s) specified by their product_id 
 to the catalog (as a list)
@@ -100,6 +105,14 @@ permissions:
 CatalogCreate: Agent from org needs the "can_create_catalog" permission
 CatalogDelete: Agent from org needs the "can_delete_catalog" permission
 CatalogReplicate: Agent from org needs the "can_duplicate_catalog" permission
+```
+
+To perform any of the **catalog_product actions** agents inherit the same 
+permissions needed for a Grid Product:
+```
+CatalogProductCreate: Agent from org needs the "can_create_product" permission
+CatalogProductUpdate: Agent from org needs the "can_update_product" permission
+CatalogProductDelete: Agent from org needs the "can_delete_product" permission
 ```
 
 In the case of **catalog operations** agents from the org they represent will
@@ -317,7 +330,7 @@ message Product {
 The catalog smart contract would then be responsible for validating the 
 properties field against the CatalogProduct schema at run-time.
 
-A catalog product entry would inherit from a Grid Product. In addition to 
+A catalog_product entry would inherit from a Grid Product. In addition to 
 the properties definied in the CatalogProduct schema. The data model 
 would look like this:
 ```
@@ -344,13 +357,15 @@ CatalogProduct(
     ])
 ```
 
-## Transaction Payload and Execution (catalog operations)
+## Transaction Payload and Execution 
 
-CatalogPayload Transaction
-CatalogPayload contains an action enum and the associated action payload. 
+The following payloads contain an action enum and the associated action payload. 
 This allows for the action payload to be dispatched to the appropriate logic.
-Only the defined actions are available and only one action payload should be 
-defined in the CatalogPayload.
+Only the defined actions (enum) are available, and only one Action should be 
+performed in a payload.
+
+### CatalogPayload Transaction
+
 ```
 message CatalogPayload { 
     enum Actions { 
@@ -370,8 +385,64 @@ message CatalogPayload {
     CatalogReplicateAction catalog_replicate = 5; 
 } 
 ```
+
+### CatalogProductPayload Transaction
+CatalogProductPayload contains an action enum and the associated action payload. 
+This allows for the action payload to be dispatched to the appropriate logic.
+Only the defined actions are available and only one action payload should be 
+defined in the CatalogProductPayload.
+
+```
+message CatalogProductPayload { 
+    enum Actions { 
+        UNSET_ACTION = 0; 
+        CATALOG_PRODUCT_CREATE = 1; 
+        CATALOG_PRODUCT_UPDATE = 2; 
+        CATALOG_PRODUCT_DELETE = 3; 
+    }
+
+    Action action = 1;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 2;
+
+    CatalogProductCreateAction catalog_product_create = 3; 
+    CatalogProductUpdateAction catalog_product_update = 4; 
+    CatalogProductDeleteAction catalog_product_delete = 5; 
+} 
+```
+
+```
+message CatalogProductOperationPayload { 
+    enum Actions { 
+        UNSET_ACTION = 0;
+        ADD_PRODUCTS_TO_CATALOG = 1;
+        REMOVE_PRODUCTS_FROM_CATALOG = 2;
+        ACTIVATE_PRODUCT = 3;
+        DEACTIVATE_PRODUCT = 4;
+        DISCONTINUE_PRODUCT = 5;
+    }
+
+    Action action = 1;
+
+    // Approximately when transaction was submitted, as a Unix UTC timestamp
+    uint64 timestamp = 2;
+
+    CatalogProductAddAction catalog_product_add = 3; 
+    CatalogProductRemoveAction catalog_product_remove= 4; 
+    CatalogProductActivateAction catalog_product_activate = 5; 
+    CatalogProductDeactivateAction catalog_product_deactivate = 6;
+    CatalogProductDiscontinueAction catalog_product_discontinue = 7;  
+} 
+```
+
+## Catalog Actions
+
 ### CatalogCreateAction
-CatalogCreateAction adds a new catalog to state. The transaction should be submitted by an agent, which is identified by its signing key, acting on behalf of the organization that corresponds to the owner in the create transaction. (Organizations and agents are defined by the Pike smart contract.)
+CatalogCreateAction adds a new catalog to state. The transaction should be submitted 
+by an agent, which is identified by its signing key, acting on behalf of the 
+organization that corresponds to the owner in the create transaction. (Organizations 
+and agents are defined by the Pike smart contract.)
 
 message CatalogCreateAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
@@ -380,16 +451,103 @@ message CatalogCreateAction {
     string catalog_id = 2;
     string name = 3;
     string expiry_date = 4;
-    repeated PropertyValues properties = 4; 
+    repeated PropertyValues properties = 5; 
 } 
 
 Validation requirements:
 
 - If a catalog with catalog_id already exists the transaction is invalid.
-- The signer of the transaction must be an agent in the Pike state and must belong to an organization in Pike state, otherwise the transaction is invalid.
-- The agent must have the permission can_create_catalog for the organization, otherwise the transaction is invalid.
-- If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its metadata (gs1_company_prefixes), and the prefix must match the company prefix in the product_id, which is a GTIN if GS1, otherwise the transaction is invalid.
-- The properties must be valid for the product_namespace. For example, if the product is GS1 product, its properties must only contain properties that are included in the GS1 Schema. If it includes a property not in the GS1 Schema the transaction is invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong 
+to an organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_create_catalog for the organization, 
+otherwise the transaction is invalid.
+
+If all requirements are met, the transaction will be accepted, the batch will be 
+written to a block, and the catalog will be created in state.
+
+The inputs for CatalogCreateAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Catalog is being created for
+Address of the Catalog to be created
+
+The outputs for CatalogCreateAction must include:
+
+Address of the Catalog created
+
+### CatalogDeleteAction
+CatalogDeleteAction adds a new catalog to state. The transaction should be submitted 
+by an agent, which is identified by its signing key, acting on behalf of the 
+organization that corresponds to the owner in the delete transaction. 
+(Organizations and agents are defined by the Pike smart contract.)
+
+message CatalogDeleteAction { 
+    // GS1 Company Prefix from owner + catalog_id are use as 
+    // a composite key for determining the state address
+    string owner = 1;
+    string catalog_id = 2;
+} 
+
+Validation requirements:
+
+- If a catalog with catalog_id exists the transaction is valid, otherwise it's invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to 
+an organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_delete_catalog for the organization, otherwise 
+the transaction is invalid.
+
+If all requirements are met, the transaction will be accepted, the batch will be 
+written to a block, and the catalog will be created in state.
+
+The inputs for CatalogDeleteAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Catalog is being created for
+Address of the Catalog to be deleted
+
+The outputs for CatalogDeleteAction must include:
+
+Address of the Catalog to be deleted
+
+### CatalogReplicateAction
+CatalogReplicateAction adds a new catalog to state. The transaction should be submitted by 
+an agent, which is identified by its signing key, acting on behalf of the organization 
+that corresponds to the owner in the delete transaction. (Organizations and agents are 
+defined by the Pike smart contract.)
+
+message CatalogReplicateAction { 
+    // GS1 Company Prefix from owner + catalog_id are use as 
+    // a composite key for determining the state address
+    string owner = 1;
+    string catalog_id = 2;
+    string name = 3;
+    string expiry_date = 4;
+    repeated PropertyValues properties = 5; 
+} 
+
+Validation requirements:
+
+- If a catalog with catalog_id exists the transaction is invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_replicate_catalog for the organization, 
+otherwise the transaction is invalid.
+
+If all requirements are met, the transaction will be accepted, the batch will be written 
+to a block, and the product will be created in state.
+
+The inputs for CatalogDeleteAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Catalog is being created for
+Address of the Catalog to be replicated
+
+The outputs for CatalogDeleteAction must include:
+
+Address of the Catalog to be replicated
+Address of the CatalogProducts it's replicating
+
+## Catalog_Product Actions (operations)
 
 AddProductsToCatalog
 RemoveProductsFromCatalog
@@ -409,7 +567,10 @@ RFC. A GS1 pricing standard that can be leveraged in the writing of such an RFC
 would be [GS1 Price 
 Sync](https://www.gs1.org/docs/gdsn/3.1BMS_Price_Sync_r3p1p3_i1p3p5_23May2017.pdf).
 
-Ideally the catalog_id should be a composite key dervied from the org_id and perhaps the catalog_name. In this current implementation catalogs/catalog_products simply maintain references to eachother. There is no concept of "list of products" within a catalog. This design makes catalog actions/operations less expensive to perform. 
+Ideally the catalog_id should be a composite key dervied from the org_id and perhaps the 
+catalog_name. In this current implementation catalogs/catalog_products simply maintain 
+references to eachother. There is no concept of "list of products" within a catalog. 
+This design makes catalog actions/operations less expensive to perform. 
 
 # Prior art
 [prior-art]: #prior-art
