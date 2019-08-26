@@ -51,9 +51,9 @@ are supported:
 
 **catalog actions:**
 * CatalogCreate - create a catalog and store it in state
+* CatalogUpdate - update a catalog in state
 * CatalogDelete - removes a catalog from state
-* CatalogReplicate - creates a full copy of a catalog, or a sub catalog from 
-catalog_products that already exist in state
+
 
 **catalog_product actions:**
 * CatalogProductCreate - create a catalog_product and stores it in state
@@ -91,20 +91,13 @@ references to these products and deleting them could leave dangling references.
 *Disclaimer: CatalogDelete is a potentially hazardous operation and needs to be 
 done with care.*
 
-Replication of a catalog is restricted to agents acting on behalf of an
-organization. The purpose of replication is to enable agents to duplicate a 
-catalog, or a subset of "catalog_products" in state with the intention of 
-modifying the catalog_products to fit a different scheme. It reduces the 
-overhead needed to recreate a catalog. Generally organizations have a single 
-"master" catalog that they use to build "sub-catalogs" customized for their 
-business partners. 
 
 To perform any of the **catalog actions** agents will need the following 
 permissions:
 ```
 CatalogCreate: Agent from org needs the "can_create_catalog" permission
+CatalogUpdate: Agent from org needs the "can_update_catalog" permission
 CatalogDelete: Agent from org needs the "can_delete_catalog" permission
-CatalogReplicate: Agent from org needs the "can_duplicate_catalog" permission
 ```
 
 To perform any of the **catalog_product actions** agents inherit the same 
@@ -201,7 +194,7 @@ the GS1 Catalog representation, for example:
 
 Using SHA-3 from the rust-crypto crate we can tie the catalog_id to 
 catalog_name to prevent duplication of catalogs when invoking the 
-catalog_replicate action.  
+catalog_create action.  
 ```
 extern crate crypto;
 use self::crypto::digest::Digest;
@@ -371,8 +364,8 @@ message CatalogPayload {
     enum Actions { 
         UNSET_ACTION = 0; 
         CATALOG_CREATE = 1; 
-        CATALOG_DELETE = 2; 
-        CATALOG_REPLICATE = 3; 
+        CATALOG_UPDATE = 2; 
+        CATALOG_DELETE = 3; 
     }
 
     Action action = 1;
@@ -381,8 +374,9 @@ message CatalogPayload {
     uint64 timestamp = 2;
 
     CatalogCreateAction catalog_create = 3; 
-    CatalogDeleteAction catalog_delete = 4; 
-    CatalogReplicateAction catalog_replicate = 5; 
+    CatalogUpdateAction catalog_update = 4; 
+    CatalogDeleteAction catalog_delete = 5; 
+    
 } 
 ```
 
@@ -509,13 +503,13 @@ The outputs for CatalogDeleteAction must include:
 
 Address of the Catalog to be deleted
 
-### CatalogReplicateAction
-CatalogReplicateAction adds a new catalog to state. The transaction should be submitted by 
+### CatalogUpdateAction
+CatalogUpdateAction adds a new catalog to state. The transaction should be submitted by 
 an agent, which is identified by its signing key, acting on behalf of the organization 
 that corresponds to the owner in the delete transaction. (Organizations and agents are 
 defined by the Pike smart contract.)
 
-message CatalogReplicateAction { 
+message CatalogUpdateAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
     // a composite key for determining the state address
     string owner = 1;
@@ -530,7 +524,7 @@ Validation requirements:
 - If a catalog with catalog_id exists the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must belong to an 
 organization in Pike state, otherwise the transaction is invalid.
-- The agent must have the permission can_replicate_catalog for the organization, 
+- The agent must have the permission can_update_catalog for the organization, 
 otherwise the transaction is invalid.
 
 If all requirements are met, the transaction will be accepted, the batch will be written 
@@ -540,12 +534,11 @@ The inputs for CatalogDeleteAction must include:
 
 Address of the Agent submitting the transaction
 Address of the Organization the Catalog is being created for
-Address of the Catalog to be replicated
+Address of the Catalog to be updated
 
 The outputs for CatalogDeleteAction must include:
 
-Address of the Catalog to be replicated
-Address of the CatalogProducts it's replicating
+Address of the Catalog to be updated
 
 ## Catalog_Product Actions (operations)
 
