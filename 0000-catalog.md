@@ -469,6 +469,43 @@ The outputs for CatalogCreateAction must include:
 
 Address of the Catalog created
 
+### CatalogUpdateAction
+CatalogUpdateAction adds a new catalog to state. The transaction should be submitted by 
+an agent, which is identified by its signing key, acting on behalf of the organization 
+that corresponds to the owner in the delete transaction. (Organizations and agents are 
+defined by the Pike smart contract.)
+
+message CatalogUpdateAction { 
+    // GS1 Company Prefix from owner + catalog_id are use as 
+    // a composite key for determining the state address
+    string owner = 1;
+    string catalog_id = 2;
+    string name = 3;
+    string expiry_date = 4;
+    repeated PropertyValues properties = 5; 
+} 
+
+Validation requirements:
+
+- If a catalog with catalog_id exists the transaction is invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_update_catalog for the organization, 
+otherwise the transaction is invalid.
+
+If all requirements are met, the transaction will be accepted, the batch will be written 
+to a block, and the product will be created in state.
+
+The inputs for CatalogUpdateAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Catalog is being created for
+Address of the Catalog to be updated
+
+The outputs for CatalogUpdateAction must include:
+
+Address of the Catalog to be updated
+
 ### CatalogDeleteAction
 CatalogDeleteAction adds a new catalog to state. The transaction should be submitted 
 by an agent, which is identified by its signing key, acting on behalf of the 
@@ -502,43 +539,6 @@ Address of the Catalog to be deleted
 The outputs for CatalogDeleteAction must include:
 
 Address of the Catalog to be deleted
-
-### CatalogUpdateAction
-CatalogUpdateAction adds a new catalog to state. The transaction should be submitted by 
-an agent, which is identified by its signing key, acting on behalf of the organization 
-that corresponds to the owner in the delete transaction. (Organizations and agents are 
-defined by the Pike smart contract.)
-
-message CatalogUpdateAction { 
-    // GS1 Company Prefix from owner + catalog_id are use as 
-    // a composite key for determining the state address
-    string owner = 1;
-    string catalog_id = 2;
-    string name = 3;
-    string expiry_date = 4;
-    repeated PropertyValues properties = 5; 
-} 
-
-Validation requirements:
-
-- If a catalog with catalog_id exists the transaction is invalid.
-- The signer of the transaction must be an agent in the Pike state and must belong to an 
-organization in Pike state, otherwise the transaction is invalid.
-- The agent must have the permission can_update_catalog for the organization, 
-otherwise the transaction is invalid.
-
-If all requirements are met, the transaction will be accepted, the batch will be written 
-to a block, and the product will be created in state.
-
-The inputs for CatalogDeleteAction must include:
-
-Address of the Agent submitting the transaction
-Address of the Organization the Catalog is being created for
-Address of the Catalog to be updated
-
-The outputs for CatalogDeleteAction must include:
-
-Address of the Catalog to be updated
 
 ## Catalog_Product Actions (operations)
 
