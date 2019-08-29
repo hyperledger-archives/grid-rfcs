@@ -65,12 +65,17 @@ perform.  Organizations and agents are defined and managed by Pike (another
 component of Grid).
 
 A product has one or more **properties**.  Properties are described in the Grid
-Primitives RFC.  A *property namespace* contains multiple *property schemas*.  A
-property schema associates a name (such as “length”) with a data type (such as
-integer).  GS1 products may only include properties defined in the GS1 product
-property namespace.
+Primitives RFC.  The grid *schema namespace* will contain many *property schemas*.
+A property schema associates a name (such as “length”) with a data type (such as
+integer). A single entry in a schema is known as a PropertyDefinition.  GS1 
+products may only include properties defined in the GS1 product property 
+namespace.
 
 ## Transactions
+
+In order to add Products to state, a transaction must be used. The following 
+transactions and their execution rules are designed for the Hyperledger 
+Sawtooth platform and may differ for other transaction execution platforms.
 
 Products are managed by submitting transactions to Hyperledger Grid, which will
 process them with the Grid Product smart contract. The following transactions
@@ -94,8 +99,10 @@ need to be implemented in Pike.) When a product is created, its owning
 organization is stored with the product in an “owner” field.
 
 Updates to products is restricted to agents acting on behalf of the organization
-stored in the product’s owner field.  Only property fields can be updated.
-Product_id, product_namespace, and owner fields are immutable.
+stored in the product’s owner field.  Only property fields can be updated. They 
+are updated by providing a complete and updated list of the properties, and 
+overwrites the entire list of property values. Product_id, product_namespace, 
+and owner fields are immutable.
 
 Deletion of products is restricted to agents acting on behalf of the
 organization in the product’s owner field.  A setting will turn off deletion
