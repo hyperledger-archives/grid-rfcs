@@ -7,11 +7,12 @@
 [summary]: #summary
 
 This RFC proposes a generic implementation for a Hyperledger Grid *Catalog*. The
-implementation of *Catalog* will materialize as an assortment of grid products
-that can be shared with one or more organizations, as well as implementation of
-catalog related functions. The Catalog on grid will contain 5 fields. A
-**catalog_id**, a **catalog_owner**, an **expiry_date**, a **Name** for the 
-catalog, and a repeated field of PropertyValues for custom fields.
+implementation of *Catalog* will materialize as a reference based ID shared bewtween 
+instances of of grid products. That catalog ID can be used to share a grouping of 
+products with that can be shared with one or more organizations. As well as assist 
+in programmatic operations performed on a Catalog. The Grid Catalog will contain 5 
+fields. A **catalog_id**, a **catalog_owner**, an **expiry_date**, a **Name** for 
+the catalog, and a repeated field of PropertyValues for custom fields.
 
 In addition an example "catalog_product" is included as a way to demonstrate 
 schema enforcement of additional product properties. Any grid product added to a 
@@ -20,7 +21,7 @@ schema) which requires a ***catalog_id*** field, a***status*** field and an
 optional ***prices*** field, which will be enforced by the catalog_product grid 
 schema.
 
-A catalog_id field *must* be included in any catalog related schema. All other 
+A **catalog_id** field ***must*** be included in any catalog related schema. All other 
 fields are supplemental and based on an organizations requirements.
 
 # Motivation
