@@ -201,27 +201,27 @@ use self::crypto::digest::Digest;
 use self::crypto::sha3::Sha3;
 
 fn main(){
-  // create a SHA3-256 object
-  let mut hasher = Sha3::sha3_256();
+	// create a SHA2-512 hasher
+	let mut hasher = Sha512::new();
 
-  // write input message
-  hasher.input_str("catalog_name ");
+	// write input message
+	hasher.input_str("catalog_name");
 
-  // read hash digest
-  let hex = hasher.result_str();
-  let hex_15 = &hex[0..15];
+	// read hash digest
+	let hex = hasher.result_str();
+	let hex_15 = &hex[0..15];
 
-  println!("SHA3 Hash is: {:?}", hex);
-  println!("SHA3 Hash (15): {:?}", hex_15);
+	println!("SHA2 Hash is {:?}", hex);
+	println!("SHA2 Hash (15) {:?}", hex_15);
 }
 
->> SHA3 Hash is: 846e4a25c881f5643b4fb4a775fc679ef2dbf44e5c67f48ba3573ccb9ddcaca1
->> SHA3 Hash (15): 846e4a25c881f56
+>> SHA3 Hash is: cad4e781e7977123893a42c7e7230e798bf5693f95c04980ba70bbe3504b194227c62e7e32d83ddbd083979720d7025b2cc9f68ac7b572dc6a607409b2dcdc43
+>> SHA3 Hash (15): cad4e781e797712
 ```
 
 The full catalog address would look like:
 ``` 
-"621dee03123456000000000000000000000000000000000000000846e4a25c881f5600" 
+"621dee03123456000000000000000000000000000000000000000cad4e781e79771200" 
 ```
 
 
@@ -234,7 +234,7 @@ product namespace), and the catalog_id.
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "02" + "01 + "846e4a25c881f56" // catalog_id
+"621dee" + "02" + "01 + "cad4e781e797712" // catalog_id
 ```
 
 are Grid GS1 Catalog Products and are expected to contain the standard 
@@ -242,8 +242,8 @@ attributes of a Grid GS1 Product as well as the extra PropertyValues that
 are defined in the  catalog product schema. These PropertyValues are in 
 addition to the expected PropertyValues of a [Grid GS1 Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1e87146c5fc56771/0000-product.md).
 
-GTIN formats consist of 14-digit “numeric strings” which include some amount of
-internal “0” padding depending on the specific GTIN format (GTIN-12,
+GTIN formats consist of 14-digit "numeric strings" which include some amount of
+internal "0" padding depending on the specific GTIN format (GTIN-12,
 GTIN-13, or GTIN-14).  After the 12-hex-characters that are consumed by the grid
 namespace prefix, the product namespace prefix, GS1 namespce prefix, and catalog 
 product namespace prefix, there are 58 hex characters remaining in the address.  
@@ -252,14 +252,14 @@ right padded with 2-hex-character zeroes to accommodate potential future storage
 associated with the GS1 Product representation, for example:
 
 ``` 
-“621dee” + “02” + “01” + "846e4a25c881f56" + “00000000000000000000000000000” 
-+ 14-character “numeric string” product_id + “00” // product_id == GTIN 
+"621dee" + "02" + "01" + "cad4e781e797712" + "00000000000000000000000000000" 
++ 14-character "numeric string" product_id + "00" // product_id == GTIN 
 ```
 
 A full Catalog Product address using the example GTIN from https://www.gtin.info/ would therefore be:
 
 ``` 
-“621dee0201846e4a25c881f56000000000000000000000000000000001234560001200” 
+"621dee0201cad4e781e797712000000000000000000000000000000001234560001200" 
 ```
 
 ### Catalog Product Schema Definition
@@ -335,7 +335,7 @@ CatalogProduct(
         PropertyDefinition(
             name="catalog_id",
             data_type=PropertyDefinition.DataType.STRING,
-            string_value="846e4a25c881f56"
+            string_value="cad4e781e797712"
         ),
         PropertyValue(
             name="status",
@@ -542,7 +542,40 @@ Address of the Catalog to be deleted
 
 ## Catalog_Product Actions (operations)
 
-AddProductsToCatalog
+### AddProductsToCatalogAction
+
+AddProductsToCatalogAction adds a new catalog to state. The transaction should be submitted 
+by an agent, which is identified by its signing key, acting on behalf of the 
+organization that corresponds to the owner in the AddProductsToCatalog transaction. 
+(Organizations and agents are defined by the Pike smart contract.)
+
+message AddProductsToCatalogAction { 
+    // GS1 Company Prefix from owner + catalog_id are use as 
+    // a composite key for determining the state address
+    string owner = 1;
+    string catalog_id = 2;
+} 
+
+Validation requirements:
+
+- If a catalog with catalog_id exists the transaction is valid, otherwise it's invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to 
+an organization in Pike state, otherwise the transaction is invalid.
+- The agent must have the permission can_delete_catalog for the organization, otherwise 
+the transaction is invalid.
+
+If all requirements are met, the transaction will be accepted, the batch will be 
+written to a block, and the catalog will be created in state.
+
+The inputs for CatalogDeleteAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Catalog is being created for
+Address of the Catalog to be deleted
+
+The outputs for CatalogDeleteAction must include:
+
+Address of the Catalog to be deleted
 RemoveProductsFromCatalog
 ActivateProduct
 DeactivateProduct
