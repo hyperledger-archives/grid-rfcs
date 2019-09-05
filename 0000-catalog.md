@@ -7,22 +7,18 @@
 [summary]: #summary
 
 This RFC proposes a generic implementation for a Hyperledger Grid *Catalog*. The
-implementation of *Catalog* will materialize as a reference based ID shared bewtween 
-instances of of grid products. That catalog ID can be used to share a grouping of 
+implementation of *Catalog* will materialize as a reference based ID shared between 
+instances of catalog_products. That catalog_id can be used to share a grouping of 
 products with that can be shared with one or more organizations. As well as assist 
-in programmatic operations performed on a Catalog. The Grid Catalog will contain 5 
-fields. A **catalog_id**, a **catalog_owner**, an **expiry_date**, a **Name** for 
+in programmatic operations performed on a Catalog. The Grid Catalog will contain 4 
+fields. A **catalog_id**, a **catalog_owner**, a **Name** for 
 the catalog, and a repeated field of PropertyValues for custom fields.
 
-In addition an example "catalog_product" is included as a way to demonstrate 
-schema enforcement of additional product properties. Any grid product added to a 
-catalog will adhere to the "catalog_product" schema (or another custom-defined 
-schema) which requires a ***catalog_id*** field, a***status*** field and an 
-optional ***prices*** field, which will be enforced by the catalog_product grid 
-schema.
-
-A **catalog_id** field ***must*** be included in any catalog related schema. All other 
-fields are supplemental and based on an organizations requirements.
+In addition an example catalog product schema is included as a way to demonstrate 
+enforcement of additional product properties. Any grid product added to a catalog 
+will adhere to the "catalog_product" schema (or another custom-defined schema). The 
+example schema in particular will enforce a required a ***status*** field, and an 
+optional ***prices*** field.
 
 # Motivation
 [motivation]: #motivation
@@ -42,8 +38,7 @@ A **catalog** is a high-level construct that products adhering to the
 "catalog_product" schema can reference as an additional field.  A catalog can be 
 referenced, or used to do business in a supply chain. A catalog is referenced by
 a "catalog_product" via its **catalog_id**. A catalog also has an **owner** (the 
-organization that creates the catalog).  It also contains an **expiry_date** as 
-a mechanism for clients to exipire the catalog. Also a **Name** for the catalog. 
+organization that creates the catalog).  Also a **Name** for the catalog. 
 
 A catalog, like a product, can also have one or more **properties**.  Properties
 are described in the Grid Primitives RFC.  A *property namespace* contains
@@ -105,6 +100,7 @@ permissions:
 CatalogCreate: Agent from org needs the "can_create_catalog" permission
 CatalogUpdate: Agent from org needs the "can_update_catalog" permission
 CatalogDelete: Agent from org needs the "can_delete_catalog" permission
+CatalogSync: Agent from org needs the "can_sync_catalog" permission
 ```
 
 To perform any of the **catalog_product actions** agents inherit the same 
@@ -135,7 +131,7 @@ DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog
 
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** (hash of the catalog_name), an **owner** (org_id 
-compatible w/Pike), an **expiry_date** (unix timestamp), a **Name**, and a 
+compatible w/Pike), a **Name**, and a 
 repeated field of **PropertyValues**.  The properties available are defined by 
 the Grid Property Schema Transaction Family and are restricted to the fields 
 and rules of the GS1 Catalog schema (which will be defined at a later time).  
@@ -147,9 +143,8 @@ Schema (to be defined at a later time).
 message Catalog { 
     string catalog_id = 1; 
     string owner = 2; 
-    string expiry_date = 3; 
-    string name = 4; 
-    repeated PropertyValue properties = 5; 
+    string name = 3; 
+    repeated PropertyValue properties = 4; 
 } 
 ```
 
@@ -199,7 +194,7 @@ the GS1 Catalog representation, for example:
 15-character "numeric string" catalog_id + "00" // catalog_id == hash(catalog_name) 
 ```
 
-Using SHA-3 from the rust-crypto crate we can tie the catalog_id to 
+Using SHA-2 from the rust-crypto crate we can tie the catalog_id to 
 catalog_name to prevent duplication of catalogs when invoking the 
 catalog_create action.  
 ```
@@ -208,29 +203,39 @@ use self::crypto::digest::Digest;
 use self::crypto::sha3::Sha3;
 
 fn main(){
-	// create a SHA2-512 hasher
-	let mut hasher = Sha512::new();
+    // create a SHA2-256 hasher
+    let mut hasher = Sha256::new();
 
-	// write input message
-	hasher.input_str("catalog_name");
+    // write input message
+    hasher.input_str("catalog_name");
 
-	// read hash digest
-	let hex = hasher.result_str();
-	let hex_15 = &hex[0..15];
+    // read hash digest
+    let hex = hasher.result_str();
+    let hex_15 = &hex[0..15];
 
-	println!("SHA2 Hash is {:?}", hex);
-	println!("SHA2 Hash (15) {:?}", hex_15);
+    println!("SHA2-256 Hash is {:?}", hex);
+    println!("SHA2-256 Hash (15) {:?}", hex_15);
 }
 
->> SHA3 Hash is: cad4e781e7977123893a42c7e7230e798bf5693f95c04980ba70bbe3504b194227c62e7e32d83ddbd083979720d7025b2cc9f68ac7b572dc6a607409b2dcdc43
->> SHA3 Hash (15): cad4e781e797712
+>> SHA3 Hash is: e70fe351d1d096c263d041624c4524da22693cabeef978c6e1d9b1b0dc266a65
+>> SHA3 Hash (15): e70fe351d1d096c
 ```
 
 The full catalog address would look like:
 ``` 
-"621dee03123456000000000000000000000000000000000000000cad4e781e79771200" 
+"621dee03123456000000000000000000000000000000000000000e70fe351d1d096c00" 
 ```
 
+### Referencing a Catalog Product
+
+Catalogs products are uniquely referenced by a composite key composed of their catalog_id 
+and product_id. For example:
+
+``` 
+get_catalog_product(catalog_id, product_id) // hash(catalog_name), product_id
+set_catalog_product(catalog_id, product_id, catalog_product) // hash(catalog_name), product_id, 
+catalog_product
+```
 
 ### Catalog Product Addressing in the Merkle-Radix State System
 
@@ -241,7 +246,7 @@ product namespace), and the catalog_id.
 Therefore, all addresses starting with:
 
 ``` 
-"621dee" + "02" + "01 + "cad4e781e797712" // catalog_id
+"621dee" + "02" + "01 + "e70fe351d1d096c" // catalog_id
 ```
 
 are Grid GS1 Catalog Products and are expected to contain the standard 
@@ -254,19 +259,19 @@ internal "0" padding depending on the specific GTIN format (GTIN-12,
 GTIN-13, or GTIN-14).  After the 12-hex-characters that are consumed by the grid
 namespace prefix, the product namespace prefix, GS1 namespce prefix, and catalog 
 product namespace prefix, there are 58 hex characters remaining in the address.  
-The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character zeroes and 
-right padded with 2-hex-character zeroes to accommodate potential future storage 
-associated with the GS1 Product representation, for example:
+The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character 
+zeroes and right padded with 2-hex-character zeroes to accommodate potential 
+future storage associated with the GS1 Product representation, for example:
 
 ``` 
-"621dee" + "02" + "01" + "cad4e781e797712" + "00000000000000000000000000000" 
+"621dee" + "02" + "01" + "e70fe351d1d096c" + "00000000000000000000000000000" 
 + 14-character "numeric string" product_id + "00" // product_id == GTIN 
 ```
 
 A full Catalog Product address using the example GTIN from https://www.gtin.info/ would therefore be:
 
 ``` 
-"621dee0201cad4e781e797712000000000000000000000000000000001234560001200" 
+"621dee0201e70fe351d1d096c000000000000000000000000000000001234560001200" 
 ```
 
 ### Catalog Product Schema Definition
@@ -277,22 +282,19 @@ other catalog products. Once grouped, the grid catalog can be shared with other
 participants in a grid network.
 
 
-Any grid product added to a catalog will need to contain a _required_ ***status*** 
-field and can include an _optional_ ***prices*** field, which will be enforced by 
-the catalog_product grid schema.
+Any grid product added to a catalog (thus becoming a catalog_product) will need to 
+contain a reference fields to the original product (product_id, product_namespace, 
+and owner) and a catalog_id. A catalog product schema may also be defined to 
+required additional fields for that catalog_product. This example schema enforces 
+a _required_ ***status*** field and an _optional_ ***prices*** field.
 
+Example schema:
 ```
 Schema(
     name="Catalog Product",
     description="A grid product that can be grouped with other products via grid catalog",
     owner = "Target"
     properties=[
-        PropertyDefinition(
-            name="catalog_id",
-            data_type=PropertyDefinition.DataType.STRING,
-            description="The the id of the catalog this 'catalog product' belongs to",
-            required=True
-        ),
         PropertyDefinition(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
@@ -327,23 +329,19 @@ message Product {
 }
 ```
 
-The catalog smart contract would then be responsible for validating the 
+The catalog_product smart contract would then be responsible for validating the 
 properties field against the CatalogProduct schema at run-time.
 
-A catalog_product entry would inherit from a Grid Product. In addition to 
-the properties definied in the CatalogProduct schema. The data model 
+A catalog_product entry would reference Grid Product. In addition to 
+the properties defined in the CatalogProduct schema. The data model 
 would look like this:
 ```
 CatalogProduct(
-    product_id="gtin",
-    product_namespace="GS1"
-    owner='Target',
+    product_id="gtin", // Reference from Grid Product
+    product_namespace="GS1" // Reference from Grid Product
+    owner='Target', // Reference from Grid Product
+		catalog_id='e70fe351d1d096c'
     properties=[
-        PropertyDefinition(
-            name="catalog_id",
-            data_type=PropertyDefinition.DataType.STRING,
-            string_value="cad4e781e797712"
-        ),
         PropertyValue(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
@@ -451,8 +449,7 @@ message CatalogCreateAction {
     string owner = 1;
     string catalog_id = 2;
     string name = 3;
-    string expiry_date = 4;
-    repeated PropertyValues properties = 5; 
+    repeated PropertyValues properties = 4; 
 } 
 
 Validation requirements:
@@ -488,8 +485,7 @@ message CatalogUpdateAction {
     string owner = 1;
     string catalog_id = 2;
     string name = 3;
-    string expiry_date = 4;
-    repeated PropertyValues properties = 5; 
+    repeated PropertyValues properties = 4; 
 } 
 
 Validation requirements:
