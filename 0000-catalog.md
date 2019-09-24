@@ -100,7 +100,6 @@ permissions:
 CatalogCreate: Agent from org needs the "can_create_catalog" permission
 CatalogUpdate: Agent from org needs the "can_update_catalog" permission
 CatalogDelete: Agent from org needs the "can_delete_catalog" permission
-CatalogSync: Agent from org needs the "can_sync_catalog" permission
 ```
 
 To perform any of the **catalog_product actions** agents inherit the same 
@@ -168,8 +167,8 @@ All Grid addresses are prefixed by the 6-hex-character namespace prefix
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
 indicating "Grid Catalogs" and an additional org_id. Currently in Grid Product, 
 org_ids are a [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/). 
-To keep the prefix length consistant, any GS1 company prefix less than 10 digits will 
-be left padded with the hexidecimal representation of the number 10 ("a") until it is 
+To keep the prefix length consistent, any GS1 company prefix less than 10 digits will 
+be left padded with the hexadecimal representation of the number 10 ("a") until it is 
 10 digits in length. This composite address will enable inexpensive catalog operations.
 
 Therefore, all addresses starting with:
@@ -257,7 +256,7 @@ addition to the expected PropertyValues of a [Grid GS1 Product](https://github.c
 GTIN formats consist of 14-digit "numeric strings" which include some amount of
 internal "0" padding depending on the specific GTIN format (GTIN-12,
 GTIN-13, or GTIN-14).  After the 12-hex-characters that are consumed by the grid
-namespace prefix, the product namespace prefix, GS1 namespce prefix, and catalog 
+namespace prefix, the product namespace prefix, GS1 namespace prefix, and catalog 
 product namespace prefix, there are 58 hex characters remaining in the address.  
 The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character 
 zeroes and right padded with 2-hex-character zeroes to accommodate potential 
@@ -442,7 +441,7 @@ CatalogCreateAction adds a new catalog to state. The transaction should be submi
 by an agent, which is identified by its signing key, acting on behalf of the 
 organization that corresponds to the owner in the create transaction. (Organizations 
 and agents are defined by the Pike smart contract.)
-
+```
 message CatalogCreateAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
     // a composite key for determining the state address
@@ -451,7 +450,7 @@ message CatalogCreateAction {
     string name = 3;
     repeated PropertyValues properties = 4; 
 } 
-
+```
 Validation requirements:
 
 - If a catalog with catalog_id already exists the transaction is invalid.
@@ -478,7 +477,7 @@ CatalogUpdateAction adds a new catalog to state. The transaction should be submi
 an agent, which is identified by its signing key, acting on behalf of the organization 
 that corresponds to the owner in the delete transaction. (Organizations and agents are 
 defined by the Pike smart contract.)
-
+```
 message CatalogUpdateAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
     // a composite key for determining the state address
@@ -487,7 +486,7 @@ message CatalogUpdateAction {
     string name = 3;
     repeated PropertyValues properties = 4; 
 } 
-
+```
 Validation requirements:
 
 - If a catalog with catalog_id exists the transaction is invalid.
@@ -514,14 +513,14 @@ CatalogDeleteAction adds a new catalog to state. The transaction should be submi
 by an agent, which is identified by its signing key, acting on behalf of the 
 organization that corresponds to the owner in the delete transaction. 
 (Organizations and agents are defined by the Pike smart contract.)
-
+```
 message CatalogDeleteAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
     // a composite key for determining the state address
     string owner = 1;
     string catalog_id = 2;
 } 
-
+```
 Validation requirements:
 
 - If a catalog with catalog_id exists the transaction is valid, otherwise it's invalid.
@@ -543,34 +542,162 @@ The outputs for CatalogDeleteAction must include:
 
 Address of the Catalog to be deleted
 
-## Catalog_Product Actions (operations)
+## Catalog_Product Actions
+
+### CatalogProductCreateAction
+The CatalogProductCreateAction adds a new catalog_product to state. The transaction should 
+be submitted by an agent, which is identified by its signing key, acting on behalf of the 
+organization that corresponds to the owner in the create transaction. (Organizations and 
+agents are defined by the Pike smart contract.)
+```
+message CatalogProductCreateAction { 
+    // catalog_id and product_id are used in deriving the state address
+    string catalog_id = 1
+    string product_id = 2 // Reference from Grid Product 
+    // schema defined additional fields
+    repeated PropertyValues properties = 4;
+} 
+```
+Validation requirements:
+
+If a product with product_id already exists the transaction is invalid.
+The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+The agent must have the permission can_create_product for the organization, otherwise the 
+transaction is invalid.
+If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its 
+metadata (gs1_company_prefixes), and the prefix must match the company prefix in the 
+product_id, which is a GTIN if GS1, otherwise the transaction is invalid.
+The properties must be valid for the product_namespace. For example, if the product is GS1 
+product, its properties must only contain properties that are included in the GS1 Schema. 
+If it includes a property not in the GS1 Schema the transaction is invalid.
+The base GS1 schema will be defined in a future RFC.
+
+If all requirements are met, the transaction will be accepted, the batch will be written to 
+a block, and the product will be created in state.
+
+The inputs for ProductCreateAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Product is being created for
+Address of the Catalog the Product is related too
+Address of the Product Namespace Schema the product’s properties must match
+Address of the Product to be created
+
+The outputs for ProductCreateAction must include:
+Address of the Catalog_Product created
+
+ProductUpdateAction
+ProductUpdateAction updates an existing product in state. The transaction should be submitted 
+by an agent, identified by its signing key, acting on behalf of an organization that 
+corresponds to the owner in the product being updated. (Organizations and agents are defined 
+by the Pike smart contract.)
+```
+    enum Product_Namespace { 
+        UNSET_NAMESPACE = 0;
+        GS1 = 1; 
+    }
+    // product_namespace and product_id are used in deriving the state address
+    Product_Namespace product_namespace = 1; 
+    string product_id = 2;
+    // this will replace all properties currently defined
+    repeated PropertyValues properties = 4; 
+} 
+```
+Validation requirements:
+
+If a product with product_id does not exist the transaction is invalid.
+The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+The owner in the product must match the organization that the agent belongs to,
+otherwise the transaction is invalid.
+The agent must have the permission can_update_product for the organization, otherwise 
+the transaction is invalid.
+The new properties must be valid for the product_namespace. For example, if the product 
+is GS1 product, its properties must only contain properties that are included in the GS1 
+Schema. If it includes a property not in the GS1 Scheme the transaction is invalid.
+The base GS1 schema will be defined in a future RFC.
+
+The properties in the product will be swapped for the new properties and the updated 
+product will be set in state.
+
+The inputs for ProductUpdateAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Product is being updated for
+Address of the Product Namespace Schema the product’s properties must match
+Address of the Product to be updated
+The outputs for ProductUpdateAction must include:
+
+Address of the Product updated
+ProductDeleteAction
+ProductDeleteAction removes an existing product from state. The transaction should be 
+submitted by an agent, identified by its signing key, acting on behalf of the organization 
+that corresponds to the org_id in the product being updated. (Organizations and agents are 
+defined by the Pike smart contract.)
+
+message ProductDeleteAction { 
+    enum Product_Namespace { 
+        UNSET_NAMESPACE = 0;
+        GS1 = 1; 
+    }
+    // product_namespace and product_id are used in deriving the state address
+    Product_Namespace product_namespace = 1; 
+    string product_id = 2; 
+} 
+If the Grid setting grid.product.allow_delete is set to false, this transaction is invalid. 
+The default value for grid.product.allow_delete is true. This setting is stored using the 
+Sawtooth Settings smart contract, more information can be found here.
+
+Validation requirements:
+
+If a product with product_id does not exist the transaction is invalid.
+The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+The owner in the product must match the organization that the agent belongs to, otherwise 
+the transaction is invalid.
+The agent must have the permission “can_delete_product” for the organization otherwise the 
+transaction is invalid.
+The inputs for ProductDeleteAction must include:
+
+Address of the Agent submitting the transaction
+Address of the Organization the Product is being deleted for Address of the Product to be 
+deleted
+The outputs for ProductUpdateAction must include:
+
+Address of the Product to be deleted
+
+
+## Catalog_Product Operations
 
 ### AddProductsToCatalogAction
 
-AddProductsToCatalogAction adds a new catalog to state. The transaction should be submitted 
+AddProductsToCatalogAction adds catalog_products to an existing catalog to state 
+(by reference). The transaction should be submitted 
 by an agent, which is identified by its signing key, acting on behalf of the 
 organization that corresponds to the owner in the AddProductsToCatalog transaction. 
 (Organizations and agents are defined by the Pike smart contract.)
-
+```
 message AddProductsToCatalogAction { 
     // GS1 Company Prefix from owner + catalog_id are use as 
     // a composite key for determining the state address
     string owner = 1;
     string catalog_id = 2;
 } 
-
+```
 Validation requirements:
 
-- If a catalog with catalog_id exists the transaction is valid, otherwise it's invalid.
+- If a catalog_product (identified by product_id) already exists in the catalog the 
+transaction is valid, otherwise it's invalid.
 - The signer of the transaction must be an agent in the Pike state and must belong to 
 an organization in Pike state, otherwise the transaction is invalid.
-- The agent must have the permission can_delete_catalog for the organization, otherwise 
-the transaction is invalid.
+- The agent must have the permission can_add_products_to_catalog for the organization, 
+otherwise the transaction is invalid.
 
 If all requirements are met, the transaction will be accepted, the batch will be 
 written to a block, and the catalog will be created in state.
 
-The inputs for CatalogDeleteAction must include:
+The inputs for AddProductsToCatalogAction must include:
 
 Address of the Agent submitting the transaction
 Address of the Organization the Catalog is being created for
@@ -579,7 +706,11 @@ Address of the Catalog to be deleted
 The outputs for CatalogDeleteAction must include:
 
 Address of the Catalog to be deleted
-RemoveProductsFromCatalog
+
+
+### RemoveProductsFromCatalog
+
+
 ActivateProduct
 DeactivateProduct
 DiscontinueProduct
@@ -596,10 +727,10 @@ RFC. A GS1 pricing standard that can be leveraged in the writing of such an RFC
 would be [GS1 Price 
 Sync](https://www.gs1.org/docs/gdsn/3.1BMS_Price_Sync_r3p1p3_i1p3p5_23May2017.pdf).
 
-Ideally the catalog_id should be a composite key dervied from the org_id and perhaps the 
-catalog_name. In this current implementation catalogs/catalog_products simply maintain 
-references to eachother. There is no concept of "list of products" within a catalog. 
-This design makes catalog actions/operations less expensive to perform. 
+Ideally the catalog_id should be a composite key derived from the org_id and perhaps 
+the catalog_name. In this current implementation catalogs/catalog_products simply 
+maintain references to each other. There is no concept of "list of products" within 
+a catalog. This design makes catalog actions/operations less expensive to perform. 
 
 # Prior art
 [prior-art]: #prior-art
@@ -626,5 +757,5 @@ as the formats and transactions associated with them.
 [unresolved]: #unresolved-questions
 
 - Determining the integration with Grid Schema
-- Determining schemas for catatlog products
+- Determining schemas for catalog products
 - Determining pricing data model and associated function in a future RFC
