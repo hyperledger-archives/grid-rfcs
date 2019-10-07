@@ -54,26 +54,25 @@ are supported:
 **catalog actions:**
 * CatalogCreate - create a catalog and store it in state
 * CatalogUpdate - update a catalog in state
-* CatalogDelete - removes a catalog from state
+* *CatalogDelete - deletes a catalog from state and associated catalog_products
 
 
 **catalog_product actions:**
 * CatalogProductCreate - create a catalog_product and stores it in state
-* CatalogProductUpdate - updates a catalog_product in state
-* CatalogProductDelete - removes a catalog_product from state
+* *CatalogProductUpdate - updates a catalog_product in state
+* *CatalogProductDelete - delete a catalog_product from state
 
 **catalog_product operations:**
-* AddProductsToCatalog - adds catalog_product(s) specified by their product_id 
-to the catalog (as a list)
-* RemoveProductsFromCatalog - removes catalog_product(s) from a catalog (as a list)
-* ActivateProduct - toggles the "status" of a catalog_product to an active state
-* DeactivateProduct - toggles the "status" of a catalog_product to an inactive state
-* DiscontinueProduct - removes a catalog_product from all catalogs it's in
+* *ActivateProduct - toggles the "status" of a catalog_product to an active state
+* *DeactivateProduct - toggles the "status" of a catalog_product to an inactive state
+* *DiscontinueProduct - toggles the "status" of a catalog_product to an discontinued state
 
-The catalog_product operations scope will be local and global. Meaning 
-AddProductsToCatalog will support adding products to a single, multiple, or all 
-catalogs that an organization has. Same idea RemoveProductsFromCatalog, 
-ActivateProduct, DeactiveProduct.
+The catalog_product actions/operations will accept a parameter list of the catalogs 
+the operation should be performed on. Meaning Activate, Deactivate, or
+Discontinue can be performed on a single, multiple, or all catalogs that an 
+organization has. 
+
+_The trailing `*` indicates the need to perform the action/operation across one or more locations in state._
 
 ## Permissions
 
@@ -114,12 +113,11 @@ In the case of **catalog operations** agents from the org they represent will
 need the operational permission to perform the desired operation on a Grid
 Catalog.
 ```
-AddProductsToCatalog: Agent from org needs the "can_add_products_to_catalog" permission
-RemoveProductsFromCatalog: Agent from org needs the "can_remove_products_from_catalog" permission
-ActivateProduct: Agent from org needs the "can_activate_product_in_catalog" permission
-DeactivateProduct: Agent from org needs the "can_deactivate_product_in_catalog" permission
+ActivateCatalogProduct: Agent from org needs the "can_activate_product_in_catalog" permission
+DeactivateCatalogProduct: Agent from org needs the "can_deactivate_product_in_catalog" permission
 DiscontinueProduct: Agent from org needs the "can_discontinue_product_in_catalog" permission
 ```
+
 
 # Reference-level explanation
 [reference-level-explanation]: #reference-level-explanation
@@ -670,7 +668,7 @@ Address of the Product to be deleted
 
 ## Catalog_Product Operations
 
-### AddProductsToCatalogAction
+### DeleteProductsFromCatalogAction
 
 AddProductsToCatalogAction adds catalog_products to an existing catalog to state 
 (by reference). The transaction should be submitted 
@@ -687,11 +685,11 @@ message AddProductsToCatalogAction {
 ```
 Validation requirements:
 
-- If a catalog_product (identified by product_id) already exists in the catalog the 
+- If a catalog_product (identified by product_id) exists in the catalog the 
 transaction is valid, otherwise it's invalid.
 - The signer of the transaction must be an agent in the Pike state and must belong to 
 an organization in Pike state, otherwise the transaction is invalid.
-- The agent must have the permission can_add_products_to_catalog for the organization, 
+- The agent must have the permission can_delete_products_from_catalog for the organization, 
 otherwise the transaction is invalid.
 
 If all requirements are met, the transaction will be accepted, the batch will be 
@@ -700,15 +698,11 @@ written to a block, and the catalog will be created in state.
 The inputs for AddProductsToCatalogAction must include:
 
 Address of the Agent submitting the transaction
-Address of the Organization the Catalog is being created for
-Address of the Catalog to be deleted
+Address of the catalog_product to be deleted
 
-The outputs for CatalogDeleteAction must include:
+The outputs for DeleteProductsFromCatalogAction must include:
 
-Address of the Catalog to be deleted
-
-
-### RemoveProductsFromCatalog
+Address of the catalog_product to be deleted
 
 
 ActivateProduct
@@ -733,7 +727,7 @@ maintain references to each other. There is no concept of "list of products" wit
 a catalog. This design makes catalog actions/operations less expensive to perform. 
 
 # Prior art
-[prior-art]: #prior-art
+[prior-art]: #prior-artt
 
 In the distributed ledger space there are not any example implementations of a
 product catalog. There are specs and standards around catalogs that can be
