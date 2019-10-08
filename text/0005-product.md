@@ -475,18 +475,18 @@ Merchandise](https://www.gs1us.org/DesktopModules/Bring2mind/DMX/Download.aspx?C
 
 ### Clothing:
 
-Material content:\ This element is used to indicate the material composition.
+Material content: This element is used to indicate the material composition.
 This element is used in conjunction with the percentage.
 
-Material Percentage:\ Net weight percentage of a product material of the first
+Material Percentage: Net weight percentage of a product material of the first
 main material. The percentages must add up to 100.
 
-Material Percentage:\ Net weight percentage of a product material of the first
+Material Percentage: Net weight percentage of a product material of the first
 main material. The percentages must add up to 100.
 
 ### Furniture:
 
-Number of pieces:\ The total number of separately packaged components comprising
+Number of pieces: The total number of separately packaged components comprising
 a single trade item.
 
 Look at section 3.5.7 Packaging component number AI (243)
