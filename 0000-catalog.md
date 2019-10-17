@@ -34,11 +34,12 @@ network.
 
 ## Entities
 
-A **catalog** is a high-level construct that catalog_products can reference. The "catalog_product" 
-schema can be extended to include any number of attributes that are required by an organization. A catalog can be referenced, or used to share item level information in a supply chain. 
-A catalog is referenced by a "catalog_product" via its **catalog_id**. A catalog also 
-has an **owner** (the organization that creates the catalog).  Also a **Name** for 
-the catalog. 
+A **catalog** is a high-level construct that catalog_products can reference. The 
+"catalog_product" schema can be extended to include any number of attributes that 
+are required by an organization. A catalog can be referenced, or used to share item 
+level information in a supply chain. A catalog is referenced by a "catalog_product" 
+via its **catalog_id**. A catalog also has an **owner** (the organization that 
+creates the catalog).  Also a **Name** for the catalog. 
 
 A catalog, like a product, can also have one or more **properties**.  Properties
 are described in the Grid Primitives RFC.  A *property namespace* contains
@@ -62,14 +63,16 @@ are supported:
 * CatalogProductUpdate - updates a catalog_product in state
 * CatalogProductDelete - delete a catalog_product from state
 
-**catalog_product operations:**
-* *ActivateProduct - toggles the "status" of a catalog_product to an active state
-* *DeactivateProduct - toggles the "status" of a catalog_product to an inactive state
-* *DiscontinueProduct - toggles the "status" of a catalog_product to an discontinued state
+**catalog_product operation:**
+* *SetCatalogProductStatus - changes the "status" of a catalog_product to an active, 
+inactive, or discontinued state
 
-The catalog_product actions/operations will accept a parameter list of the catalogs the operation should be performed on. Meaning Activate, Deactivate, or Discontinue can be performed on a single, multiple, or all catalogs that an organization has. 
+The catalog_product actions/operation will accept a parameter list of the catalogs 
+the operation should be performed on. Meaning SetCatalogProductStatus can be
+perfomed on catalog_products in a single, multiple, or all catalogs that an 
+organization has. 
 
-`*` indicates that the action/operation can affect more than one catalog_product._
+_`*` indicates that the action/operation can affect more than one catalog_product._
 
 ## Permissions
 
@@ -86,7 +89,8 @@ entirely, with the intent that it could be enabled/disabled by a Grid
 administrator.  Disabling delete is useful because external systems may have
 references to these products and deleting them could leave dangling references.
 
-*Disclaimer: CatalogDelete & CatalogProductDelete are potentially hazardous operation and need to be done with care.*
+*Disclaimer: CatalogDelete & CatalogProductDelete are potentially hazardous 
+operation and need to be done with care.*
 
 
 To perform any of the **catalog actions** agents will need the following 
@@ -314,6 +318,8 @@ definition of a grid product with several fixed fields, namely identifiers, as
 well as the set of dynamic property values that will conform to the catalog 
 product schema definition.
 
+**Grid Product from the [Product RFC](https://github.com/hyperledger/grid-rfcs/blob/master/text/0005-product.md):**
+
 ```
 message Product { 
     enum ProductNamespace { 
@@ -385,7 +391,6 @@ message CatalogPayload {
     CatalogCreateAction catalog_create = 3; 
     CatalogUpdateAction catalog_update = 4; 
     CatalogDeleteAction catalog_delete = 5; 
-    
 } 
 ```
 
@@ -419,11 +424,7 @@ message CatalogProductPayload {
 message CatalogProductOperationPayload { 
     enum Actions { 
         UNSET_ACTION = 0;
-        ADD_PRODUCTS_TO_CATALOG = 1;
-        REMOVE_PRODUCTS_FROM_CATALOG = 2;
-        ACTIVATE_PRODUCT = 3;
-        DEACTIVATE_PRODUCT = 4;
-        DISCONTINUE_PRODUCT = 5;
+        SET_CATALOG_PRODUCT_STATUS = 1;
     }
 
     Action action = 1;
@@ -431,11 +432,7 @@ message CatalogProductOperationPayload {
     // Approximately when transaction was submitted, as a Unix UTC timestamp
     uint64 timestamp = 2;
 
-    CatalogProductAddAction catalog_product_add = 3; 
-    CatalogProductRemoveAction catalog_product_remove= 4; 
-    CatalogProductActivateAction catalog_product_activate = 5; 
-    CatalogProductDeactivateAction catalog_product_deactivate = 6;
-    CatalogProductDiscontinueAction catalog_product_discontinue = 7;  
+    SetCatalogProductStatusAction set_catalog_product_status = 3;  
 } 
 ```
 
@@ -573,7 +570,8 @@ transaction is invalid.
 - If the product_namespace is GS1, the organization must contain a GS1 Company Prefix in its 
 metadata (gs1_company_prefixes), and the prefix must match the company prefix in the 
 product_id, which is a GTIN if GS1, otherwise the transaction is invalid.
-- The properties must be valid for the catalog_product schema. Meaning its properties must only contain properties that are included in the catalog_product Schema. 
+- The properties must be valid for the catalog_product schema. Meaning its properties must only 
+\contain properties that are included in the catalog_product Schema. 
 
 If all requirements are met, the transaction will be accepted, the batch will be written to 
 a block, and the product will be created in state.
@@ -585,7 +583,7 @@ The inputs for CatalogProductCreateAction must include:
 - Address of the Catalog the catalog_product is related too
 - Address of the catalog_product namespace schema and the catalog_product’s properties must match
 
-The outputs for ProductCreateAction must include:
+The outputs for CatalogProductCreateAction must include:
 
 - Address of the Catalog_Product created
 
@@ -595,7 +593,7 @@ by an agent, identified by its signing key, acting on behalf of an organization 
 corresponds to the owner in the product being updated. (Organizations and agents are defined 
 by the Pike smart contract.)
 ```
-message CatalogProductUpdatection { 
+message CatalogProductUpdateAction { 
     // catalog_id and product_id are used in deriving the state address
     string catalog_id = 1; 
     string product_id = 2;
@@ -612,9 +610,10 @@ The owner in the product must match the organization that the agent belongs to,
 otherwise the transaction is invalid.
 - The agent must have the permission can_update_product for the organization, otherwise 
 the transaction is invalid.
-- The properties must be valid for the catalog_product schema. Meaning its properties must only contain properties that are included in the catalog_product Schema. 
+- The properties must be valid for the catalog_product schema. Meaning its properties must 
+only contain properties that are included in the catalog_product Schema. 
 
-The inputs for ProductUpdateAction must include:
+The inputs for CatalogProductUpdateAction must include:
 
 - Address of the Agent submitting the transaction
 - Address of the Organization the Product is being updated for
@@ -629,16 +628,16 @@ CatalogProductDeleteAction removes an existing product from state. The transacti
 submitted by an agent, identified by its signing key, acting on behalf of the organization 
 that corresponds to the org_id in the product being updated. (Organizations and agents are 
 defined by the Pike smart contract.)
-
+```
 message CatalogProductDeleteAction { 
-
     // catalog_id and product_id are used in deriving the state address
     string catalog_id = 1; 
     string product_id = 2; 
 } 
-If the Grid setting grid.product.allow_delete is set to false, this transaction is invalid. (sys admin setting)
-The default value for grid.product.allow_delete is true. This setting is stored using the 
-Sawtooth Settings smart contract, more information can be found here.
+```
+If the Grid setting grid.product.allow_delete is set to false, this transaction is invalid. 
+(sys admin setting) The default value for grid.product.allow_delete is true. This setting 
+is stored using the Sawtooth Settings smart contract.
 
 Validation requirements:
 
@@ -650,25 +649,63 @@ the transaction is invalid.
 - The agent must have the permission “can_delete_product” for the organization otherwise the 
 transaction is invalid.
 
-The inputs for ProductDeleteAction must include:
+The inputs for CatalogProductDeleteAction must include:
 
 - Address of the Agent submitting the transaction
 - Address of the Organization the Product is being deleted for 
-- Address of the Product to be 
+- Address of the catalog_product to be 
 deleted
 
-The outputs for ProductUpdateAction must include:
+The outputs for CatalogProductDeleteAction must include:
 
-- Address of the Product to be deleted
+- Address of the catalog_product to be deleted
 
 
 ## Catalog_Product Operations
 
-### ActivateCatalogProduct
+### SetCatalogProductStatusAction
+SetCatalogProductStatusAction updates an existing catalog_product in state. The transaction 
+should be submitted by an agent, identified by its signing key, acting on behalf of an 
+organization that corresponds to the owner in the product being updated. (Organizations and 
+agents are defined by the Pike smart contract.)
 
-### DectivateCatalogProduct
+```
+message SetCatalogProductStatusAction { 
+    enum Status { 
+        INACTIVE = 0;
+        ACTIVE = 1; 
+        DISCONTINUED = 2;
+    }
+    // catalog_id and product_id are used in deriving the state address
+    string catalog_id = 1; 
+    string product_id = 2;
+    Status catalog_product_status  = 4; 
+    // Reason for the change
+    string reason = 5;
+} 
+```
 
-### DiscontinueCatalogProduct
+Validation requirements:
+
+- If a catalog_product with product_id does not exist the transaction is invalid.
+- The signer of the transaction must be an agent in the Pike state and must belong to an 
+organization in Pike state, otherwise the transaction is invalid.
+The owner in the product must match the organization that the agent belongs to,
+otherwise the transaction is invalid.
+- The agent must have the permission can_update_product for the organization, otherwise 
+the transaction is invalid.
+- The properties must be valid for the catalog_product schema. Meaning its properties must 
+only contain properties that are included in the catalog_product Schema. 
+
+The inputs for SetCatalogProductStatusAction must include:
+
+- Address of the Agent submitting the transaction
+- Address of the Organization the catalog_product is being updated for
+- Address of the catalog_product to be updated
+
+The outputs for SetCatalogProductStatusAction must include:
+
+- Address of the updated catalog_product
 
 
 # Rationale and alternatives
@@ -680,6 +717,7 @@ the notion of price within products added to a catalog. A simple implementation
 of price is fine and currently serves as a placeholder, while a more robust 
 standard of modeling price data can be implemented from a future pricing-related
 RFC. A GS1 pricing standard that can be leveraged in the writing of such an RFC
+
 would be [GS1 Price 
 Sync](https://www.gs1.org/docs/gdsn/3.1BMS_Price_Sync_r3p1p3_i1p3p5_23May2017.pdf).
 
