@@ -9,22 +9,17 @@
 
 This RFC proposes a generic implementation for a Hyperledger Grid _Product
 Catalog_. Product Catalogs will be represented by a unique identifier, which
-will
-be referenced by the _catalog_products_ included in the catalog. That
-catalog_id
-can be used to share a grouping of products that can be shared with one or more
-organizations. The Grid Catalog will contain 4 fields. A **catalog_id**, a
-**catalog_owner**, a **Name** for the catalog, and a repeated field of
-PropertyValues for custom fields.
+will be referenced by the _catalog_products_ included in the catalog. That
+catalog_id can be used to share a grouping of products that can be shared with 
+one or more organizations. The Grid Catalog will contain 4 fields. A 
+**catalog_id**, a **catalog_owner**, a **Name** for the catalog, and a repeated 
+field of PropertyValues for custom fields.
 
 In addition, a base catalog product schema is included as a way to demonstrate
 enforcement of additional product properties. Any grid product added to a
-catalog
-will adhere to the "catalog*product" schema (or another custom-defined schema).
-The
-example schema in particular will enforce a required \*\*\_status*** field, an
-optional
-**_return_policy_**, and an optional **_price_\*\* field.
+catalog will adhere to the "catalog_product" schema (or another custom-defined 
+schema). Theexample schema in particular will enforce a required **_status_** 
+field, an optional **_return_policy_**, and an optional **_price_** field.
 
 # Motivation
 
@@ -43,18 +38,13 @@ network.
 ## Entities
 
 A **catalog** is a high-level construct that **catalog_products** can
-reference. A
-_catalog_product_ is an instance of a Grid Product with additional schema
-defined
-attributes specific to the trading partner involed. The "catalog_product"
-schema can be extended to include any number of attributes that are required by
-an
-organization. A catalog can be referenced, or used to share item level
-information
-in a supply chain. A catalog is referenced by a "catalog_product" via its
-**catalog_id**. A catalog also has an **owner** (the organization that creates
-the
-catalog). Also a **Name** for the catalog.
+reference. A _catalog_product_ is an instance of a Grid Product with additional 
+schema defined attributes specific to the trading partner involved. The 
+"catalog_product" schema can be extended to include any number of attributes that 
+are required by an organization. A catalog can be referenced, or used to share 
+item level information in a supply chain. A catalog is referenced by a 
+"catalog_product" via its **catalog_id**. A catalog also has an **owner** (the 
+organization that creates the catalog). Also a **Name** for the catalog.
 
 A catalog, like a product, can also have one or more **properties**. Properties
 are described in the Grid Primitives RFC. A _property namespace_ contains
@@ -71,29 +61,20 @@ are supported:
 
 - CatalogCreate - create a catalog and store it in state
 - CatalogUpdate - update a catalog in state
-- \*CatalogDelete - deletes a catalog from state and associated catalog_products
+- CatalogDelete - deletes a catalog from state and associated catalog_products
 
 **catalog_product actions:**
 
 - CatalogProductCreate - create a catalog_product and stores it in state
 - CatalogProductUpdate - updates a catalog_product in state
 - CatalogProductDelete - delete a catalog_product from state
+- CatalogProductSetStatus - changes the "status" of a catalog_product to an
+  active, inactive, or discontinued state
 
-**catalog_product operation:**
-
-- \*CatalogProductSetStatus - changes the "status" of a catalog_product to an
-  active,
-  inactive, or discontinued state
-
-The catalog_product actions/operation will accept a parameter list of the
-catalogs
-the operation should be performed on. Meaning Activate, Deactivate, or
-Discontinue
-can be performed on a single, multiple, or all catalogs that an organization
-has.
-
-_`*` indicates that the action/operation can affect more than one
-catalog_product._
+The CatalogProductSetStatus action will accept a parameter list of the
+catalogs the action should be performed on. Meaning Activate, Deactivate, or 
+Discontinue can be performed on a single, multiple, or all catalogs that an 
+organization has.
 
 ## Permissions
 
@@ -134,12 +115,8 @@ need the operational permission to perform the desired operation on a Grid
 Catalog.
 
 ```
-ActivateCatalogProduct: Agent from org needs the
-"can_activate_product_in_catalog" permission
-DeactivateCatalogProduct: Agent from org needs the
-"can_deactivate_product_in_catalog" permission
-DiscontinueProduct: Agent from org needs the
-"can_discontinue_product_in_catalog" permission
+CatalogProductSetStatus: Agent from org needs the "can_set_catalog_product_status" 
+permission
 ```
 
 # Reference-level explanation
@@ -152,13 +129,12 @@ DiscontinueProduct: Agent from org needs the
 
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** (hash of the catalog_name), an **owner** (org_id
-compatible w/Pike), a **Name**, and a
-repeated field of **PropertyValues**. The properties available are defined by
-the Grid Property Schema Transaction Family and are restricted to the fields
-and rules of the GS1 Catalog schema (which will be defined at a later time).  
-Transactions which are responsible for setting catalog state values must ensure
-that those properties conform with the requirements of the GS1 Catalog Property
-Schema (to be defined at a later time).
+compatible w/Pike), a **Name**, and a repeated field of **PropertyValues**. 
+The properties available are defined bythe Grid Property Schema Transaction 
+Family and are restricted to the fields and rules of the GS1 Catalog schema 
+(which will be defined at a later time).  Transactions which are responsible 
+for setting catalog state values must ensure that those properties conform with 
+the requirements of the GS1 Catalog Schema (not yet defined).
 
 ```
 message Catalog {
@@ -188,14 +164,11 @@ All Grid addresses are prefixed by the 6-hex-character namespace prefix
 "621dee", Catalogs are further prefixed under the Grid namespace with reserved
 enumerations of "03" ("00", "01", and "02" being reserved for other purposes)
 indicating "Grid Catalogs" and an additional org_id. Currently in Grid Product,
-org_ids are a [6-10 digit GS1 company
-prefix](https://www.gs1-us.info/gs1-company-prefix/).
+org_ids are a [6-10 digit GS1 company prefix](https://www.gs1-us.info/gs1-company-prefix/).
 To keep the prefix length consistent, any GS1 company prefix less than 10
-digits will
-be left padded with the hexadecimal representation of the number 10 ("a") until
-it is
-10 digits in length. This composite address will enable inexpensive catalog
-operations.
+digits will be left padded with the hexadecimal representation of the number 10 
+("a") until it is 10 digits in length. This composite address will enable 
+inexpensive catalog operations.
 
 Therefore, all addresses starting with:
 
@@ -210,21 +183,19 @@ The catalog_id format consists of 70-digit "alphanumeric string" which include
 a fixed amount of internal "0" padding. After the 18-hex-characters that are
 consumed by the grid namespace prefix, the catalog, and gs1_company_prefix
 there
-are 52 hex characters remaining in the address. The 18 digits of the
+are 52 hex characters remaining in the address. Then the 15 digits of the
 catalog_id can
-be right padded with 35-hex-character zeroes and right padded with
-2-hex-character zeroes to accommodate potential future storage associated with
-the GS1 Catalog representation, for example:
+be added with a left padding of 35-hex-character zeroes, and that string is right 
+padded with 2-hex-character zeroes to accommodate potential future storage 
+associated with the GS1 Catalog representation, for example:
 
 ```
-"621dee" + "03" + "aaaa123456" + "00000000000000000000000000000000000" +
-15-character "numeric string" catalog_id + "00" // catalog_id ==
-hash(catalog_name)
+"621dee" + "03" + "aaaa123456" + "00000000000000000000000000000000000" + catalog_id 
++ "00" // catalog_id == hash(catalog_name).trunc(15)
 ```
 
-Using SHA-2 from the rust-crypto crate we can tie the catalog_id to
-catalog_name to prevent duplication of catalogs when invoking the
-catalog_create action.
+Using SHA-2 from the rust-crypto crate we can tie the catalog_id to catalog_name
+to prevent duplication of catalogs when invoking the catalog_create action.
 
 ```
 extern crate crypto;
@@ -261,14 +232,11 @@ The full catalog address would look like:
 ### Referencing a Catalog Product
 
 Catalogs products are uniquely referenced by a composite key composed of their
-catalog_id
-and product_id. For example:
+catalog_id and product_id. For example:
 
 ```
 get_catalog_product(catalog_id, product_id) // hash(catalog_name), product_id
-set_catalog_product(catalog_id, product_id, catalog_product) //
-hash(catalog_name), product_id,
-catalog_product
+set_catalog_product(catalog_id, product_id, catalog_product) //hash(catalog_name), product_id, catalog_product
 ```
 
 ### Catalog Product Addressing in the Merkle-Radix State System
@@ -290,11 +258,10 @@ addition to the expected PropertyValues of a [Grid GS1
 Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1e87146c5fc56771/0000-product.md).
 
 GTIN formats consist of 14-digit "numeric strings" which include some amount of
-internal "0" padding depending on the specific GTIN format (GTIN-12,
-GTIN-13, or GTIN-14). After the 12-hex-characters that are consumed by the grid
-namespace prefix, the product namespace prefix, GS1 namespace prefix, and
-catalog
-product namespace prefix, there are 58 hex characters remaining in the address.
+internal "0" padding depending on the specific GTIN format (GTIN-12, GTIN-13, or 
+GTIN-14). After the 12-hex-characters that are consumed by the gridnamespace 
+prefix, the product namespace prefix, GS1 namespace prefix, and catalog product 
+namespace prefix, there are 58 hex characters remaining in the address.
 
 The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character
 zeroes and right padded with 2-hex-character zeroes to accommodate potential
@@ -315,20 +282,16 @@ https://www.gtin.info/ would therefore be:
 ### Catalog Product Schema Definition
 
 This schema defines the additional attributes required of a grid product, such
-that
-it may be considered a "catalog product". Catalog products should be grouped
-with
-other catalog products. Once grouped, the grid catalog can be shared with other
-participants in a grid network.
+that it may be considered a "catalog product". Catalog products should be 
+grouped with other catalog products. Once grouped, the grid catalog can be 
+shared with other participants in a grid network.
 
-Any grid product added to a catalog (thus becoming a catalog*product) will need
-to
-contain a reference fields to the original product (product_id,
-product_namespace,
-and owner) and a catalog_id. A catalog product schema may also be defined to
-required additional fields for that catalog_product. This example schema
-enforces
-a \_required* **_status_** field and an _optional_ **_prices_** field.
+Any grid product added to a catalog (thus becoming a catalog product) will need
+to contain a reference fields to the original product (product_id, 
+product_namespace,and owner) and a catalog_id. A catalog product schema may 
+also be defined torequire additional fields for that catalog_product. This 
+example schema enforces a _required_ **_catalog_id_** & **_status_** field, as 
+well as an _optional_ **_prices_** & **_return_policy_** field.
 
 Example schema:
 
@@ -339,6 +302,12 @@ Schema(
 grid catalog",
     owner = "Target"
     properties=[
+        PropertyDefinition(
+            name="catalog_id",
+            data_type=PropertyDefinition.DataType.STRING,
+            description="The id of the catalog this catalog product belongs to"
+            required=True
+        ),
         PropertyDefinition(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
@@ -390,12 +359,16 @@ the properties defined in the CatalogProduct schema. The data model
 would look like this:
 
 ```
-CatalogProduct(
+Product(
     product_id="gtin", // Reference from Grid Product
     product_namespace="GS1" // Reference from Grid Product
     owner='Target', // Reference from Grid Product
-		catalog_id='e70fe351d1d096c'
     properties=[
+        PropertyValue(
+            name="catalog_id",
+            data_type=PropertyDefinition.DataType.STRING,
+            string_value="e70fe351d1d096c"
+        ),
         PropertyValue(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
@@ -411,16 +384,21 @@ CatalogProduct(
             data_type=PropertyDefinition.DataType.STRING,
             string_value="30 days from sale"
         ),
+        # ... Additional Product Properties
     ])
 ```
 
+A catalog product, from a data model perspective, is a grid product. With the 
+differentiators being:
+- It contains the additional fields defined by the catalog_product schema
+- It's stored in the catalog_product state location within the merkle tree
+
 ## Transaction Payload and Execution
 
-The following payloads contain an action enum and the associated action
-payload.
-This allows for the action payload to be dispatched to the appropriate logic.
-Only the defined actions (enum) are available, and only one Action should be
-performed in a payload.
+The following payload contains an action enum and the associated action
+payload.This allows for the action payload to be dispatched to the appropriate 
+logic. Only the defined actions (enum) are available, and only one Action 
+should be performed in a payload.
 
 ### CatalogPayload Transaction
 
@@ -431,10 +409,10 @@ message CatalogPayload {
         CATALOG_CREATE = 1;
         CATALOG_UPDATE = 2;
         CATALOG_DELETE = 3;
-        CATALOG_PRODUCT_CREATE = 4;
-        CATALOG_PRODUCT_UPDATE = 5;
-        CATALOG_PRODUCT_DELETE = 6;
-         SET_CATALOG_PRODUCT_STATUS = 7;
+        CATALOG_PRODUCT_CREATE = 100;
+        CATALOG_PRODUCT_UPDATE = 101;
+        CATALOG_PRODUCT_DELETE = 102;
+        CATALOG_PRODUCT_SET_STATUS = 103;
     }
 
     Action action = 1;
@@ -457,11 +435,9 @@ message CatalogPayload {
 ### CatalogCreateAction
 
 CatalogCreateAction adds a new catalog to state. The transaction should be
-submitted
-by an agent, which is identified by its signing key, acting on behalf of the
-organization that corresponds to the owner in the create transaction.
-(Organizations
-and agents are defined by the Pike smart contract.)
+submitted by an agent, which is identified by its signing key, acting on behalf 
+of the organization that corresponds to the owner in the create transaction. 
+(Organizations and agents are defined by the Pike smart contract.)
 
 ```
 message CatalogCreateAction {
@@ -478,8 +454,7 @@ Validation requirements:
 
 - If a catalog with catalog_id already exists the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong
-  to an organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_create_catalog for the organization,
   otherwise the transaction is invalid.
 
@@ -496,12 +471,9 @@ Address of the Catalog created
 ### CatalogUpdateAction
 
 CatalogUpdateAction adds a new catalog to state. The transaction should be
-submitted by
-an agent, which is identified by its signing key, acting on behalf of the
-organization
-that corresponds to the owner in the update transaction. (Organizations and
-agents are
-defined by the Pike smart contract.)
+submitted by an agent, which is identified by its signing key, acting on behalf 
+of the organization that corresponds to the owner in the update transaction. 
+(Organizations and agents are defined by the Pike smart contract.)
 
 ```
 message CatalogUpdateAction {
@@ -518,8 +490,7 @@ Validation requirements:
 
 - If a catalog with catalog_id exists the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to an
-  organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_update_catalog for the organization,
   otherwise the transaction is invalid.
 
@@ -536,9 +507,8 @@ Address of the Catalog to be updated
 ### CatalogDeleteAction
 
 CatalogDeleteAction adds a new catalog to state. The transaction should be
-submitted
-by an agent, which is identified by its signing key, acting on behalf of the
-organization that corresponds to the owner in the delete transaction.
+submitted by an agent, which is identified by its signing key, acting on behalf 
+of the organization that corresponds to the owner in the delete transaction.
 (Organizations and agents are defined by the Pike smart contract.)
 
 ```
@@ -555,11 +525,9 @@ Validation requirements:
 - If a catalog with catalog_id exists the transaction is valid, otherwise it's
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to
-  an organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_delete_catalog for the organization,
-  otherwise
-  the transaction is invalid.
+  otherwise the transaction is invalid.
 
 The inputs for CatalogDeleteAction must include:
 
@@ -571,15 +539,19 @@ The outputs for CatalogDeleteAction must include:
 
 Address of the Catalog to be deleted
 
+**_NOTE: Deleting a catalog is potentially dangerous operation that could leave 
+dangling references and should be done with care._**
+
 ## Catalog_Product Actions
 
 ### CatalogProductCreateAction
 
-The CatalogProductCreateAction adds a new catalog_product to state. The catalog_product references a Grid Product for the shared item level master data. The
-transaction should be submitted by an agent, which is identified by its
-signing key, acting on behalf of the organization that corresponds to the
-owner in the create transaction. (Organizations and agents are defined by
-the Pike smart contract.)
+The CatalogProductCreateAction adds a new catalog_product to state. The 
+catalog_product references a Grid Product for the shared item level master 
+data. Thetransaction should be submitted by an agent, which is identified by 
+its signing key, acting on behalf of the organization that corresponds to the
+owner in the create transaction. (Organizations and agents are defined by the 
+Pike smart contract.)
 
 ```
 message CatalogProductCreateAction {
@@ -593,22 +565,18 @@ message CatalogProductCreateAction {
 
 Validation requirements:
 
-- If a catalog_product with product_id and catalog_id already exists the
-  transaction is
-  invalid.
+- If a catalog_product with catalog_product_id and catalog_id already exists the
+  transaction is invalid.
 - If the grid product the catalog_product is referencing does not exist in
   state the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to an
-  organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_create_product for the organization,
-  otherwise the
-  transaction is invalid.
+  otherwise the transaction is invalid.
 - If the product_namespace is GS1, the organization must contain a GS1 Company
-  Prefix in its
-  metadata (gs1_company_prefixes), and the prefix must match the company prefix
-  in the
-  product_id, which is a GTIN if GS1, otherwise the transaction is invalid.
+  Prefix in its metadata (gs1_company_prefixes), and the prefix must match the 
+  company prefix in the product_id, which is a GTIN (if GS1), otherwise the 
+  transaction is invalid.
 - The properties must be valid for the catalog_product schema; its properties
   must only contain properties that are included in the catalog_product Schema.
 
@@ -628,12 +596,10 @@ The outputs for CatalogProductCreateAction must include:
 ### CatalogProductUpdateAction
 
 CatalogProductUpdateAction updates an existing product in state. The
-transaction should be submitted
-by an agent, identified by its signing key, acting on behalf of an organization
-that
-corresponds to the owner in the product being updated. (Organizations and
-agents are defined
-by the Pike smart contract.)
+transaction should be submitted by an agent, identified by its signing key, 
+acting on behalf of an organization that corresponds to the owner in the 
+product being updated. (Organizations and agents are defined by the Pike 
+smart contract.)
 
 ```
 message CatalogProductUpdateAction {
@@ -650,13 +616,11 @@ Validation requirements:
 - If a catalog_product with catalog_product_id does not exist the transaction
   is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to an
-  organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
   The owner in the product must match the organization that the agent belongs to,
   otherwise the transaction is invalid.
 - The agent must have the permission can_update_product for the organization,
-  otherwise
-  the transaction is invalid.
+  otherwise the transaction is invalid.
 - The properties must be valid for the catalog_product schema; its properties
   must only contain properties that are included in the catalog_product Schema.
 
@@ -672,13 +636,11 @@ The outputs for CatalogProductUpdateAction must include:
 
 ### CatalogProductDeleteAction
 
-CatalogProductDeleteAction removes an existing product from state. The
-transaction should be
-submitted by an agent, identified by its signing key, acting on behalf of the
-organization
-that corresponds to the org_id in the product being deleted. (Organizations and
-agents are
-defined by the Pike smart contract.)
+CatalogProductDeleteAction removes an existing catalog_product from state. The
+transaction should be submitted by an agent, identified by its signing key, 
+acting on behalf of the organization that corresponds to the org_id in the 
+product being deleted. (Organizations and agents are defined by the Pike smart 
+contract.)
 
 ```
 message CatalogProductDeleteAction {
@@ -689,47 +651,43 @@ message CatalogProductDeleteAction {
 ```
 
 If the Grid setting grid.product.allow_delete is set to false, this transaction
-is invalid. (sys admin setting)
-The default value for grid.product.allow_delete is true. This setting is stored
-using the
-Sawtooth Settings smart contract, more information can be found here.
+is invalid (sys admin setting). The default value for grid.product.allow_delete 
+is true. This setting is stored using the Sawtooth Settings smart contract, more 
+information can be found [here](https://sawtooth.hyperledger.org/docs/core/releases/1.0/transaction_family_specifications/settings_transaction_family.html).
 
 Validation requirements:
 
-- If a catalog_product with product_id does not exist the transaction is
+- If a catalog_product with catalog_product_id does not exist the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to an
-  organization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The owner in the product must match the organization that the agent belongs
-  to, otherwise
-  the transaction is invalid.
+  to, otherwise the transaction is invalid.
 - The agent must have the permission “can_delete_product” for the organization
-  otherwise the
-  transaction is invalid.
+  otherwise the transaction is invalid.
 
 The inputs for CatalogProductDeleteAction must include:
 
 - Address of the Agent submitting the transaction
 - Address of the Organization the Product is being deleted for
-- Address of the catalog_product to be
-  deleted
+- Address of the catalog_product to be deleted
 
 The outputs for CatalogProductDeleteAction must include:
 
 - Address of the catalog_product to be deleted
+
+**_NOTE: Deleting a catalog_product is potentially dangerous operation that
+could leave dangling references and should be done with care._**
 
 ## Catalog_Product Operations
 
 ### CatalogProductSetStatus
 
 CatalogProductSetStatusAction updates an existing catalog_product in state. The
-transaction should be submitted
-by an agent, identified by its signing key, acting on behalf of an organization
-that
-corresponds to the owner in the product being updated. (Organizations and
-agents are defined
-by the Pike smart contract.)
+transaction should be submitted by an agent, identified by its signing key, 
+acting  on behalf of an organization that corresponds to the owner in the 
+product being updated. (Organizations and agents are defined by the Pike smart 
+contract.)
 
 ```
 message CatalogProductSetStatusAction {
@@ -749,16 +707,14 @@ message CatalogProductSetStatusAction {
 
 Validation requirements:
 
-- If a catalog_product with product_id does not exist the transaction is
+- If a catalog_product with catalog_product_id does not exist the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to an
-  organization in Pike state, otherwise the transaction is invalid.
-  The owner in the product must match the organization that the agent belongs to,
-  otherwise the transaction is invalid.
+  belong to anorganization in Pike state, otherwise the transaction is invalid.
+- The owner in the product must match the organization that the agent belongs 
+  to, otherwise the transaction is invalid.
 - The agent must have the permission can_update_product for the organization,
-  otherwise
-  the transaction is invalid.
+  otherwise the transaction is invalid.
 - The properties must be valid for the catalog_product schema; its properties
   must only contain properties that are included in the catalog_product Schema.
 
@@ -786,12 +742,9 @@ would be [GS1 Price
 Sync](https://www.gs1.org/docs/gdsn/3.1BMS_Price_Sync_r3p1p3_i1p3p5_23May2017.pdf).
 
 Ideally the catalog_id should be a composite key derived from the org_id and
-perhaps
-the catalog_name. In this current implementation catalogs/catalog_products
-simply
-maintain references to each other. There is no concept of "list of products"
-within
-a catalog. This design makes catalog actions/operations less expensive to
+perhaps the catalog_name. In this current implementation catalogs/catalog_products
+simply maintain references to each other. There is no concept of "list of products"
+within a catalog. This design makes catalog actions/operations less expensive to
 perform.
 
 # Prior art
