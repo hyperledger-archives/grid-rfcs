@@ -181,7 +181,7 @@ referenced by a "catalog_product" to group products to a specific catalog.
 
 The catalog_id format consists of 70-digit "alphanumeric string" which include
 a fixed amount of internal "0" padding. After the 18-hex-characters that are
-consumed by the grid namespace prefix, the catalog, and gs1_company_prefix
+consumed by the grid namespace prefix, the catalog prefix, and gs1_company_prefix
 there
 are 52 hex characters remaining in the address. Then the 15 digits of the
 catalog_id can
