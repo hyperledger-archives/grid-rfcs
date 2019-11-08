@@ -18,8 +18,9 @@ field of PropertyValues for custom fields.
 In addition, a base catalog product schema is included as a way to demonstrate
 enforcement of additional product properties. Any grid product added to a
 catalog will adhere to the "catalog_product" schema (or another custom-defined 
-schema). Theexample schema in particular will enforce a required **_status_** 
-field, an optional **_return_policy_**, and an optional **_price_** field.
+schema). The example schema in particular will enforce a required **_catalog_id_**
+field, a required **_status_** field, an optional **_return_policy_**, and an 
+optional **_price_** field.
 
 # Motivation
 
