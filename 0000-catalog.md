@@ -131,7 +131,7 @@ permission
 The primary object stored in state is **Catalog**, which consists of a
 **catalog_id** (hash of the catalog_name), an **owner** (org_id
 compatible w/Pike), a **Name**, and a repeated field of **PropertyValues**. 
-The properties available are defined bythe Grid Property Schema Transaction 
+The properties available are defined by the Grid Property Schema Transaction 
 Family and are restricted to the fields and rules of the GS1 Catalog schema 
 (which will be defined at a later time).  Transactions which are responsible 
 for setting catalog state values must ensure that those properties conform with 
@@ -549,7 +549,7 @@ dangling references and should be done with care._**
 
 The CatalogProductCreateAction adds a new catalog_product to state. The 
 catalog_product references a Grid Product for the shared item level master 
-data. Thetransaction should be submitted by an agent, which is identified by 
+data. The transaction should be submitted by an agent, which is identified by 
 its signing key, acting on behalf of the organization that corresponds to the
 owner in the create transaction. (Organizations and agents are defined by the 
 Pike smart contract.)
@@ -711,7 +711,7 @@ Validation requirements:
 - If a catalog_product with catalog_product_id does not exist the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
-  belong to anorganization in Pike state, otherwise the transaction is invalid.
+  belong to an organization in Pike state, otherwise the transaction is invalid.
 - The owner in the product must match the organization that the agent belongs 
   to, otherwise the transaction is invalid.
 - The agent must have the permission can_update_product for the organization,
@@ -763,7 +763,7 @@ companies throughout the world.
 
 [GS1's Catalogue Item
 Synchronisation](https://www.gs1.org/docs/gdsn/3.1/BMS_GDSN_Catalogue_Item_Sync_r3p1p0_i1_p0_p6_25Aug2015.pdf)
-is the process of continuous harmonisation of item information between trading
+is the process of continuous harmonization of item information between trading
 partners which ensures that the master data is the same in all trading partners
 systems.
 
