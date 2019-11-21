@@ -81,8 +81,7 @@ organization has.
 
 Creation of a Grid Catalog is restricted to agents acting on behalf of the
 organization in the catalog's owner field. An organization must have the GS1
-company prefix in the "gs1_company_prefixes" metadata field for its Pike
-organization.
+company prefix in the "gs1_company_prefixes" metadata field for its [Pike](https://grid.hyperledger.org/docs/grid/nightly/master/transaction_family_specifications/pike_transaction_family.html) organization.
 
 Deletion of a catalog is restricted to agents acting on behalf of the
 organization in the catalog's owner field. A setting will turn off deletion
@@ -152,7 +151,7 @@ Catalogs are uniquely referenced by their catalog_id. For example:
 
 ```
 get_catalog(catalog_id) // hash(catalog_name)
-set_catalog(catalog_id, catalog) // hash(catalog_name), catalog
+set_catalog(org_id, catalog_id, catalog) // GS1 Company Prefix, hash(catalog_name), catalog
 ```
 
 ### Catalog Addressing in the Merkle-Radix State System
@@ -260,11 +259,12 @@ Product](https://github.com/hyperledger/grid-rfcs/blob/fbedec06d70b16492fea9f6b1
 
 GTIN formats consist of 14-digit "numeric strings" which include some amount of
 internal "0" padding depending on the specific GTIN format (GTIN-12, GTIN-13, or 
-GTIN-14). After the 12-hex-characters that are consumed by the gridnamespace 
-prefix, the product namespace prefix, GS1 namespace prefix, and catalog product 
-namespace prefix, there are 58 hex characters remaining in the address.
+GTIN-14). After the 10-hex-characters that are consumed by the Grid namespace 
+prefix, the product namespace prefix, and GS1 namespace prefix. There are 
+15-hex-characters consumed by the catalog id, leaving 45 hex characters
+remaining in the address.
 
-The 12 to 14 digits of the GTIN can be left padded with 40 to 42-hex-character
+The 11 to 13 digits of the GTIN can be left padded with 30 to 32-hex-character
 zeroes and right padded with 2-hex-character zeroes to accommodate potential
 future storage associated with the GS1 Product representation, for example:
 
@@ -289,8 +289,8 @@ shared with other participants in a grid network.
 
 Any grid product added to a catalog (thus becoming a catalog product) will need
 to contain a reference fields to the original product (product_id, 
-product_namespace,and owner) and a catalog_id. A catalog product schema may 
-also be defined torequire additional fields for that catalog_product. This 
+product_namespace, and owner) and a catalog_id. A catalog product schema may 
+also be defined to require additional fields for that catalog_product. This 
 example schema enforces a _required_ **_catalog_id_** & **_status_** field, as 
 well as an _optional_ **_prices_** & **_return_policy_** field.
 
@@ -313,7 +313,7 @@ grid catalog",
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
             description="The current state of the catalog product",
-            enum_options=["ACTIVE", "INACTIVE"],
+            enum_options=["ACTIVE", "INACTIVE", "DISCONTINUED"],
             required=True
         ),
         PropertyDefinition(
@@ -397,7 +397,7 @@ differentiators being:
 ## Transaction Payload and Execution
 
 The following payload contains an action enum and the associated action
-payload.This allows for the action payload to be dispatched to the appropriate 
+payload. This allows for the action payload to be dispatched to the appropriate 
 logic. Only the defined actions (enum) are available, and only one Action 
 should be performed in a payload.
 
@@ -424,10 +424,10 @@ message CatalogPayload {
     CatalogCreateAction catalog_create = 3;
     CatalogUpdateAction catalog_update = 4;
     CatalogDeleteAction catalog_delete = 5;
-    CatalogProductCreateAction catalog_product_create = 6;
-    CatalogProductUpdateAction catalog_product_update = 7;
-    CatalogProductDeleteAction catalog_product_delete = 8;
-    CatalogProductSetStatusAction set_catalog_product_status = 9;
+    CatalogProductCreateAction catalog_product_create = 100;
+    CatalogProductUpdateAction catalog_product_update = 101;
+    CatalogProductDeleteAction catalog_product_delete = 102;
+    CatalogProductSetStatusAction set_catalog_product_status = 103;
 }
 ```
 
@@ -471,7 +471,7 @@ Address of the Catalog created
 
 ### CatalogUpdateAction
 
-CatalogUpdateAction adds a new catalog to state. The transaction should be
+CatalogUpdateAction updates a new catalog to state. The transaction should be
 submitted by an agent, which is identified by its signing key, acting on behalf 
 of the organization that corresponds to the owner in the update transaction. 
 (Organizations and agents are defined by the Pike smart contract.)
@@ -507,7 +507,7 @@ Address of the Catalog to be updated
 
 ### CatalogDeleteAction
 
-CatalogDeleteAction adds a new catalog to state. The transaction should be
+CatalogDeleteAction deletes a new catalog to state. The transaction should be
 submitted by an agent, which is identified by its signing key, acting on behalf 
 of the organization that corresponds to the owner in the delete transaction.
 (Organizations and agents are defined by the Pike smart contract.)
