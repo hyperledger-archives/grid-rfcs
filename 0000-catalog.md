@@ -50,7 +50,9 @@ organization that creates the catalog). Also a **Name** for the catalog.
 A catalog, like a product, can also have one or more **properties**. Properties
 are described in the Grid Primitives RFC. A _property namespace_ contains
 multiple _property schemas_. A property schema associates a name (such as
-"length") with a data type (such as integer).
+"length") with a data type (such as integer). A catalog may want additional 
+properties to support execute custom smart contract, or trigger some type of 
+check. An example could be an expiry_date for an entire catalog. 
 
 ## Transactions
 
@@ -461,9 +463,9 @@ Validation requirements:
 
 The inputs for CatalogCreateAction must include:
 
-Address of the Agent submitting the transaction
-Address of the Organization the Catalog is being created for
-Address of the Catalog to be created
+- Address of the Agent submitting the transaction
+- Address of the Organization the Catalog is being created for
+- Address of the Catalog to be created
 
 The outputs for CatalogCreateAction must include:
 
@@ -497,9 +499,9 @@ Validation requirements:
 
 The inputs for CatalogUpdateAction must include:
 
-Address of the Agent submitting the transaction
-Address of the Organization the Catalog is being created for
-Address of the Catalog to be updated
+- Address of the Agent submitting the transaction
+- Address of the Organization the Catalog is being created for
+- Address of the Catalog to be updated
 
 The outputs for CatalogUpdateAction must include:
 
@@ -532,9 +534,9 @@ Validation requirements:
 
 The inputs for CatalogDeleteAction must include:
 
-Address of the Agent submitting the transaction
-Address of the Organization the Catalog is being created for
-Address of the Catalog to be deleted
+- Address of the Agent submitting the transaction
+- Address of the Organization the Catalog is being created for
+- Address of the Catalog to be deleted
 
 The outputs for CatalogDeleteAction must include:
 
