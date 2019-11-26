@@ -51,7 +51,7 @@ A catalog, like a product, can also have one or more **properties**. Properties
 are described in the Grid Primitives RFC. A _property namespace_ contains
 multiple _property schemas_. A property schema associates a name (such as
 "length") with a data type (such as integer). A catalog may want additional 
-properties to support execute custom smart contract, or trigger some type of 
+properties to support executing custom smart contract, or trigger some type of 
 check. An example could be an expiry_date for an entire catalog. 
 
 ## Transactions
@@ -152,7 +152,7 @@ message Catalog {
 Catalogs are uniquely referenced by their catalog_id. For example:
 
 ```
-get_catalog(catalog_id) // hash(catalog_name)
+get_catalog(org_id, catalog_id) // GS1 Company Prefix, hash(catalog_name)
 set_catalog(org_id, catalog_id, catalog) // GS1 Company Prefix, hash(catalog_name), catalog
 ```
 
@@ -473,7 +473,7 @@ Address of the Catalog created
 
 ### CatalogUpdateAction
 
-CatalogUpdateAction updates a new catalog to state. The transaction should be
+CatalogUpdateAction updates an existing catalog in state. The transaction should be
 submitted by an agent, which is identified by its signing key, acting on behalf 
 of the organization that corresponds to the owner in the update transaction. 
 (Organizations and agents are defined by the Pike smart contract.)
@@ -509,7 +509,7 @@ Address of the Catalog to be updated
 
 ### CatalogDeleteAction
 
-CatalogDeleteAction deletes a new catalog to state. The transaction should be
+CatalogDeleteAction deletes an existing catalog from state. The transaction should be
 submitted by an agent, which is identified by its signing key, acting on behalf 
 of the organization that corresponds to the owner in the delete transaction.
 (Organizations and agents are defined by the Pike smart contract.)
@@ -700,7 +700,7 @@ message CatalogProductSetStatusAction {
         DISCONTINUED = 2;
     }
     // catalog_id and product_id are used in deriving the state address
-    string catalog_id = 1;
+    repeated catalog_id = 1;
     string product_id = 2;
     Status catalog_product_status  = 4;
     // Reason for the change
