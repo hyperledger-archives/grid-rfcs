@@ -688,9 +688,15 @@ could leave dangling references and should be done with care._**
 
 CatalogProductSetStatusAction updates an existing catalog_product in state. The
 transaction should be submitted by an agent, identified by its signing key, 
-acting  on behalf of an organization that corresponds to the owner in the 
+acting on behalf of an organization that corresponds to the owner in the 
 product being updated. (Organizations and agents are defined by the Pike smart 
 contract.)
+
+The implementation of the CatalogProductSetStatusAction will handling iterating 
+through the list of catalog_ids, and updating the status of the 
+catalog_product(s) accordingly. Having the address of an individual 
+catalog_product be a composite key containing the catalog_id and product_id 
+enables us to easily update the status across one, all, or specific catalogs.
 
 ```
 message CatalogProductSetStatusAction {
@@ -710,7 +716,8 @@ message CatalogProductSetStatusAction {
 
 Validation requirements:
 
-- If a catalog_product with catalog_product_id does not exist the transaction is
+- The catalog_product must be able to be updated or the transaction is invalid
+- If a catalog_product with product_id does not exist the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -724,12 +731,12 @@ Validation requirements:
 The inputs for CatalogProductSetStatusAction must include:
 
 - Address of the Agent submitting the transaction
-- Address of the Organization the catalog_product is being updated for
-- Address of the catalog_product to be updated
+- Address of the Organization the catalog_product(s) is/are being updated for
+- Address of the catalog_product(s) to be updated
 
 The outputs for CatalogProductSetStatusAction must include:
 
-- Address of the updated catalog_product
+- Address of the updated catalog_product(s)
 
 # Rationale and alternatives
 
