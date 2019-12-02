@@ -692,8 +692,8 @@ acting on behalf of an organization that corresponds to the owner in the
 product being updated. (Organizations and agents are defined by the Pike smart 
 contract.)
 
-The implementation of the CatalogProductSetStatusAction will handling iterating 
-through the list of catalog_ids, and updating the status of the 
+The implementation of the CatalogProductSetStatusAction will handle iterating 
+through the list of catalog_ids, and update the status of the 
 catalog_product(s) accordingly. Having the address of an individual 
 catalog_product be a composite key containing the catalog_id and product_id 
 enables us to easily update the status across one, all, or specific catalogs.
@@ -716,8 +716,9 @@ message CatalogProductSetStatusAction {
 
 Validation requirements:
 
-- The catalog_product must be able to be updated or the transaction is invalid
-- If a catalog_product with product_id does not exist the transaction is
+- The catalog_product must be able to be updated or the transaction is invalid 
+(i.e. meaning the status is not "DISCONTINUED")
+- If any catalog_product with product_id does not exist the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
