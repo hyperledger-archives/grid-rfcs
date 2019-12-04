@@ -706,7 +706,7 @@ message CatalogProductSetStatusAction {
         DISCONTINUED = 2;
     }
     // catalog_id and product_id are used in deriving the state address
-    repeated catalog_id = 1;
+    repeated string catalog_id = 1;
     string product_id = 2;
     Status catalog_product_status  = 4;
     // Reason for the change
