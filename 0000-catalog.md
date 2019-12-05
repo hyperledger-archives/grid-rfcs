@@ -12,15 +12,15 @@ Catalog_. Product Catalogs will be represented by a unique identifier, which
 will be referenced by the _catalog_products_ included in the catalog. That
 catalog_id can be used to share a grouping of products that can be shared with 
 one or more organizations. The Grid Catalog will contain 4 fields. A 
-**catalog_id**, a **catalog_owner**, a **Name** for the catalog, and a repeated 
+`catalog_id`, a `catalog_owner`, a `name` for the catalog, and a repeated 
 field of PropertyValues for custom fields.
 
 In addition, a base catalog product schema is included as a way to demonstrate
 enforcement of additional product properties. Any grid product added to a
 catalog will adhere to the "catalog_product" schema (or another custom-defined 
-schema). The example schema in particular will enforce a required **_catalog_id_**
-field, a required **_status_** field, an optional **_return_policy_**, and an 
-optional **_price_** field.
+schema). The example schema in particular will enforce a required `catalog_id`
+field, a required `status` field, an optional `return_policy`, and an 
+optional `price` field.
 
 # Motivation
 
@@ -38,16 +38,16 @@ network.
 
 ## Entities
 
-A **catalog** is a high-level construct that **catalog_products** can
+A `catalog` is a high-level construct that `catalog_products` can
 reference. A _catalog_product_ is an instance of a Grid Product with additional 
 schema defined attributes specific to the trading partner involved. The 
 "catalog_product" schema can be extended to include any number of attributes that 
 are required by an organization. A catalog can be referenced, or used to share 
 item level information in a supply chain. A catalog is referenced by a 
-"catalog_product" via its **catalog_id**. A catalog also has an **owner** (the 
-organization that creates the catalog). Also a **Name** for the catalog.
+"catalog_product" via its `catalog_id`. A catalog also has an `owner` (the 
+organization that creates the catalog). Also a `name` for the catalog.
 
-A catalog, like a product, can also have one or more **properties**. Properties
+A catalog, like a product, can also have one or more `properties`. Properties
 are described in the Grid Primitives RFC. A _property namespace_ contains
 multiple _property schemas_. A property schema associates a name (such as
 "length") with a data type (such as integer). A catalog may want additional 
@@ -129,9 +129,9 @@ permission
 
 ### Catalog Representation
 
-The primary object stored in state is **Catalog**, which consists of a
-**catalog_id** (hash of the catalog_name), an **owner** (org_id
-compatible w/Pike), a **Name**, and a repeated field of **PropertyValues**. 
+The primary object stored in state is `Catalog`, which consists of a
+`catalog_id` (hash of the catalog_name), an `owner` (org_id
+compatible w/Pike), a `name`, and a repeated field of `PropertyValues`. 
 The properties available are defined by the Grid Property Schema Transaction 
 Family and are restricted to the fields and rules of the GS1 Catalog schema 
 (which will be defined at a later time).  Transactions which are responsible 
@@ -293,8 +293,8 @@ Any grid product added to a catalog (thus becoming a catalog product) will need
 to contain a reference fields to the original product (product_id, 
 product_namespace, and owner) and a catalog_id. A catalog product schema may 
 also be defined to require additional fields for that catalog_product. This 
-example schema enforces a _required_ **_catalog_id_** & **_status_** field, as 
-well as an _optional_ **_prices_** & **_return_policy_** field.
+example schema enforces a _required_ `catalog_id` & `status` field, as 
+well as _optional_ `prices` & `return_policy` field.
 
 Example schema:
 
@@ -357,7 +357,7 @@ message Product {
 The catalog_product smart contract would then be responsible for validating the
 properties field against the CatalogProduct schema at run-time.
 
-A catalog_product entry would reference Grid Product. In addition to
+A catalog_product entry would reference Grid Product, in addition to
 the properties defined in the CatalogProduct schema. The data model
 would look like this:
 
@@ -706,7 +706,7 @@ message CatalogProductSetStatusAction {
         DISCONTINUED = 2;
     }
     // catalog_id and product_id are used in deriving the state address
-    repeated string catalog_id = 1;
+    repeated string catalog_ids = 1;
     string product_id = 2;
     Status catalog_product_status  = 4;
     // Reason for the change
