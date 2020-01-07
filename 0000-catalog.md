@@ -12,7 +12,7 @@ Catalog_. Product Catalogs will be represented by a unique identifier, which
 will be referenced by the _catalog_products_ included in the catalog. That
 catalog_id can be used to share a grouping of products that can be shared with 
 one or more organizations. The Grid Catalog will contain 4 fields. A 
-`catalog_id`, a `catalog_owner`, a `name` for the catalog, and a repeated 
+`catalog_id`, an `owner`, a `name` for the catalog, and a repeated 
 field of PropertyValues for custom fields.
 
 In addition, a base catalog product schema is included as a way to demonstrate
@@ -39,9 +39,9 @@ network.
 ## Entities
 
 A `catalog` is a high-level construct that `catalog_products` can
-reference. A _catalog_product_ is an instance of a Grid Product with additional 
+reference. A `catalog_product` is an instance of a Grid Product with additional 
 schema defined attributes specific to the trading partner involved. The 
-"catalog_product" schema can be extended to include any number of attributes that 
+`catalog_product` schema can be extended to include any number of attributes that 
 are required by an organization. A catalog can be referenced, or used to share 
 item level information in a supply chain. A catalog is referenced by a 
 "catalog_product" via its `catalog_id`. A catalog also has an `owner` (the 
@@ -181,9 +181,9 @@ Therefore, all addresses starting with:
 are Grid GS1 Catalogs identified by the hash of the catalog name which can be
 referenced by a "catalog_product" to group products to a specific catalog.
 
-The catalog_id format consists of 70-digit "alphanumeric string" which include
+The catalog_id is a 70-digit "alphanumeric string" which includes
 a fixed amount of internal "0" padding. After the 18-hex-characters that are
-consumed by the grid namespace prefix, the catalog prefix, and gs1_company_prefix
+consumed by the Grid namespace prefix, the catalog prefix, and gs1_company_prefix
 there
 are 52 hex characters remaining in the address. Then the 15 digits of the
 catalog_id can
@@ -284,12 +284,12 @@ https://www.gtin.info/ would therefore be:
 
 ### Catalog Product Schema Definition
 
-This schema defines the additional attributes required of a grid product, such
+This schema defines the additional attributes required of a Grid product, such
 that it may be considered a "catalog product". Catalog products should be 
-grouped with other catalog products. Once grouped, the grid catalog can be 
-shared with other participants in a grid network.
+grouped with other catalog products. Once grouped, the Grid catalog can be 
+shared with other participants in a Grid network.
 
-Any grid product added to a catalog (thus becoming a catalog product) will need
+Any Grid product added to a catalog (thus becoming a catalog product) will need
 to contain a reference fields to the original product (product_id, 
 product_namespace, and owner) and a catalog_id. A catalog product schema may 
 also be defined to require additional fields for that catalog_product. This 
@@ -301,8 +301,8 @@ Example schema:
 ```
 Schema(
     name="Catalog Product",
-    description="A grid product that can be grouped with other products via
-grid catalog",
+    description="A Grid product that can be grouped with other products via
+Grid catalog",
     owner = "Target"
     properties=[
         PropertyDefinition(
@@ -333,7 +333,7 @@ grid catalog",
 ```
 
 In order to store a catalog product in global state, we will extend from the
-definition of a grid product with several fixed fields, namely identifiers, as
+definition of a Grid product with several fixed fields, namely identifiers, as
 well as the set of dynamic property values that will conform to the catalog
 product schema definition.
 
@@ -391,7 +391,7 @@ Product(
     ])
 ```
 
-A catalog product, from a data model perspective, is a grid product. With the 
+A catalog product, from a data model perspective, is a Grid product. With the 
 differentiators being:
 - It contains the additional fields defined by the catalog_product schema
 - It's stored in the catalog_product state location within the merkle tree
@@ -491,7 +491,7 @@ message CatalogUpdateAction {
 
 Validation requirements:
 
-- If a catalog with catalog_id exists the transaction is invalid.
+- If a catalog with catalog_id does not exist, the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_update_catalog for the organization,
@@ -570,7 +570,7 @@ Validation requirements:
 
 - If a catalog_product with catalog_product_id and catalog_id already exists the
   transaction is invalid.
-- If the grid product the catalog_product is referencing does not exist in
+- If the Grid product the catalog_product is referencing does not exist in
   state the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -653,8 +653,8 @@ message CatalogProductDeleteAction {
 }
 ```
 
-If the Grid setting grid.product.allow_delete is set to false, this transaction
-is invalid (sys admin setting). The default value for grid.product.allow_delete 
+If the Grid setting Grid.product.allow_delete is set to false, this transaction
+is invalid (sys admin setting). The default value for `grid.product.allow_delete`
 is true. This setting is stored using the Sawtooth Settings smart contract, more 
 information can be found [here](https://sawtooth.hyperledger.org/docs/core/releases/1.0/transaction_family_specifications/settings_transaction_family.html).
 
@@ -698,6 +698,18 @@ catalog_product(s) accordingly. Having the address of an individual
 catalog_product be a composite key containing the catalog_id and product_id 
 enables us to easily update the status across one, all, or specific catalogs.
 
+CatalogProductSetStatusAction does not set the status for multiple 
+catalog_products. It will only change the status of a single 
+catalog_product. The nuance being that this status change can be reflected in 
+as many, or as few catalogs an entity desires.
+
+This flexibility is to enable support for use cases like:
+
+- I am discontinuing a catalog_product for entity A, B, C, but not for retailer D.
+- I want to discontinue catalog_products for all entity A, B, C, and D.
+- I am marking a catalog_product as active for entity A and B, but not C or D just yet.
+- I am making an active catalog_product inactive for entity A and B, but not C or D.
+
 ```
 message CatalogProductSetStatusAction {
     enum Status {
@@ -707,7 +719,7 @@ message CatalogProductSetStatusAction {
     }
     // catalog_id and product_id are used in deriving the state address
     repeated string catalog_ids = 1;
-    string product_id = 2;
+    string catalog_product_id = 2;
     Status catalog_product_status  = 4;
     // Reason for the change
     string reason = 5;
