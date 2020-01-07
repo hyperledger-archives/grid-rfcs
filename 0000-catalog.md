@@ -68,7 +68,7 @@ are supported:
 
 **catalog_product actions:**
 
-- CatalogProductCreate - create a catalog_product and stores it in state
+- CatalogProductCreate - creates a catalog_product and stores it in state
 - CatalogProductUpdate - updates a catalog_product in state
 - CatalogProductDelete - delete a catalog_product from state
 - CatalogProductSetStatus - changes the "status" of a catalog_product to an
@@ -181,7 +181,7 @@ Therefore, all addresses starting with:
 are Grid GS1 Catalogs identified by the hash of the catalog name which can be
 referenced by a "catalog_product" to group products to a specific catalog.
 
-The catalog_id is a 70-digit "alphanumeric string" which includes
+The catalog_id consists of a 70-character "alphanumeric string" which includes
 a fixed amount of internal "0" padding. After the 18-hex-characters that are
 consumed by the Grid namespace prefix, the catalog prefix, and gs1_company_prefix
 there
@@ -233,7 +233,7 @@ The full catalog address would look like:
 
 ### Referencing a Catalog Product
 
-Catalogs products are uniquely referenced by a composite key composed of their
+Catalog products are uniquely referenced by a composite key composed of their
 catalog_id and product_id. For example:
 
 ```
@@ -455,7 +455,7 @@ message CatalogCreateAction {
 
 Validation requirements:
 
-- If a catalog with catalog_id already exists the transaction is invalid.
+- If a catalog with catalog_id already exists, the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_create_catalog for the organization,
@@ -616,7 +616,7 @@ message CatalogProductUpdateAction {
 
 Validation requirements:
 
-- If a catalog_product with catalog_product_id does not exist the transaction
+- If a catalog_product with catalog_product_id does not exist, the transaction
   is invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -653,14 +653,14 @@ message CatalogProductDeleteAction {
 }
 ```
 
-If the Grid setting Grid.product.allow_delete is set to false, this transaction
+If the Grid setting `grid.product.allow_delete` is set to false, this transaction
 is invalid (sys admin setting). The default value for `grid.product.allow_delete`
 is true. This setting is stored using the Sawtooth Settings smart contract, more 
 information can be found [here](https://sawtooth.hyperledger.org/docs/core/releases/1.0/transaction_family_specifications/settings_transaction_family.html).
 
 Validation requirements:
 
-- If a catalog_product with catalog_product_id does not exist the transaction is
+- If a catalog_product with catalog_product_id does not exist, the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
@@ -730,7 +730,7 @@ Validation requirements:
 
 - The catalog_product must be able to be updated or the transaction is invalid 
 (i.e. meaning the status is not "DISCONTINUED")
-- If any catalog_product with product_id does not exist the transaction is
+- If any catalog_product with product_id does not exist, the transaction is
   invalid.
 - The signer of the transaction must be an agent in the Pike state and must
   belong to an organization in Pike state, otherwise the transaction is invalid.
