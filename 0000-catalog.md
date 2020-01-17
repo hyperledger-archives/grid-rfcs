@@ -319,6 +319,12 @@ Grid catalog",
             required=True
         ),
         PropertyDefinition(
+            name="status_change_reason",
+            data_type=PropertyDefinition.DataType.STRING,
+            description="The reason for the status change",
+            required=True
+        ),
+        PropertyDefinition(
             name="price",
             data_type=PropertyDefinition.DataType.STRING,
             description="The price of the catalog product"
@@ -376,6 +382,11 @@ Product(
             name="status",
             data_type=PropertyDefinition.DataType.ENUM,
             enum_value=1, # ACTIVE (default)
+        ),
+        PropertyValue(
+            name="status_change_reason",
+            data_type=PropertyDefinition.DataType.STRING,
+            string_value="" # Intial value should be an empty string
         ),
         PropertyValue(
             name="price"
@@ -722,7 +733,7 @@ message CatalogProductSetStatusAction {
     string catalog_product_id = 2;
     Status catalog_product_status  = 4;
     // Reason for the change
-    string reason = 5;
+    string status_change_reason = 5;
 }
 ```
 
