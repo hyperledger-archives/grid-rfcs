@@ -133,10 +133,10 @@ The primary object stored in state is `Catalog`, which consists of a
 `catalog_id` (hash of the catalog_name), an `owner` (org_id
 compatible w/Pike), a `name`, and a repeated field of `PropertyValues`. 
 The properties available are defined by the Grid Property Schema Transaction 
-Family and are restricted to the fields and rules of the GS1 Catalog schema 
-(which will be defined at a later time).  Transactions which are responsible 
-for setting catalog state values must ensure that those properties conform with 
-the requirements of the GS1 Catalog Schema (not yet defined).
+Family and are restricted to the fields and rules of the GS1 Catalog schema
+(which will be defined at a later time). Currently, you can proceed to create 
+a catalog that does not adhere to any schema. The GS1 Catalog Schema will be 
+defined in a future RFC.
 
 ```
 message Catalog {
