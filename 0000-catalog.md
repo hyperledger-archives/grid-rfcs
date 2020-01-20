@@ -459,7 +459,7 @@ message CatalogCreateAction {
     // a composite key for determining the state address
     string owner = 1;
     string catalog_id = 2;
-    string name = 3;
+    string catalog_name = 3;
     repeated PropertyValues properties = 4;
 }
 ```
@@ -495,7 +495,7 @@ message CatalogUpdateAction {
     // a composite key for determining the state address
     string owner = 1;
     string catalog_id = 2;
-    string name = 3;
+    string catalog_name = 3;
     repeated PropertyValues properties = 4;
 }
 ```
