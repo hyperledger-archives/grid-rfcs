@@ -781,6 +781,22 @@ simply maintain references to each other. There is no concept of "list of produc
 within a catalog. This design makes catalog actions/operations less expensive to
 perform.
 
+The proposed implementation of Grid Catalog reuses the `Product` protobuf
+message for catalog products. However, there are several differences between the
+data model defined in the `Product` message, and the data model required for
+product catalogs and related transactions.
+
+1. Product catalogs must reference the catalog that they belong to.
+2. The `CatalogProductSetStatus` transaction requires that each product catalog
+   has a `status` field.
+
+Currently, these fields are represented as required `PropertyValues` in the
+`Product` message. An alternative to this implementation would be to define a
+new messsage, `CatalogProduct`, which would include these fields. This
+alternative would simplify the smart contract because it would not require
+special logic to search the `PropertyValues` for specific fields in order to
+validate that these fields exist.
+
 # Prior art
 
 [prior-art]: #prior-art
