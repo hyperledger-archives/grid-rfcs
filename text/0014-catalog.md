@@ -1,6 +1,6 @@
 - Feature Name: Product Catalog
 - Start Date: 2019-07-12
-- RFC PR:
+- RFC PR: https://github.com/hyperledger/grid-rfcs/pull/14
 - Hyperledger Grid Issue: [GRID-95](https://jira.hyperledger.org/browse/GRID-95)
 
 # Summary
