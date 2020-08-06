@@ -414,4 +414,4 @@ details.
 - Does GS1 assign one or more usage types (legal entity, function, physical 
 location, digital location) to a given Location? If yes, what field is used and
 how do required/optional attribution differ for each usage type? See [GS1 Usage 
-Types[(https://www.gs1.org/1/glnrules/en/guideline/230 "GS1 Usage Types").
+Types](https://www.gs1.org/1/glnrules/en/guideline/230 "GS1 Usage Types").
