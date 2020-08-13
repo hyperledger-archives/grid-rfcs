@@ -348,15 +348,15 @@ digital locations and should be implemented with supplemental RFC(s).
 |Contact Name|contactName| |"Jane Doe"|STRING| | |
 |Contact Email|contactEmail| |"jane_doe@example.com"|STRING| | |
 |Contact Phone|contactPhone|The location's primary phone number. Best practice is individual with assignment duty.|"937-435-3870"|STRING|1|30|
-|Create Date|createDate|Date this location becomes active.|"06/01/2015"| | | |
+|Create Date|createDate|Date this location becomes active.|"06/01/2015"|DATETIME| | |
 
 **_OPTIONAL FIELDS_**
 |GS1 Common Name|GS1 Attribute Name|Description|Example|Data Type|Min|Max|
 |---------------|------------------|-----------|-------|----|---|---|
 |Location Name 2|locationName2|A secondary facility name.|"Cargill Incorporated"|STRING|0|80|
 |Address Line 2|addressLine2|Any secondary information such as Suite, Floor, etc. The USPS address is validated if Country = United States.|"Suite 204"|STRING|0|80|
-|Address Line 3|addressLine3|Additional descriptive information that is not verified through the USPS data base. Best practice is to use AddressLine3 when there are multiple locations using the same USPS address. Examples: Billing office, cardiology lab, backroom, etc.| | | | |
-|Inactivation Date|inactivationDate|Date this location is no longer used by the information provider.|"01/15/2020"| | | |
+|Address Line 3|addressLine3|Additional descriptive information that is not verified through the USPS data base. Best practice is to use AddressLine3 when there are multiple locations using the same USPS address. Examples: Billing office, cardiology lab, backroom, etc.| |STRING| | |
+|Inactivation Date|inactivationDate|Date this location is no longer used by the information provider.|"01/15/2020"|DATETIME| | |
 |Parent Location GLN|parentLocation|Used to describe a location hierarchy. Needed for every GLN except the top-level location, which does not have a parent location.|"0653114000000"|NUMBER|13|13|
 |Industry Sector|industrySector|Select one option: General, CPG, Healthcare, Foodservice.|"Foodservice"|ENUM| | |
 |Supply Chain Role|role|Available options are based on the selected Industry Sector for this GLN. General: Manufacturer, Solutions Provider, Undefined. CPG: Manufacturer, Solutions Provider, Undefined. Healthcare: Distributor, Provider, Supplier, Undefined. Foodservice: 3rd Party, Warehouse, Distributor, Independent Operator, Manufacturer, Operator.|"Manufacturer"|ENUM| | |
