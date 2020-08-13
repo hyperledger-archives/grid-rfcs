@@ -50,7 +50,7 @@ Properties are described in the “_Defined GS1 Properties_” section of the RF
 |Master Data Common Name|Attribute Name|Description|Example|
 |-----------------------|--------------|-----------|-------|
 |Location Identifier|location_id|A location is referenced using a location_id (key attribute). For GS1 locations, the location_id is a Global Location Number which is part of GS1 specifications.|"0099474000005"|
-|Namespace|location_namespace|This RFC defines a single location_namespace for GS1; a location in the GS1 location_namespace is called a GS1 location. Note that this design supports extending additional location namespaces in the future.|"01"|
+|Location Namespace|location_namespace|This RFC defines a single location_namespace for GS1; a location in the GS1 location_namespace is called a GS1 location. Note that this design supports extending additional location namespaces in the future.|"01"|
 |Owner|owner/org_id|The identifier of the organization responsible for maintaining the location. For GS1 locations, org_id is the Pike organization which claims ownership of the GS1 company prefix (via the "gs1_company_prefixes" field in the Pike records). The GLN will always start with the company prefix. The smart contract will check that the org claiming ownership lists the matching prefix in their Pike org.||
 
 
@@ -87,7 +87,7 @@ Updates to locations are restricted to agents acting on behalf of the
 organization stored in the location’s owner field. Only property fields can be 
 updated. They are updated by providing a complete and updated list of the 
 properties, and overwrites the entire list of property values. Location_id, 
-location_type, and owner fields are immutable.
+location_namespace, and owner fields are immutable.
 
 Deletion of locations is restricted to agents acting on behalf of the 
 organization in the location’s owner field. A setting will turn off deletion 
@@ -123,15 +123,15 @@ location state values must ensure that the properties conform with the
 requirements of the GS1 Location Property Schema.
 
     message Location { 
-        enum LocationType { 
+        enum LocationNamespace { 
             UNSET_NAMESPACE = 0; 
             GS1 = 1; 
         }
 
         // What type of location is this (GS1)
-        LocationType location_type = 1; 
+        LocationNamespace location_namespace = 1; 
 
-        // location_id is the GLN for GS1-type locations
+        // location_id is the GLN for GS1-namespace locations
         string location_id = 2;
 
         // Who owns this location (pike organization id)
@@ -148,7 +148,7 @@ digit.
 
 ### Referencing Locations
 
-Locations are uniquely referenced by their location_id and location_type.
+Locations are uniquely referenced by their location_id and location_namespace.
 For GS1, locations are referenced by the GLN identifier.
 
 **Note: For the remainder of this document, “address” will refer to a 
@@ -202,25 +202,23 @@ allows for the action payload to be dispatched to the appropriate logic.
 
 Only the defined actions are available and only one action payload should be 
 defined in the LocationPayload.
-
-    message LocationPayload {        
-
-     enum Actions {
-        UNSET_ACTION = 0;
-        LOCATION_CREATE = 1;
-        LOCATION_UPDATE = 2;
-        LOCATION_DELETE = 3;
     
-    }
-    
-    Action action = 1;
-    
-    // Approximately when transaction was submitted, as a Unix UTC timestamp
-    uint64 timestamp = 2;
+        message LocationPayload {        
+        enum Actions {
+            UNSET_ACTION = 0;
+            LOCATION_CREATE = 1;
+            LOCATION_UPDATE = 2;
+            LOCATION_DELETE = 3;
+        }
 
-    LocationCreateAction location_create = 3;
-    LocationUpdateAction location_update = 4;
-    LocationDeleteAction location_delete = 5;
+        Action action = 1;
+
+        // Approximately when transaction was submitted, as a Unix UTC timestamp
+        uint64 timestamp = 2;
+
+        LocationCreateAction location_create = 3;
+        LocationUpdateAction location_update = 4;
+        LocationDeleteAction location_delete = 5;
     }
 
 ### LocationCreateAction
@@ -236,11 +234,11 @@ Validation requirements:
 belong to an organization in Pike state, otherwise the transaction is invalid.
 - The agent must have the permission can_create_location for the organization, 
 otherwise the transaction is invalid.
-- If the location_type is GS1, the organization must contain a GS1 Company 
+- If the location_namespace is GS1, the organization must contain a GS1 Company 
 Prefix in its metadata (gs1_company_prefixes), and the prefix must match the 
 company prefix in the location_id, which is a GLN if GS1, otherwise the 
 transaction is invalid.
-- The properties must be valid for the location_type. For example, if the
+- The properties must be valid for the location_namespace. For example, if the
 location is GS1 location, its properties must only contain properties that are
 included in the GS1 Schema. If it includes a property not in the GS1 Schema the
 transaction is invalid.
@@ -258,7 +256,7 @@ match
 The outputs for LocationCreateAction must include:
 - Grid address of the Location created
 
-### LocationCreateAction
+### LocationUpdateAction
 
 LocationUpdateAction updates an existing location in state. The transaction 
 should be submitted by an agent, identified by its signing key, acting on behalf
@@ -273,7 +271,7 @@ belong to an organization in Pike state, otherwise the transaction is invalid.
 to, otherwise the transaction is invalid.
 - The agent must have the permission can_update_location for the organization, 
 otherwise the transaction is invalid.
-- The new properties must be valid for the location_type. For example, if 
+- The new properties must be valid for the location_namespace. For example, if 
 the location is a GS1 location, its properties must only contain properties that
 are included in the GS1 Schema. If it includes a property not in the GS1 Schema 
 the transaction is invalid.
@@ -346,7 +344,7 @@ digital locations and should be implemented with supplemental RFC(s).
 |State or Region|stateOrRegion|The state, province, or region using the standard two-letter abbreviation specified in ISO 3166-2:1998 country subdivision code [16].|"MN"|STRING|1|3|
 |Postal Code|postalCode|The ZIP or other postal code.|"55362-8524"|STRING|1|10|
 |Country|country|Country of your location. Spell out, do not use abbreviations.|"United States"|STRING|2|80|
-|Latitude & Longitude|LAT_Long| |"44.986656, -93.258133"|LAT_LONG| | |
+|Latitude, Longitude|latitude, longitude| |"44.986656, -93.258133"|LAT_LONG| | |
 |Contact Name|contactName| |"Jane Doe"|STRING| | |
 |Contact Email|contactEmail| |"jane_doe@example.com"|STRING| | |
 |Contact Phone|contactPhone|The location's primary phone number. Best practice is individual with assignment duty.|"937-435-3870"|STRING|1|30|
@@ -392,6 +390,12 @@ in the future, addressing items such as:
 - facility specification (operating hours, time zone)
 - digital locations (network address, Production/Test/Development)
 
+Above we use the terminology LocationNamespace, which is used in the same manner
+as in the Product RFC, where it is called ProductNamespace. The current Product 
+codebase, however, calls this ProductType. Because “locationType” is a GS1 field,
+this RFC remains consistent with the use in the Product RFC, with the assumption
+that the Product codebase should be changed to match the original RFC in this respect.
+
 Note from GS1: GLNs and GTINs are formed from an organization’s GS1 Company 
 Prefix which means the numbering sequence is identical. As such, GLNs and GTINs
 should be maintained in separated database records.
@@ -400,7 +404,7 @@ should be maintained in separated database records.
 # Prior art
 [prior-art]: #prior-art
 
-None.
+[Product RFC](https://github.com/hyperledger/grid-rfcs/blob/master/text/0005-product.md "Product RFC")
 
 
 # Unresolved questions
