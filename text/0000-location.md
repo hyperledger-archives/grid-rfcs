@@ -202,8 +202,8 @@ allows for the action payload to be dispatched to the appropriate logic.
 
 Only the defined actions are available and only one action payload should be 
 defined in the LocationPayload.
-    
-        message LocationPayload {        
+
+    message LocationPayload {
         enum Actions {
             UNSET_ACTION = 0;
             LOCATION_CREATE = 1;
@@ -219,6 +219,29 @@ defined in the LocationPayload.
         LocationCreateAction location_create = 3;
         LocationUpdateAction location_update = 4;
         LocationDeleteAction location_delete = 5;
+    }
+
+    message LocationCreateAction {
+        Location.LocationType location_type = 1;
+        string location_id = 2;
+        string owner = 3;
+        repeated PropertyValue properties = 4;
+    }
+
+    message LocationUpdateAction {
+        // Not modified. Only  used to find location object in state
+        Location.LocationType location_type = 1;
+        // Not modified. Only  used to find location object in state
+        string location_id = 2;
+        // This will replace all properties currently defined
+        repeated PropertyValue properties = 3;
+    }
+
+    message LocationDeleteAction {
+        // Not modified. Only  used to find location object in state
+        Location.LocationType location_type = 1;
+        // Not modified. Only  used to find location object in state
+        string location_id = 2;
     }
 
 ### LocationCreateAction
