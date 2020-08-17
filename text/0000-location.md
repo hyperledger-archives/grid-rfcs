@@ -65,11 +65,11 @@ covers all currently implemented DLT backends in Grid.
 Locations are managed by submitting transactions to Hyperledger Grid, which will
 process them with the Grid Location smart contract. The following transactions 
 are supported:
-- LocationCreate - create a Location and store it in state.
-- LocationUpdate - update (replace) the properties of a Location already in state.
-- LocationDelete - remove a Location from state.
+- `LocationCreateAction` - create a Location and store it in state.
+- `LocationUpdateAction` - update (replace) the properties of a Location already in state.
+- `LocationDeleteAction` - remove a Location from state.
  
-_*Disclaimer: LocationDelete is a potentially hazardous operation and needs to 
+_*Disclaimer: `LocationDeleteAction` is a potentially hazardous operation and needs to 
 be done with care._
 
 
@@ -195,7 +195,7 @@ A full GS1 Location address (for example purposes) would therefore be:
 ## Transaction Payload and Execution
 [transaction payload and execution]: "transactionpayloadandexecution"
 
-### Location PayLoad Transaction
+### Location Payload Transaction
 
 LocationPayload contains an action enum and the associated action payload. This 
 allows for the action payload to be dispatched to the appropriate logic.
@@ -244,9 +244,9 @@ defined in the LocationPayload.
         string location_id = 2;
     }
 
-### LocationCreateAction
+### Location Create Action
 
-LocationCreateAction adds a new location to state. The transaction should be 
+`LocationCreateAction` adds a new location to state. The transaction should be 
 submitted by an agent, which is identified by its signing key, acting on behalf 
 of the organization that corresponds to the owner in the create transaction. 
 (Organizations and agents are defined by the Pike smart contract.)
@@ -269,19 +269,19 @@ transaction is invalid.
 If all requirements are met, the transaction will be accepted and the location
 will be created in state.
 
-The inputs for LocationCreateAction must include:
+The inputs for `LocationCreateAction` must include:
 - Grid address of the Agent submitting the transaction
 - Grid address of the Organization the Location is being created for
 - Grid address of the Location Namespace Schema the location’s properties must 
 match
 - Grid address of the Location to be created
 
-The outputs for LocationCreateAction must include:
+The outputs for `LocationCreateAction` must include:
 - Grid address of the Location created
 
-### LocationUpdateAction
+### Location Update Action
 
-LocationUpdateAction updates an existing location in state. The transaction 
+`LocationUpdateAction` updates an existing location in state. The transaction 
 should be submitted by an agent, identified by its signing key, acting on behalf
 of an organization that corresponds to the owner in the location being updated.
 (Organizations and agents are defined by the Pike smart contract.)
@@ -302,14 +302,14 @@ the transaction is invalid.
 The properties in the location will be swapped for the new properties and the 
 updated location will be set in state.
 
-The inputs for LocationUpdateAction must include:
+The inputs for `LocationUpdateAction` must include:
 - Grid address of the Agent submitting the transaction
 - Grid address of the Organization the Location is being updated for
 - Grid address of the Location Namespace Schema the location’s properties must
 match
 - Grid address of the Location to be updated
 
-The outputs for LocationUpdateAction must include:
+The outputs for `LocationUpdateAction` must include:
 - Grid address of the Location updated
 
 Note: This RFC handles updates to Location master data (e.g. a Location without 
@@ -320,9 +320,9 @@ used in new transactions but can still be used when referencing earlier
 transactions. In this example, consuming logic will decide which Locations are 
 included in a transaction.
 
-### LocationDeleteAction
+### Location Delete Action
 
-LocationDeleteAction removes an existing location from state. The transaction 
+`LocationDeleteAction` removes an existing location from state. The transaction 
 should be submitted by an agent, identified by its signing key, acting on behalf
 of the organization that corresponds to the owner in the location being updated.
 (Organizations and agents are defined by the Pike smart contract.)
@@ -338,15 +338,15 @@ Validation requirements:
 belong to an organization in Pike state, otherwise the transaction is invalid.
 - The owner in the location must match the organization that the agent belongs 
 to, otherwise the transaction is invalid.
-- The agent must have the permission “can_delete_location” for the organization
+- The agent must have the permission can_delete_location for the organization
 otherwise the transaction is invalid.
 
-The inputs for LocationDeleteAction must include:
+The inputs for `LocationDeleteAction` must include:
 - Grid address of the Agent submitting the transaction
 - Grid address of the Organization the Location is being deleted for Grid 
 address of the Location to be deleted
 
-The outputs for LocationDeleteAction must include:
+The outputs for `LocationDeleteAction` must include:
 - Grid address of the Location to be deleted
 
 ### Defined GS1 Properties
@@ -433,12 +433,3 @@ should be maintained in separated database records.
 # Unresolved questions
 [unresolved]: #unresolved-questions
 
-- GS1 attribution details regarding required/optional attributes, field type and
-minimum/maximum field values were initially sourced from the _GS1 US Data Hub | 
-Location User Guide_. We are seeking validation GS1 experts on attribute details
-that exist within this document as well as input on missing attributes and/or 
-details.
-- Does GS1 assign one or more usage types (legal entity, function, physical 
-location, digital location) to a given Location? If yes, what field is used and
-how do required/optional attribution differ for each usage type? See [GS1 Usage 
-Types](https://www.gs1.org/1/glnrules/en/guideline/230 "GS1 Usage Types").
