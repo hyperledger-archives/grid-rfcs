@@ -222,7 +222,7 @@ defined in the LocationPayload.
     }
 
     message LocationCreateAction {
-        Location.LocationType location_type = 1;
+        Location.LocationNamespace location_namespace = 1;
         string location_id = 2;
         string owner = 3;
         repeated PropertyValue properties = 4;
@@ -230,7 +230,7 @@ defined in the LocationPayload.
 
     message LocationUpdateAction {
         // Not modified. Only  used to find location object in state
-        Location.LocationType location_type = 1;
+        Location.LocationNamespace location_namespace = 1;
         // Not modified. Only  used to find location object in state
         string location_id = 2;
         // This will replace all properties currently defined
@@ -239,7 +239,7 @@ defined in the LocationPayload.
 
     message LocationDeleteAction {
         // Not modified. Only  used to find location object in state
-        Location.LocationType location_type = 1;
+        Location.LocationNamespace location_namespace = 1;
         // Not modified. Only  used to find location object in state
         string location_id = 2;
     }
@@ -351,10 +351,12 @@ The outputs for `LocationDeleteAction` must include:
 
 ### Defined GS1 Properties
 
-This Location RFC defines required and optional attributes for GS1 Locations 
-(see table below). This implementation does not include attribution for specific
-industries, financial/tax account information, a physical location extension, or
-digital locations and should be implemented with supplemental RFC(s).
+This Location RFC defines required and optional attributes (see below) for GS1
+physical locations such as manufacturing facilities, warehouses, distribution
+centers, retail stores, dock doors, etc. This implementation does not include
+attribution for specific industries, financial/tax account information, a 
+physical location extension, or digital locations and should be implemented 
+with supplemental RFC(s).
 
 **_REQUIRED FIELDS_**
 |GS1 Common Name|GS1 Attribute Name|Description|Example|Data Type|Min|Max|
@@ -396,6 +398,9 @@ taken with Grid Product. Thus, many of the drawbacks mentioned in the Grid
 Product RFC that haven't yet been addressed will apply to Grid Location as well.
 This RFC intentionally re-uses the current structure where possible as 
 cross-cutting enhancements would be better in separate RFCs.
+
+Competitive data will not be captured in location but can be extended to at a 
+later time if need be. Similarly to how catalog_product extends product.
 
 This implementation does not account for transfer-of-ownership scenarios 
 (mergers, acquisitions), and should be implemented as a supplemental RFC at a 
