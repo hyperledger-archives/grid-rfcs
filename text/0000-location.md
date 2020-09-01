@@ -13,13 +13,21 @@ that positioning and familiarity, Grid support feels natural. Additional
 implementations of Location for specialized industries or use cases may derive 
 from or extend this implementation.
 
-This Grid Location proposal is specific to physical locations within a supply 
-chain. The GS1 General Specification defines a physical location as a site (an area,
-a structure or group of structures) or an area within the site where something 
-was, is, or will be located. For example: A label attached to a loading dock or 
-to a shelf location in a warehouse. Legal entities, functions and digital 
-locations are out of scope for our initial design and should be addressed in 
-supplemental RFC(s).
+This Grid Location proposal may be used to uniquely identify the following
+locations (definitions and examples sourced from GS1).
+- Legal entities. Any buisness, government body, department, charity, individual
+or institution that has standing in the eyes of the law and has the capacity to
+enter into contracts. Examples: Whole companies, subsidiaries or divisions. Suppliers,
+distributors, banks, freight carriers, etc.
+- Functional entities. A specific department within a legal entity. Examples: accounting
+accounts payable, returns.
+- Physical locations. A site (an area, a structure or group of structures) or an
+area within the site where something was, is, or will be located. Examples: Retail
+store, manufacturing facility, warehouse, distribution center, dock door, floor
+number, section of floor, room, shelf, section on shelf.
+- Digital locations. An electronic (non-physical) address that is used for
+communication between computer systems. Example: ERP system.
+
 
 # Motivation
 [motivation]: #motivation
@@ -27,9 +35,9 @@ supplemental RFC(s).
 The Grid Location implementation is designed for sharing location master data 
 between participants. Location is a near universal concept within supply chain 
 solutions and would naturally be one of the highest areas of re-use across Grid 
-applications. The identification of where a physical location exists (and thus 
-where a business transaction occurs) is a foundational element that will enable 
-a wide host of distributed supply chain and commerce solutions. The design will 
+applications. The identification of where a location exists (and thus where a 
+business transaction occurs) is a foundational element that will enable a wide
+host of distributed supply chain and commerce solutions. The design will 
 address use cases such as:
 
 - the inclusion of Location within business transactions (e.g. track and trace 
@@ -49,7 +57,7 @@ Properties are described in the “_Defined GS1 Properties_” section of the RF
 
 |Master Data Common Name|Attribute Name|Description|Example|
 |-----------------------|--------------|-----------|-------|
-|Location Identifier|location_id|A location is referenced using a location_id (key attribute). For GS1 locations, the location_id is a Global Location Number which is part of GS1 specifications.|"0099474000005"|
+|Location Identifier|location_id|A location is referenced using a location_id (key attribute). For GS1 locations, the location_id is a Global Location Number (GLN) which is part of GS1 specifications.|"0099474000005"|
 |Location Namespace|location_namespace|This RFC defines a single location_namespace for GS1; a location in the GS1 location_namespace is called a GS1 location. Note that this design supports extending additional location namespaces in the future.|"01"|
 |Owner|owner/org_id|The identifier of the organization responsible for maintaining the location. For GS1 locations, org_id is the Pike organization which claims ownership of the GS1 company prefix (via the "gs1_company_prefixes" field in the Pike records). The GLN will always start with the company prefix. The smart contract will check that the org claiming ownership lists the matching prefix in their Pike org.||
 
@@ -162,8 +170,8 @@ Location representation.
 
 All Grid addresses are prefixed by the 6-hex-character namespace prefix “621dee”.
 Locations are further prefixed under the Grid namespace with reserved 
-enumerations of “04” (“00”, “01”, “02” and “03” being reserved for other 
-purposes) indicating “Locations” and an additional “01” indicating “GS1 
+enumerations of “04” (“00” = TBD, “01” = Schema, “02” = Product, and “03” = 
+Catalog) indicating “Locations” and an additional “01” indicating “GS1 
 Locations”.
 
 Therefore, all addresses starting with “621dee” + “04” are Grid locations, and 
@@ -351,12 +359,11 @@ The outputs for `LocationDeleteAction` must include:
 
 ### Defined GS1 Properties
 
-This Location RFC defines required and optional attributes (see below) for GS1
-physical locations such as manufacturing facilities, warehouses, distribution
-centers, retail stores, dock doors, etc. This implementation does not include
-attribution for specific industries, financial/tax account information, a 
-physical location extension, or digital locations and should be implemented 
-with supplemental RFC(s).
+This Location RFC defines base required and optional attributes (see below) 
+for GS1 locations. This implementation does not include attribution for 
+specific industries, financial/tax account information, etc. These fields
+should be implemented with supplemental RFC(s).
+
 
 **_REQUIRED FIELDS_**
 |GS1 Common Name|GS1 Attribute Name|Description|Example|Data Type|Min|Max|
@@ -380,23 +387,24 @@ with supplemental RFC(s).
 |---------------|------------------|-----------|-------|----|---|---|
 |Location Name 2|locationName2|A secondary facility name.|"Cargill Incorporated"|STRING|0|80|
 |Address Line 2|addressLine2|Any secondary information such as Suite, Floor, etc. The USPS address is validated if Country = United States.|"Suite 204"|STRING|0|80|
-|Address Line 3|addressLine3|Additional descriptive information that is not verified through the USPS data base. Best practice is to use AddressLine3 when there are multiple locations using the same USPS address. Examples: Billing office, cardiology lab, backroom, etc.| |STRING| | |
+|Address Line 3|addressLine3|Additional descriptive information that is not verified through the USPS data base. Best practice is to use AddressLine3 when there are multiple locations using the same USPS address. Examples: Billing office, cardiology lab, backroom, dock door, airport terminal/gate, etc.| |STRING| | |
 |Inactivation Date|inactivationDate|Date this location is no longer used by the information provider.|"01/15/2020"|DATETIME| | |
 |Parent Location GLN|parentLocation|Used to describe a location hierarchy. Needed for every GLN except the top-level location, which does not have a parent location.|"0653114000000"|NUMBER|13|13|
 |Industry Sector|industrySector|Select one option: General, CPG, Healthcare, Foodservice.|"Foodservice"|ENUM| | |
 |Supply Chain Role|role|Available options are based on the selected Industry Sector for this GLN. General: Manufacturer, Solutions Provider, Undefined. CPG: Manufacturer, Solutions Provider, Undefined. Healthcare: Distributor, Provider, Supplier, Undefined. Foodservice: 3rd Party, Warehouse, Distributor, Independent Operator, Manufacturer, Operator.|"Manufacturer"|ENUM| | |
 |Information Provider GLN|informationProviderGLN|The entity providing this information. Usually points to the primary business GLN listed in the spreadsheet or database.|GS1 US, Inc. "0614141000005"|NUMBER| | |
 |GDSN GLN Type|GDSNGLNType|Multiple types allowed. Options include: Brand Owner GLN, Manufacturer GLN, Recipient Provider GLN, Source Provider GLN, Information Provider GLN.|"Brand Owner GLN"|ENUM|15|34|
-|Replaced GLN|replaced GLN|The GLN assigned to this location previously, if any.|"1234567890128"|NUMBER|13|13|
+|Replaced GLN|replacedGLN|The GLN assigned to this location previously, if any.|"1234567890128"|NUMBER|13|13|
 
 
 # Drawbacks
 [drawbacks]: #drawbacks
 
 Many of the approaches taken here are similar or the same as the approach 
-taken with Grid Product. Thus, many of the drawbacks mentioned in the Grid 
-Product RFC that haven't yet been addressed will apply to Grid Location as well.
-This RFC intentionally re-uses the current structure where possible as 
+taken with [Grid Product](https://github.com/hyperledger/grid-rfcs/blob/master/text/0005-product.md "Product RFC").
+Thus, many of the drawbacks mentioned in the Grid Product RFC that haven't
+yet been addressed will apply to Grid Location as well. This RFC 
+intentionally re-uses the current structure where possible as 
 cross-cutting enhancements would be better in separate RFCs.
 
 Competitive data will not be captured in location but can be extended to at a 
@@ -405,6 +413,15 @@ later time if need be. Similarly to how catalog_product extends product.
 This implementation does not account for transfer-of-ownership scenarios 
 (mergers, acquisitions), and should be implemented as a supplemental RFC at a 
 later time.
+
+This implementation does not account for the deactivation and reactivation
+of locations and should be implemented as a supplemental RFC at a later time
+(perhaps with an associated Status). For example: A 3rd party location may 
+pop up in the food supply chain space. Or services at an airport may go dark 
+due to inactivity (e.g. pandemic) and then reactivate when demand resurfaces 
+or capabilities shift. Note: this RFC does account for the inactivation of a
+location. Once inactivated, the location cannot be activated for 48 months per
+the location lifecycle.
 
 
 # Rationale and alternatives
@@ -416,13 +433,21 @@ in the future, addressing items such as:
 - tax registration numbers (VAT number)
 - delivery requirements or restrictions
 - facility specification (operating hours, time zone)
-- digital locations (network address, Production/Test/Development)
+- digital location attributes (network address, Production/Test/Development)
 
 Above we use the terminology LocationNamespace, which is used in the same manner
 as in the Product RFC, where it is called ProductNamespace. The current Product 
 codebase, however, calls this ProductType. Because “locationType” is a GS1 field,
 this RFC remains consistent with the use in the Product RFC, with the assumption
 that the Product codebase should be changed to match the original RFC in this respect.
+
+This RFC does not support the GLN extension component. According to GS1, "The GLN 
+extension is an optional GLN feature for sub-dividing a physical location according
+to rules internal to the location itself. Not all trading partners are able to 
+differentiate locations using the GLN extension component in their transactional 
+systems (e.g. order management, ERP)." Given limited transactional support, use of
+the GLN without the extension is recommended. The extension may be implemented in
+a future RFC when a use case warrants its use.
 
 Note from GS1: GLNs and GTINs are formed from an organization’s GS1 Company 
 Prefix which means the numbering sequence is identical. As such, GLNs and GTINs
