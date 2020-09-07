@@ -263,6 +263,8 @@ Validation requirements:
 - If a location with location_id already exists the transaction is invalid.
 - The signer of the transaction must be an agent in the Pike state and must 
 belong to an organization in Pike state, otherwise the transaction is invalid.
+- The owner in the location must match the organization that the agent belongs 
+to, otherwise the transaction is invalid.
 - The agent must have the permission can_create_location for the organization, 
 otherwise the transaction is invalid.
 - If the location_namespace is GS1, the organization must contain a GS1 Company 
