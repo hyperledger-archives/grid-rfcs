@@ -1,6 +1,6 @@
 - Feature Name: Location
 - Start Date: 2020-07-29
-- RFC PR: 
+- RFC PR: https://github.com/hyperledger/grid-rfcs/pull/20
 - Hyperledger Grid Issue: 
 
 # Summary
