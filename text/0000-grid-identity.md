@@ -54,7 +54,7 @@ state and thus requires a handle to state be passed into the function.
 
 The current Pike implementation relies on organizations, agents, and roles:
 
-![Pike Diagram](/images/grid-identity/pike.png)
+![Pike Diagram](https://github.com/Cargill/grid-rfcs/blob/identity/images/grid-identity/pike.png)
 
 In Pike, when `has_permission()` is evaluated, an agent is looked up via the
 public key. The public key is the agent’s primary key and the agent is stored in
@@ -85,7 +85,7 @@ defined as a list of permissions. The smart contracts check for permissions.
 This level of indirection allows the definition of higher-order roles be defined
 by organizations. The resulting state looks like:
 
-![Grid Identity Diagram](/images/grid-identity/identity.png)
+![Grid Identity Diagram](https://github.com/Cargill/grid-rfcs/blob/identity/images/grid-identity/identity.png)
 
 The Agent has one or more organization-specific roles. The `has_permission()`
 function determines the roles assigned to the agent and returns `true` if one of
