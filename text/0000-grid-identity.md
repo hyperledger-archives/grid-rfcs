@@ -629,8 +629,7 @@ new organization will produce three objects: an agent, and organization, and an
   public_key: 000000000000000000000000000000000000000000000000000000000000000000
   active: true
   roles:
-    - org_id: alpha
-      name: alpha.Admin
+    - alpha.Admin
   metadata: []
 ```
 
