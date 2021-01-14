@@ -298,7 +298,7 @@ permission.
 Several weeks later, the Beta Company receives a phone call from Alpha Company
 lawyers. They heard about the deal with Delta Company and cite a clause in their
 contract which disallows drivers of Alpha tanks to also drive tanks from another
-t-shirt tank management company. After the appropriate retrimands are dealt,
+t-shirt tank management company. After the appropriate reprimands are dealt,
 the Beta Company deactivates their previous `beta.Drivers` role and creates
 two new roles, one for each tank company.
 
