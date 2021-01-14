@@ -130,7 +130,7 @@ The data model for the t-shirt tank may look something like this:
 ```
 
 The smart contract for operating tanks (named "tankops") would also define
-several roles:
+several permissions:
 
   - `tankops::can-drive` allows agents to submit a transaction to update the `is_driving`
     boolean.
