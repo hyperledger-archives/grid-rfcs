@@ -82,8 +82,8 @@ that Grid Identity solves this problem.
 
 In Grid Identity, roles are not directly used as permissions. Instead, a role is
 defined as a list of permissions. The smart contracts check for permissions.
-This level of indirection allows the definition of higher-order roles be defined
-by organizations. The resulting state looks like:
+This level of indirection allows organizations to define higher-order roles. The
+resulting state looks like:
 
 ![Grid Identity Diagram](https://github.com/Cargill/grid-rfcs/blob/identity/images/grid-identity/identity.png)
 
