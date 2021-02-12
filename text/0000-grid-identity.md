@@ -6,18 +6,19 @@
 # Summary
 [summary]: #summary
 
-Grid Identity is a role-based access control system for managing permissions
+Grid Pike v2 is a role-based access control system for managing permissions
 within Grid and specifically within smart contracts. Agents, which are
 identified by their cryptographic public keys, are provided with permissions to
-act on behalf of organizations. Grid Identity is an evolution of the Pike
+act on behalf of organizations. Grid Pike v2 is an evolution of the Pike v1
 identity system used in Grid and Sawtooth.
 
 # Motivation
 [motivation]: #motivation
 
-Pike, the existing identity system, lacks a few key features which are necessary
-to fully capture delegation of permissions desired in more complex systems (such
-as the upcoming Grid Purchase Order capability). The desired capabilities are:
+Pike v1, the existing identity system, lacks a few key features which are
+necessary to fully capture delegation of permissions desired in more complex
+systems (such as the upcoming Grid Purchase Order capability). The desired
+capabilities are:
 
   - Organizations should have the ability to define organization-specific roles
     which are constructed from the permissions hard-coded into smart contracts.
@@ -45,7 +46,7 @@ Therefore, the authorization check determines whether the signer of the
 transaction has the permission required. If the check fails, the transaction
 will be considered invalid.
 
-Grid Identity defines the data structures and logic for the `has_permission()`
+Grid Pike v2 defines the data structures and logic for the `has_permission()`
 function, which is provided to the smart contract by the Grid SDK. The
 implementation of `has_permission()` makes various calls to obtain portions of
 state and thus requires a handle to state be passed into the function.
@@ -76,16 +77,16 @@ organizations. However, there may be cases where an organization needs to grant
 certain permissions to another organization. With Pike this would not be
 possible without specific workaround in each smart contract. This could lead to
 inconsistency and sub-standard implementations across Grid. It is imperative
-that Grid Identity solves this problem.
+that Grid Pike v2 solves this problem.
 
 ## Redefining Roles
 
-In Grid Identity, roles are not directly used as permissions. Instead, a role is
+In Grid Pike v2 , roles are not directly used as permissions. Instead, a role is
 defined as a list of permissions. The smart contracts check for permissions.
 This level of indirection allows organizations to define higher-order roles. The
 resulting state looks like:
 
-![Grid Identity Diagram](https://github.com/Cargill/grid-rfcs/blob/identity/images/grid-identity/identity.png)
+![Grid Pike v2 Diagram](https://github.com/Cargill/grid-rfcs/blob/identity/images/grid-identity/identity.png)
 
 The Agent has one or more organization-specific roles. The `has_permission()`
 function determines the roles assigned to the agent and returns `true` if one of
@@ -143,7 +144,7 @@ several permissions:
 
 Alpha Company doesn't have any drivers, but they do have inspectors that are in
 charge of decommissioning tanks which are no longer fit for service. To do this,
-an admin of Alpha Company submits a Grid Identity transaction to create the
+an admin of Alpha Company submits a Grid Pike v2 transaction to create the
 Inspector role.
 
 ```yaml
@@ -292,8 +293,8 @@ Company admin updates the `beta.Drivers` role to also include the
 
 This updated role allows Beta agents to drive, fire, and turn the turret on both
 Alpha and Delta tanks. However, it only allows agents to decommission Delta
-tanks, as the `alpha.Drivers` role does not include the `tankops::can-decommission`
-permission.
+tanks, as the `alpha.Drivers` role does not include the
+`tankops::can-decommission` permission.
 
 Several weeks later, the Beta Company receives a phone call from Alpha Company
 lawyers. They heard about the deal with Delta Company and cite a clause in their
@@ -353,13 +354,13 @@ organization must have the proper GS1 company prefix in order to interact with
 products with correlating GTINs. In Grid Pike, this is handled through the use
 of the metadata field.
 
-In Grid Identity, we further define this functionality through a new concept
+In Grid Pike v2, we further define this functionality through a new concept
 called "Alternate IDs". This is implemented through a field called
 `alternate_ids` on the `Organization` message and a new message called
 `AlternateIDIndexEntry`. The `alternate_ids` field allows users and smart
 contracts to easily fetch a list of all of the alternate IDs associated with an
 organization. The AlternateIDIndexEntry message serves as an index to fetch a
-Grid Identity organization from an externally known ID, and also ensures that no
+Grid Pike organization from an externally known ID, and also ensures that no
 organization can have an alternate ID that is already assigned.
 
 When an organization is created, we check the list of alternate IDs supplied in
@@ -437,13 +438,12 @@ message AlternateID {
 
 ## Transactions
 
-There is one `IdentityPayload` message which accounts for all Identity
-transactions. This message has an enum to indicate if the transaction is a
-creation, update, or delete action for each of the three core data types in
-Identity.
+There is one `PikePayload` message which accounts for all Pike transactions.
+This message has an enum to indicate if the transaction is a creation, update,
+or delete action for each of the three core data types in Pike v2.
 
 ```protobuf
-message IdentityPayload {
+message PikePayload {
   enum Action {
     ACTION_UNSET = 0;
     CREATE_AGENT = 1;
@@ -537,86 +537,86 @@ message DeleteRoleAction {
 
 ## Naming Conventions
 
-Roles in Grid Identity must adhere to a naming convention for easy
-identification and uniformity. The permissions hard-coded into smart contracts
-should also follow a naming convention. The naming conventions for these strings
-are as follows:
+Roles in Grid Pike must adhere to a naming convention for easy identification
+and uniformity. The permissions hard-coded into smart contracts should also
+follow a naming convention. The naming conventions for these strings are as
+follows:
 
 Roles: `<Organization.org_id>.<Role name>`, for example the name of an
 "Admin" of the org with ID "alpha" would be `alpha.Admin`.
 
 Permissions: `<smart contract name>::<permission>`, for example the name of a
 permission to update agents for the "identity" smart contract would be
-`identity::can-update-agents`.
+`pike::can-update-agents`.
 
 ## Addressing
 
 In order to uniquely locate agents, organizations, and roles in the Merkle-Radix
 state system, an address must be constructed which identifies the storage
-location each the Grid Identity object.
+location each the Grid Pike object.
 
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
-“621dee”. Identity objects are further prefixed under the Grid namespace with
+“621dee”. Pike objects are further prefixed under the Grid namespace with
 the reserved enumeration of “05”. The remaining 62 characters depend on the
 object type as shown below:
 
 ### Agent State
 
-The specific namespace prefix within Grid Identity for Agent state is
-`621dee0500`, which is the general Grid Identity namespace `621dee05`
+The specific namespace prefix within Grid Pike for Agent state is
+`621dee0500`, which is the general Grid Pike namespace `621dee05`
 concatenated with 00. The remaining 60 characters are the first 60 characters of
 the hash of the agent’s public key.
 
 ### Organization State
 
-The specific namespace prefix within Grid Identity for Organization state is
-`621dee0501`, which is the general Grid Identity namespace `621dee05`
+The specific namespace prefix within Grid Pike for Organization state is
+`621dee0501`, which is the general Grid Pike namespace `621dee05`
 concatenated with 01. The remaining 60 characters are the first 60 characters of
 the hash of the organization's ID.
 
 ### Role State
 
-The specific namespace prefix within Grid Identity for Role state is
-`621dee0502`, which is the general Grid Identity namespace `621dee05`
+The specific namespace prefix within Grid Pike for Role state is
+`621dee0502`, which is the general Grid Pike namespace `621dee05`
 concatenated with 02. The next 60 characters are the first 60 characters of
 the hash of the role's name.
 
 ### AlternateIDIndexEntry State
 
-The specific namespace prefix within Grid Identity for the alternate ID index is
-`621dee0503`, which is the general Grid Identity namespace `621dee05`
+The specific namespace prefix within Grid Pike for the alternate ID index is
+`621dee0503`, which is the general Grid Pike namespace `621dee05`
 concatenated with 03. The next 60 characters are the first 60 characters of
 the hash of the alternate ID. Note that this addess does not take the Grid
-Identity org ID into account since the alternate ID must be unique.
+Pike org ID into account since the alternate ID must be unique.
 
 ## Permissions
 
-Each smart contract that uses Grid Identity (including Grid Identity itself)
-must define a set of permissions used for validation. The Grid Identity smart
+Each smart contract that uses Grid Pike (including Grid Pike itself)
+must define a set of permissions used for validation. The Grid Pike smart
 contract defines 7 permissions, allowing agents to create, update, and delete
-Grid Identity objects:
+Grid Pike objects:
 
-  - identity::can-create-agents
-  - identity::can-update-agents
-  - identity::can-delete-agents
-  - identity::can-update-organization
-  - identity::can-create-roles
-  - identity::can-update-roles
-  - identity::can-delete-roles
+  - pike::can-create-agents
+  - pike::can-update-agents
+  - pike::can-delete-agents
+  - pike::can-update-organization
+  - pike::can-create-roles
+  - pike::can-update-roles
+  - pike::can-delete-roles
 
 ## Initialization
 
 Due to the chicken-and-egg problem inherent in role-based permissioning systems,
-Grid Identity needs to define specific logic to initialize state for an
+Grid Pike v2 needs to define specific logic to initialize state for an
 organization.
 
-In Pike, the signing key of a transaction that creates a new organization must
-not be established as an agent's public key already. The organization and first
-agent associated with the new organization are created in one atomic step, and
-the new agent is given the `admin` permission, which allows them to assign
+In Pike v1, the signing key of a transaction that creates a new organization
+must not be established as an agent's public key already. The organization and
+first agent associated with the new organization are created in one atomic step,
+and the new agent is given the `admin` permission, which allows them to assign
 permissions to other agents.
 
-For Grid Identity, we will use a similar strategy. The transaction to create a
+For Grid Pike v2, we will use a similar strategy. The transaction to create a
 new organization will produce three objects: an agent, and organization, and an
 "admin" role. An example of these objects is shown below:
 
@@ -646,13 +646,13 @@ new organization will produce three objects: an agent, and organization, and an
 ```yaml
 - name: alpha.Admin
   permissions:
-    - identity::can-create-agents
-    - identity::can-update-agents
-    - identity::can-delete-agents
-    - identity::can-update-organization
-    - identity::can-create-roles
-    - identity::can-update-roles
-    - identity::can-delete-roles
+    - pike::can-create-agents
+    - pike::can-update-agents
+    - pike::can-delete-agents
+    - pike::can-update-organization
+    - pike::can-create-roles
+    - pike::can-update-roles
+    - pike::can-delete-roles
   allowed_organizations: []
   inherit_from: []
 ```
@@ -660,7 +660,7 @@ new organization will produce three objects: an agent, and organization, and an
 The <org_name>::Admin role has some special-case logic around it to avoid
 several critical issues:
   - The Admin role can never be updated or deleted. This is the simplest way to
-    ensure that we don't remove the ability to execute Grid Identity
+    ensure that we don't remove the ability to execute Grid Pike
     functionality for an organization.
   - The Admin role can only be added or removed from another agent with the
     Admin role. This way we can never remove the last admin.
@@ -668,42 +668,32 @@ several critical issues:
 # Drawbacks
 [drawbacks]: #drawbacks
 
-Implementing Grid Identity in this way has some negative implications for Pike.
- Some of the downsides of this would be:
-
-  - Seeing as the proposed Grid Identity solution contains all of Pike's
-    functionality with some extra features on top, it would likely result in
-    Pike being a deprecated feature.
-
-  - Existing smart contracts using Pike would need to be reworked to use Grid
-    Identity.
-
-  - The proposed solution for Grid Identity does not design a mechanism to
-    ensure that Pike and Grid Identity aren't being run side-by-side. If both
-    features were in use on a Grid network, they could have potentially
-    conflicting information.
+Since this RFC doesn't remove any existing functionality, there are few
+drawbacks. However, existing smart contracts using Pike would need to be
+reworked to use Grid Pike v2.
 
 # Rationale and alternatives
 [alternatives]: #alternatives
 
-This design of Grid Identity allows for powerful role-based permissioning and
-delegation. It also maintains patterns established with Pike while adding
+This design of Grid Pike v2 allows for powerful role-based permissioning and
+delegation. It also maintains patterns established with Pike v1 while adding
 some functionality that is specifically useful for Grid.
 
 Another option for the implementation of this functionality would be to frame
-it as an updated version of Pike. This would allow Pike to continue on without
-introducing a redundant feature. However, Grid Identity implements a large
-enough change to permissioning that it could reasonably be considered a new
-smart contract.
+it as a new smart contract. Grid Pike v2 implements a large enough change to
+permissioning that it could reasonably be considered a new smart contract.
+However, seeing as Pike v2 is essentially a superset including all Pike v1
+functionality, this could be confusing. This would also make Pike a deprecated
+feature instead of something we keep iterating upon.
 
-Also, the name "Grid Identity" fits well with other Grid smart contracts in
-which the name of the feature describes exactly what the smart contract is for.
 The name "Pike" for the identity solution in Grid has generated some confusion
-in the past.
+in the past. Other smart contracts in Grid have a descriptive name, where "Pike"
+doesn't have any intrinsic meaning with regard to its functionality. We may want
+to consider renaming it as part of this effort.
 
 Earlier versions of Pike included a smart permissions capability which is not
 discussed here. This capability may have to be redesigned to fit in with the
-role system of Grid Identity if it is needed in the future.
+role system of Grid Pike v2 if it is needed in the future.
 
 # Prior art
 [prior-art]: #prior-art
