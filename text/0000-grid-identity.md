@@ -493,8 +493,6 @@ message DeleteAgentAction {
 message CreateOrganizationAction {
   string id = 1;
   string name = 2;
-  // List of IDs for Grid Locations associated with the organization
-  repeated string locations = 3;
   repeated AlternateID alternate_ids = 4;
   repeated KeyValueEntry metadata = 5;
 }
