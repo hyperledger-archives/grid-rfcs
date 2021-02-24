@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="287.5 202 817.5 362.5" width="817.5" height="362.5">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 20 10" markerWidth="20" markerHeight="10" color="black">
+      <g>
+        <path d="M 18 0 L 6 0 M 18 4 L 8 0 L 18 -4 M .87868 2.12132 C -.29289 .949747 -.29289 -.949747 .87868 -2.12132 C 2.05025 -3.29289 3.94975 -3.29289 5.12132 -2.12132 C 6.292893 -.949747 6.292893 .949747 5.12132 2.12132 C 3.94975 3.29289 2.05025 3.29289 .87868 2.12132" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Bar_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-11 -5 12 10" markerWidth="12" markerHeight="10" color="black">
+      <g>
+        <path d="M -10 0 L 0 0 M 0 -4 L 0 4" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Bar_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 12 10" markerWidth="12" markerHeight="10" color="black">
+      <g>
+        <path d="M 10 0 L 0 0 M 0 4 L 0 -4" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-19 -5 20 10" markerWidth="20" markerHeight="10" color="black">
+      <g>
+        <path d="M -18 0 L -6 0 M -18 -4 L -8 0 L -18 4 M -.87868 -2.12132 C .29289 -.949747 .29289 .949747 -.87868 2.12132 C -2.05025 3.29289 -3.94975 3.29289 -5.12132 2.12132 C -6.292893 .949747 -6.292893 -.949747 -5.12132 -2.12132 C -3.94975 -3.29289 -2.05025 -3.29289 -.87868 -2.12132" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18.1\n2021-02-24 18:41:44 +0000</metadata>
+  <g id="Pike_2" stroke-opacity="1" fill="none" stroke="none" stroke-dasharray="none" fill-opacity="1">
+    <title>Pike 2</title>
+    <g id="Pike_2_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_27">
+        <path d="M 765 344 L 861 344 C 866.5228 344 871 348.47715 871 354 L 871 411 C 871 416.52285 866.5228 421 861 421 L 765 421 C 759.47715 421 755 416.52285 755 411 L 755 354 C 755 348.47715 759.47715 344 765 344 Z" fill="#c0c0ff"/>
+        <path d="M 765 344 L 861 344 C 866.5228 344 871 348.47715 871 354 L 871 411 C 871 416.52285 866.5228 421 861 421 L 765 421 C 759.47715 421 755 416.52285 755 411 L 755 354 C 755 348.47715 759.47715 344 765 344 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(760 373.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="31.96" y="15">Agent</tspan>
+        </text>
+      </g>
+      <g id="Graphic_26">
+        <path d="M 527 344 L 623 344 C 628.52285 344 633 348.47715 633 354 L 633 411 C 633 416.52285 628.52285 421 623 421 L 527 421 C 521.47715 421 517 416.52285 517 411 L 517 354 C 517 348.47715 521.47715 344 527 344 Z" fill="#c0c0ff"/>
+        <path d="M 527 344 L 623 344 C 628.52285 344 633 348.47715 633 354 L 633 411 C 633 416.52285 628.52285 421 623 421 L 527 421 C 521.47715 421 517 416.52285 517 411 L 517 354 C 517 348.47715 521.47715 344 527 344 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(522 373.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="36.856" y="15">Role</tspan>
+        </text>
+      </g>
+      <g id="Graphic_25">
+        <path d="M 765 487 L 861 487 C 866.5228 487 871 491.47715 871 497 L 871 554 C 871 559.52285 866.5228 564 861 564 L 765 564 C 759.47715 564 755 559.52285 755 554 L 755 497 C 755 491.47715 759.47715 487 765 487 Z" fill="#c0c0ff"/>
+        <path d="M 765 487 L 861 487 C 866.5228 487 871 491.47715 871 497 L 871 554 C 871 559.52285 866.5228 564 861 564 L 765 564 C 759.47715 564 755 559.52285 755 554 L 755 497 C 755 491.47715 759.47715 487 765 487 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(760 507.052)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="31.96" y="15">Agent</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="19.064" y="33.448">Metadata</tspan>
+        </text>
+      </g>
+      <g id="Line_24">
+        <path d="M 672.1667 290 L 672.1667 311.75 L 594.3333 311.75 L 594.3333 325.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_23">
+        <line x1="813" y1="431.5" x2="813" y2="468.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_22">
+        <path d="M 643.5 202.5 L 739.5 202.5 C 745.02285 202.5 749.5 206.97715 749.5 212.5 L 749.5 269.5 C 749.5 275.02285 745.02285 279.5 739.5 279.5 L 643.5 279.5 C 637.97715 279.5 633.5 275.02285 633.5 269.5 L 633.5 212.5 C 633.5 206.97715 637.97715 202.5 643.5 202.5 Z" fill="#c0c0ff"/>
+        <path d="M 643.5 202.5 L 739.5 202.5 C 745.02285 202.5 749.5 206.97715 749.5 212.5 L 749.5 269.5 C 749.5 275.02285 745.02285 279.5 739.5 279.5 L 643.5 279.5 C 637.97715 279.5 633.5 275.02285 633.5 269.5 L 633.5 212.5 C 633.5 206.97715 637.97715 202.5 643.5 202.5 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(638.5 231.776)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="7.896" y="15">Organization</tspan>
+        </text>
+      </g>
+      <g id="Graphic_21">
+        <path d="M 998.5 344 L 1094.5 344 C 1100.0228 344 1104.5 348.47715 1104.5 354 L 1104.5 411 C 1104.5 416.52285 1100.0228 421 1094.5 421 L 998.5 421 C 992.9772 421 988.5 416.52285 988.5 411 L 988.5 354 C 988.5 348.47715 992.9772 344 998.5 344 Z" fill="#c0c0ff"/>
+        <path d="M 998.5 344 L 1094.5 344 C 1100.0228 344 1104.5 348.47715 1104.5 354 L 1104.5 411 C 1104.5 416.52285 1100.0228 421 1094.5 421 L 998.5 421 C 992.9772 421 988.5 416.52285 988.5 411 L 988.5 354 C 988.5 348.47715 992.9772 344 998.5 344 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(993.5 373.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="14.92" y="15">Public Key</tspan>
+        </text>
+      </g>
+      <g id="Line_20">
+        <line x1="881.5" y1="382.5" x2="978" y2="382.5" marker-end="url(#Bar_Marker_2)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_19">
+        <path d="M 710.8333 290 L 710.8333 311.75 L 793.6667 311.75 L 793.6667 325.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_28">
+        <line x1="643.5" y1="382.5" x2="736.5" y2="382.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_29">
+        <path d="M 527 487 L 623 487 C 628.52285 487 633 491.47715 633 497 L 633 554 C 633 559.52285 628.52285 564 623 564 L 527 564 C 521.47715 564 517 559.52285 517 554 L 517 497 C 517 491.47715 521.47715 487 527 487 Z" fill="#c0c0ff"/>
+        <path d="M 527 487 L 623 487 C 628.52285 487 633 491.47715 633 497 L 633 554 C 633 559.52285 628.52285 564 623 564 L 527 564 C 521.47715 564 517 559.52285 517 554 L 517 497 C 517 491.47715 521.47715 487 527 487 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(522 516.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="13.44" y="15">Permission</tspan>
+        </text>
+      </g>
+      <g id="Line_30">
+        <line x1="575" y1="439.5" x2="575" y2="468.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#CrowBall_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_31">
+        <path d="M 298 487 L 394 487 C 399.52285 487 404 491.47715 404 497 L 404 554 C 404 559.52285 399.52285 564 394 564 L 298 564 C 292.47715 564 288 559.52285 288 554 L 288 497 C 288 491.47715 292.47715 487 298 487 Z" fill="#c0c0ff"/>
+        <path d="M 298 487 L 394 487 C 399.52285 487 404 491.47715 404 497 L 404 554 C 404 559.52285 399.52285 564 394 564 L 298 564 C 292.47715 564 288 559.52285 288 554 L 288 497 C 288 491.47715 292.47715 487 298 487 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(293 507.052)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="31.512" y="15">Smart</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="21.888" y="33.448">Contract</tspan>
+        </text>
+      </g>
+      <g id="Line_32">
+        <line x1="422.5" y1="525.5" x2="498.5" y2="525.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#CrowBall_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_33">
+        <path d="M 924.5 202.5 L 1020.5 202.5 C 1026.0228 202.5 1030.5 206.97715 1030.5 212.5 L 1030.5 269.5 C 1030.5 275.02285 1026.0228 279.5 1020.5 279.5 L 924.5 279.5 C 918.9772 279.5 914.5 275.02285 914.5 269.5 L 914.5 212.5 C 914.5 206.97715 918.9772 202.5 924.5 202.5 Z" fill="#c0c0ff"/>
+        <path d="M 924.5 202.5 L 1020.5 202.5 C 1026.0228 202.5 1030.5 206.97715 1030.5 212.5 L 1030.5 269.5 C 1030.5 275.02285 1026.0228 279.5 1020.5 279.5 L 924.5 279.5 C 918.9772 279.5 914.5 275.02285 914.5 269.5 L 914.5 212.5 C 914.5 206.97715 918.9772 202.5 924.5 202.5 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(919.5 222.552)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="7.896" y="15">Organization</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="19.064" y="33.448">Metadata</tspan>
+        </text>
+      </g>
+      <g id="Line_34">
+        <line x1="760" y1="241" x2="896" y2="241" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>
