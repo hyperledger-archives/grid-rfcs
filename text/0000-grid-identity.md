@@ -542,12 +542,16 @@ and uniformity. The permissions hard-coded into smart contracts should also
 follow a naming convention. The naming conventions for these strings are as
 follows:
 
-Roles: `<Organization.org_id>.<Role name>`, for example the name of an
-"Admin" of the org with ID "alpha" would be `alpha.Admin`.
-
 Permissions: `<smart contract name>::<permission>`, for example the name of a
 permission to update agents for the "identity" smart contract would be
 `pike::can-update-agents`.
+
+Roles: Roles should not have a "." character in their name. Clients (Such as UI,
+REST API responses, and CLI tools) should use the following convention when
+displaying a role name: `<Role.org_id>.<Role.name>`. This is to avoid any
+confusion in the name of a role which may be reused across organizations. For
+instance, the name of an "Admin" of the org with ID "alpha" should be displayed
+as `alpha.Admin`. Note that the role name stored in state state is just "Admin".
 
 ## Addressing
 
@@ -579,7 +583,8 @@ the hash of the organization's ID.
 The specific namespace prefix within Grid Pike for Role state is
 `621dee0502`, which is the general Grid Pike namespace `621dee05`
 concatenated with 02. The next 60 characters are the first 60 characters of
-the hash of the role's name.
+the hash of the role's org ID and the role's name, separated by a period:
+`<Role.org_id>.<Role.name>`
 
 ### AlternateIDIndexEntry State
 
@@ -702,5 +707,4 @@ role system of Grid Pike v2 if it is needed in the future.
 # Unresolved questions
 [unresolved]: #unresolved-questions
 
-- Does role addressing need to account for the organization that created the
-  role?
+- None
