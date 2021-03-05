@@ -31,20 +31,20 @@ Much of the rest of the design remains the same.
 # Guide-level explanation
 [guide-level-explanation]: #guide-level-explanation
 
-From a smart contract perspective, permission checks only involve two
-components: a public key and the name of the smart-contract-defined permission.
-All authorization checks thus can be written as:
+From a smart contract perspective, permission checks involve three components:
+a public key, the name of the smart-contract-defined permission, and the owner
+of the record. All authorization checks thus can be written as:
 
   ```
-  if (!has_permission(state, public_key, permission_name)) {
+  if (!has_permission(state, public_key, permission_name, record_owner)) {
       // return invalid transaction status
   }
   ```
 
 The public key is usually obtained from the transaction's signer’s public key.
 Therefore, the authorization check determines whether the signer of the
-transaction has the permission required. If the check fails, the transaction
-will be considered invalid.
+transaction has the permission required for a given organization. If the check
+fails, the transaction will be considered invalid.
 
 Grid Pike v2 defines the data structures and logic for the `has_permission()`
 function, which is provided to the smart contract by the Grid SDK. The
