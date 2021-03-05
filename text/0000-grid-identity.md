@@ -412,6 +412,7 @@ message Role {
   repeated string permissions = 4;
   repeated string allowed_organizations = 5;
   repeated string inherit_from = 6;
+  bool active = 7;
 }
 
 message RoleList {
