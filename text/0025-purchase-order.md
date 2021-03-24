@@ -520,14 +520,14 @@ Purchase Order representation.
 
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
 “621dee”. `PurchaseOrder` and `AlternativeID` are further prefixed under
-the Grid namespace with reserved enumeration of `05`.
+the Grid namespace with reserved enumeration of `06`.
 
 The remaining 62 characters of a `PurchaseOrder` address is calculated by taking
 the first 60 characters of a SHA512 hash of its `uid` and concatenating it with
 the prefix `00`.
 
 ```
-“621dee” + “05” + “00” Sha512(uid)[:60]
+“621dee” + “06” + “00” Sha512(uid)[:60]
 ```
 
 The remaining 62 characters of a `AlternateID` address is calculated by taking
@@ -535,7 +535,7 @@ the first 60 characters of a SHA512 hash of its corresponding purchase order's
 `uid` and concatenating it with the prefix `01`.
 
 ```
-“621dee” + “05” + “01” + Sha512(uid)[:60]
+“621dee” + “06” + “01” + Sha512(uid)[:60]
 ```
 
 ### Sub Messages
