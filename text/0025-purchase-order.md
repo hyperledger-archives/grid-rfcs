@@ -507,11 +507,11 @@ the prefix `00`.
 ```
 
 The remaining 62 characters of a `AlternateID` address is calculated by taking
-the first 60 characters of a SHA512 hash of its corresponding purchase order's
-`uid` and concatenating it with the prefix `01`.
+the first 60 characters of a SHA512 hash of the `org_id` concatinated with the
+`alternate_id` and `id_type` and concatenating that hash with the prefix `01`.
 
 ```
-“621dee” + “06” + “01” + Sha512(uid)[:60]
+“621dee” + “06” + “01” + Sha512(org_id + alternate_id + id_type)[:60]
 ```
 
 ## Transaction Payload and Execution
