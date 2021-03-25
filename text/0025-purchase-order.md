@@ -423,16 +423,18 @@ being the `PurchaseOrder`. `PurchaseOrder` contains the following fields
 - `workflow_status` - Workflow status. Values are defined by the smart contract
 workflows
 - `is_closed` - True if purchase order was closed, false otherwise
-- `accepted_version_id` - The ID of the purchase order that has been accepted
+- `accepted_version_number` - The ID of the purchase order that has been accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
 
 ```
 message PurchaseOrder {
-  required string uid = 1;
+  required string uuid = 1;
   required string workflow_status = 2;
   repeated PurchaseOrderVersion versions = 3;
-  repeated uint64 created_at = 4;
+  string accepted_version_number = 4;
+  uint64 created_at = 5;
+  bool is_closed = 6;
 }
 ```
 
@@ -448,11 +450,11 @@ most recent revision.
 
 ```
 message PurchaseOrderVersion {
-  required string version_id = 1;
-  required string workflow_status = 2;
-  required boolean is_draft = 3;
-  required uint64 current_revision_number = 4;
-  repeated PurchaseOrderRevision revisions = 5;
+  string version_id = 1;
+  string workflow_status = 2;
+  bool is_draft = 3;
+  string current_revision_id = 4;
+  PurchaseOrderRevision revisions = 5;
 }
 ```
 
@@ -463,28 +465,29 @@ time the revision was created, and the public key of the submitter.
 
 ```
 message PurchaseOrderRevision {
-  required uint64 revision_number = 1;
-  required string submitter = 2;
-  required uint64 created_at = 3;
+  string revision_id = 1;
+  string submitter = 2;
+  uint64 created_at = 3;
 
-  string order_xml_34 = 4;
+  string order_xml_v3_4 = 4;
 }
 ```
 
-### AlternativeID
+### PurchaseOrderAlternateId 
 
-`AlternativeID` are the mechanism the smart contract will use to allow
+`PurchaseOrderAlternateId ` are the mechanism the smart contract will use to allow
 purchase orders to be created and edited without having to specify a
 purchase order number at creation. This is identical to the mechanism
 outlined in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
 
 The `id_type` is used the specify the field that will be used as an alternate ID,
-and the `id` is the `uid` of the purchase order.
+and the `id` is the `uuid` of the purchase order.
 
 ```
-message AlternateID {
+message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
+  string org_id = 3;
 }
 ```
 
@@ -536,29 +539,48 @@ message PurchaseOrderPayload {
     CREATE_VERSION = 2;
     UPDATE_VERSION = 3;
   }
-  required Action action = 1;
-  required string org_id = 2;
-  required string public_key = 3;
-  required uint64 timestamp = 4;
+  Action action = 1;
+  string org_id = 2;
+  string public_key = 3;
+  uint64 timestamp = 4;
 
   CreatePurchaseOrderPayload create_po_payload = 5;
-  CreateVersionPayload create_version_payload = 6;
-  UpdateVersionPayload update_version_payload = 7;
+  UpdatePurchaseOrderPayload update_po_payload = 6;
+  CreateVersionPayload create_version_payload = 7;
+  UpdateVersionPayload update_version_payload = 8;
 }
 
-
 message CreatePurchaseOrderPayload {
-  required uint64 created_at = 1;
-  PurchaseOrderRevision revision = 2;
+  string uuid = 1;
+  uint64 created_at = 2;
+}
+
+message UpdatePurchaseOrderPayload {
+  string workflow_status = 1;
+  bool is_closed = 2;
+  string accepted_version_number = 3;
 }
 
 message CreateVersionPayload {
-  boolean is_draft = 1;
-  PurchaseOrderRevision revision = 2;
+  string version_id = 1;
+  bool is_draft = 2;
+  PayloadRevision revision = 3;
 }
 
 message UpdateVersionPayload {
-  PurchaseOrderRevision revision = 1;
+  string version_id = 1;
+  string workflow_status = 2;
+  bool is_draft = 3;
+  string current_revision_id = 4;
+  PayloadRevision revision = 5;
+}
+
+message PayloadRevision {
+  string revision_id = 1;
+  string submitter = 2;
+  uint64 created_at = 3;
+
+  string order_xml_v3_4 = 4;
 }
 ```
 
@@ -572,8 +594,28 @@ Validation Requirements:
 - The `org_id` must exist in Pike for it be a valid transaction
 - The `public_key` must belong to a Pike agent that is a part of the
 organization designated by `org_id`
-- The Pike agent must have the permission `can-create-po` 
+- The Pike agent must have the permission `can-create-po`
 - All fields marked `required` in the `CreatePurchaseOrderPayload` must be supplied
+
+Inputs:
+
+Address of Pike `cad11d`
+Address of Grid Purchase Order `621dee05`
+
+Outputs:
+
+Address of Grid Purchase Order `621dee05`
+
+### Update Purchase Order Payload
+
+`UpdatePurchaseOrderPayload` updates a purchase order's closed status,
+`workflow_status`, or `accepted_version_number`.
+
+Validation Requirements:
+- The `org_id` must exist in Pike for it be a valid transaction
+- The `public_key` must belong to a Pike agent that is a part of the
+organization designated by `org_id`
+- The Pike agent must have the permission `can-update-po`
 
 Inputs:
 
