@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Copyright 2018-2021 Cargill Incorporated
+  Licensed under Creative Commons Attribution 4.0 International License
+  https://creativecommons.org/licenses/by/4.0/
+-->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xl="http://www.w3.org/1999/xlink" version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="264.5 637 817.5 362.5" width="817.5" height="362.5">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="16" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 20 10" markerWidth="20" markerHeight="10" color="black">
+      <g>
+        <path d="M 18 0 L 6 0 M 18 4 L 8 0 L 18 -4 M .87868 2.12132 C -.29289 .949747 -.29289 -.949747 .87868 -2.12132 C 2.05025 -3.29289 3.94975 -3.29289 5.12132 -2.12132 C 6.292893 -.949747 6.292893 .949747 5.12132 2.12132 C 3.94975 3.29289 2.05025 3.29289 .87868 2.12132" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Bar_Marker" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-11 -5 12 10" markerWidth="12" markerHeight="10" color="black">
+      <g>
+        <path d="M -10 0 L 0 0 M 0 -4 L 0 4" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="Bar_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-1 -5 12 10" markerWidth="12" markerHeight="10" color="black">
+      <g>
+        <path d="M 10 0 L 0 0 M 0 4 L 0 -4" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+    <marker orient="auto" overflow="visible" markerUnits="strokeWidth" id="CrowBall_Marker_2" stroke-linejoin="miter" stroke-miterlimit="10" viewBox="-19 -5 20 10" markerWidth="20" markerHeight="10" color="black">
+      <g>
+        <path d="M -18 0 L -6 0 M -18 -4 L -8 0 L -18 4 M -.87868 -2.12132 C .29289 -.949747 .29289 .949747 -.87868 2.12132 C -2.05025 3.29289 -3.94975 3.29289 -5.12132 2.12132 C -6.292893 .949747 -6.292893 -.949747 -5.12132 -2.12132 C -3.94975 -3.29289 -2.05025 -3.29289 -.87868 -2.12132" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+    </marker>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.18.1\n2021-02-24 18:41:44 +0000</metadata>
+  <g id="Pike_2" stroke-opacity="1" fill="none" stroke="none" stroke-dasharray="none" fill-opacity="1">
+    <title>Pike 2</title>
+    <g id="Pike_2_Layer_1">
+      <title>Layer 1</title>
+      <g id="Graphic_50">
+        <path d="M 742 779 L 838 779 C 843.5228 779 848 783.47715 848 789 L 848 846 C 848 851.5228 843.5228 856 838 856 L 742 856 C 736.47715 856 732 851.5228 732 846 L 732 789 C 732 783.47715 736.47715 779 742 779 Z" fill="#c0c0ff"/>
+        <path d="M 742 779 L 838 779 C 843.5228 779 848 783.47715 848 789 L 848 846 C 848 851.5228 843.5228 856 838 856 L 742 856 C 736.47715 856 732 851.5228 732 846 L 732 789 C 732 783.47715 736.47715 779 742 779 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(737 808.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="31.96" y="15">Agent</tspan>
+        </text>
+      </g>
+      <g id="Graphic_49">
+        <path d="M 504 779 L 600 779 C 605.52285 779 610 783.47715 610 789 L 610 846 C 610 851.5228 605.52285 856 600 856 L 504 856 C 498.47715 856 494 851.5228 494 846 L 494 789 C 494 783.47715 498.47715 779 504 779 Z" fill="#c0c0ff"/>
+        <path d="M 504 779 L 600 779 C 605.52285 779 610 783.47715 610 789 L 610 846 C 610 851.5228 605.52285 856 600 856 L 504 856 C 498.47715 856 494 851.5228 494 846 L 494 789 C 494 783.47715 498.47715 779 504 779 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(499 808.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="36.856" y="15">Role</tspan>
+        </text>
+      </g>
+      <g id="Line_47">
+        <path d="M 649.1667 725 L 649.1667 746.75 L 571.3333 746.75 L 571.3333 760.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_45">
+        <path d="M 620.5 637.5 L 716.5 637.5 C 722.02285 637.5 726.5 641.97715 726.5 647.5 L 726.5 704.5 C 726.5 710.02285 722.02285 714.5 716.5 714.5 L 620.5 714.5 C 614.97715 714.5 610.5 710.02285 610.5 704.5 L 610.5 647.5 C 610.5 641.97715 614.97715 637.5 620.5 637.5 Z" fill="#c0c0ff"/>
+        <path d="M 620.5 637.5 L 716.5 637.5 C 722.02285 637.5 726.5 641.97715 726.5 647.5 L 726.5 704.5 C 726.5 710.02285 722.02285 714.5 716.5 714.5 L 620.5 714.5 C 614.97715 714.5 610.5 710.02285 610.5 704.5 L 610.5 647.5 C 610.5 641.97715 614.97715 637.5 620.5 637.5 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(615.5 666.776)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="7.896" y="15">Organization</tspan>
+        </text>
+      </g>
+      <g id="Graphic_44">
+        <path d="M 975.5 779 L 1071.5 779 C 1077.0228 779 1081.5 783.47715 1081.5 789 L 1081.5 846 C 1081.5 851.5228 1077.0228 856 1071.5 856 L 975.5 856 C 969.9772 856 965.5 851.5228 965.5 846 L 965.5 789 C 965.5 783.47715 969.9772 779 975.5 779 Z" fill="#c0c0ff"/>
+        <path d="M 975.5 779 L 1071.5 779 C 1077.0228 779 1081.5 783.47715 1081.5 789 L 1081.5 846 C 1081.5 851.5228 1077.0228 856 1071.5 856 L 975.5 856 C 969.9772 856 965.5 851.5228 965.5 846 L 965.5 789 C 965.5 783.47715 969.9772 779 975.5 779 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(970.5 808.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="14.92" y="15">Public Key</tspan>
+        </text>
+      </g>
+      <g id="Line_43">
+        <line x1="858.5" y1="817.5" x2="955" y2="817.5" marker-end="url(#Bar_Marker_2)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_42">
+        <path d="M 687.8333 725 L 687.8333 746.75 L 770.6667 746.75 L 770.6667 760.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#Bar_Marker)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Line_41">
+        <line x1="628.5" y1="817.5" x2="713.5" y2="817.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#CrowBall_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_40">
+        <path d="M 504 922 L 600 922 C 605.52285 922 610 926.4772 610 932 L 610 989 C 610 994.5228 605.52285 999 600 999 L 504 999 C 498.47715 999 494 994.5228 494 989 L 494 932 C 494 926.4772 498.47715 922 504 922 Z" fill="#c0c0ff"/>
+        <path d="M 504 922 L 600 922 C 605.52285 922 610 926.4772 610 932 L 610 989 C 610 994.5228 605.52285 999 600 999 L 504 999 C 498.47715 999 494 994.5228 494 989 L 494 932 C 494 926.4772 498.47715 922 504 922 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(499 951.276)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="13.44" y="15">Permission</tspan>
+        </text>
+      </g>
+      <g id="Line_39">
+        <line x1="552" y1="874.5" x2="552" y2="903.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#CrowBall_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_38">
+        <path d="M 275 922 L 371 922 C 376.52285 922 381 926.4772 381 932 L 381 989 C 381 994.5228 376.52285 999 371 999 L 275 999 C 269.47715 999 265 994.5228 265 989 L 265 932 C 265 926.4772 269.47715 922 275 922 Z" fill="#c0c0ff"/>
+        <path d="M 275 922 L 371 922 C 376.52285 922 381 926.4772 381 932 L 381 989 C 381 994.5228 376.52285 999 371 999 L 275 999 C 269.47715 999 265 994.5228 265 989 L 265 932 C 265 926.4772 269.47715 922 275 922 Z" stroke="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+        <text transform="translate(270 942.052)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="31.512" y="15">Smart</tspan>
+          <tspan font-family="Helvetica Neue" font-size="16" font-weight="400" fill="black" x="21.888" y="33.448">Contract</tspan>
+        </text>
+      </g>
+      <g id="Line_37">
+        <line x1="399.5" y1="960.5" x2="475.5" y2="960.5" marker-end="url(#CrowBall_Marker)" marker-start="url(#CrowBall_Marker_2)" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+    </g>
+  </g>
+</svg>
