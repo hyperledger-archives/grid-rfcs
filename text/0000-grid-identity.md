@@ -1,7 +1,6 @@
 - Feature Name: grid-identity
 - Start Date: 2020-12-08
-- RFC PR: (leave this empty)
-- Hyperledger Grid Issue: (leave this empty)
+- RFC PR: https://github.com/hyperledger/grid-rfcs/pull/23
 
 # Summary
 [summary]: #summary
