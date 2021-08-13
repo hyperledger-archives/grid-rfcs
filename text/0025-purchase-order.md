@@ -599,12 +599,12 @@ organization designated by `org_id`
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Update Purchase Order Payload
 
@@ -619,12 +619,12 @@ organization designated by `org_id`
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Create Version Payload
 
@@ -638,12 +638,12 @@ Validation Requirements
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Update Version Payload
 
@@ -657,12 +657,12 @@ Validation Requirements:
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 # Drawbacks
 [drawbacks]: #drawbacks
