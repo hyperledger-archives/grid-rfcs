@@ -559,23 +559,26 @@ message CreatePurchaseOrderPayload {
 }
 
 message UpdatePurchaseOrderPayload {
-  string workflow_status = 1;
-  bool is_closed = 2;
-  string accepted_version_number = 3;
+  string po_uid = 1;
+  string workflow_status = 2;
+  bool is_closed = 3;
+  string accepted_version_number = 4;
 }
 
 message CreateVersionPayload {
   string version_id = 1;
-  bool is_draft = 2;
-  PayloadRevision revision = 3;
+  string po_uid = 2;
+  bool is_draft = 3;
+  PayloadRevision revision = 4;
 }
 
 message UpdateVersionPayload {
   string version_id = 1;
-  string workflow_status = 2;
-  bool is_draft = 3;
-  string current_revision_id = 4;
-  PayloadRevision revision = 5;
+  string po_uid = 2;
+  string workflow_status = 3;
+  bool is_draft = 4;
+  string current_revision_id = 5;
+  PayloadRevision revision = 6;
 }
 
 message PayloadRevision {
@@ -596,6 +599,8 @@ version of the purchase order.
 Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-create-po` permission
+- The `po_uid` must refer to an existing purchase order
+- The `version_id` must not already exist as a version on the purchase order
 - The `org_id` must exist in Pike for it be a valid transaction
 - All fields marked `required` in the `CreatePurchaseOrderPayload` must be
 supplied
