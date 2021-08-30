@@ -433,7 +433,7 @@ accepted
 
 ```
 message PurchaseOrder {
-  required string uuid = 1;
+  required string uid = 1;
   required string workflow_status = 2;
   repeated PurchaseOrderVersion versions = 3;
   string accepted_version_number = 4;
@@ -485,7 +485,7 @@ purchase order number at creation. This is identical to the mechanism outlined
 in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
 
 The `id_type` is used the specify the field that will be used as an
-alternate ID, and the `id` is the `uuid` of the purchase order.
+alternate ID, and the `id` is the `uid` of the purchase order.
 
 ```
 message PurchaseOrderAlternateId {
@@ -555,7 +555,7 @@ message PurchaseOrderPayload {
 }
 
 message CreatePurchaseOrderPayload {
-  string uuid = 1;
+  string uid = 1;
   uint64 created_at = 2;
 }
 
