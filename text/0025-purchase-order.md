@@ -431,7 +431,7 @@ accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
 
-```
+```protobuf
 message PurchaseOrder {
   required string uid = 1;
   required string workflow_status = 2;
@@ -452,7 +452,7 @@ identified by its `version_id` which is globally unique. `revisions` is a list
 of revisions to version, and `current_revision_number` is the identifier of the
 most recent revision.
 
-```
+```protobuf
 message PurchaseOrderVersion {
   string version_id = 1;
   string workflow_status = 2;
@@ -467,7 +467,7 @@ message PurchaseOrderVersion {
 `PurchaseOrderRevision` holds the editable fields of a purchase order, the time
 the revision was created, and the public key of the submitter.
 
-```
+```protobuf
 message PurchaseOrderRevision {
   string revision_id = 1;
   string submitter = 2;
@@ -487,7 +487,7 @@ in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
 The `id_type` is used the specify the field that will be used as an
 alternate ID, and the `id` is the `uid` of the purchase order.
 
-```
+```protobuf
 message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
@@ -534,7 +534,7 @@ following required fields:
 - `org_id` - The Pike organization that is sending the payload
 - `timestamp` - Time the payload was created
 
-```
+```protobuf
 message PurchaseOrderPayload {
   enum Action {
     UNSET_ACTION = 0;
