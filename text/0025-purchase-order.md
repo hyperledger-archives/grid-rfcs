@@ -555,6 +555,7 @@ message PurchaseOrderPayload {
 message CreatePurchaseOrderPayload {
   string uid = 1;
   uint64 created_at = 2;
+  CreateVersionPayload create_version_payload = 3;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -598,6 +599,8 @@ Validation Requirements:
 - The `org_id` must exist in Pike for it be a valid transaction
 - All fields marked `required` in the `CreatePurchaseOrderPayload` must be
 supplied
+- The `create_version_payload`, if included, must be valid according to the
+`CreateVersionPayload` validation rules
 
 Inputs:
 
