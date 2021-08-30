@@ -532,7 +532,6 @@ be defined in the `PurchaseOrderPayload`. `PurchaseOrderPayload` contains the
 following required fields:
 - `action` - Action enum, indicating the payload type
 - `org_id` - The Pike organization that is sending the payload
-- `public_key` - The public key of a Pike agent that is sending the payload
 - `timestamp` - Time the payload was created
 
 ```
@@ -545,13 +544,12 @@ message PurchaseOrderPayload {
   }
   Action action = 1;
   string org_id = 2;
-  string public_key = 3;
-  uint64 timestamp = 4;
+  uint64 timestamp = 3;
 
-  CreatePurchaseOrderPayload create_po_payload = 5;
-  UpdatePurchaseOrderPayload update_po_payload = 6;
-  CreateVersionPayload create_version_payload = 7;
-  UpdateVersionPayload update_version_payload = 8;
+  CreatePurchaseOrderPayload create_po_payload = 4;
+  UpdatePurchaseOrderPayload update_po_payload = 5;
+  CreateVersionPayload create_version_payload = 6;
+  UpdateVersionPayload update_version_payload = 7;
 }
 
 message CreatePurchaseOrderPayload {
@@ -595,10 +593,9 @@ message PayloadRevision {
 version of the purchase order.
 
 Validation Requirements:
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-create-po` permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the
-organization designated by `org_id`
-- The Pike agent must have the permission `can-create-po`
 - All fields marked `required` in the `CreatePurchaseOrderPayload` must be
 supplied
 
@@ -617,10 +614,9 @@ Address of Grid Purchase Order `621dee06`
 `workflow_status`, or `accepted_version_number`.
 
 Validation Requirements:
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-update-po` permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the
-organization designated by `org_id`
-- The Pike agent must have the permission `can-update-po`
 
 Inputs:
 
@@ -636,9 +632,10 @@ Address of Grid Purchase Order `621dee06`
 `CreateVersionPayload` creates a new `PurchaseOrderVersion`.
 
 Validation Requirements
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-create-po-version`
+permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the organization designated by `org_id`
-- The Pike agent must have the permission `can-create-po-version`
 - All fields marked `required` in the `CreateVersionPayload` must be supplied
 
 Inputs:
@@ -656,9 +653,10 @@ Address of Grid Purchase Order `621dee06`
 with a new revision.
 
 Validation Requirements:
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-update-po-version`
+permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the
-organization designated by `org_id`
 - All fields marked `required` in the `UpdateVersionPayload` must be supplied
 
 Inputs:
