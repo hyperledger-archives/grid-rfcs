@@ -30,8 +30,8 @@ from a seller for a single shipment to a single location. The business use case
 that inspired this design is that of a vendor-managed purchasing relationship.
 However, the design was broadened to also support a more traditional procurement
 relationship between a buyer and a seller. As a reviewer of this document, we
-request that you comment on how this design does/does not support your purchasing
-needs.
+request that you comment on how this design does/does not support your
+purchasing needs.
 
 Grid Purchase Order leverages other Hyperledger Grid components including Grid
 Identity, Grid Workflow, Grid Product, and Grid Location. In the near-term, this
@@ -63,10 +63,11 @@ component with existing systems of record.
 Expected outcomes include:
 
 - Improved cost efficiency. An organization’s financial results can benefit
-  from a reduction in administrative time spent manually inputting data,
-  reconciling transactional differences with trade partners, performing
-  credit/debit adjustments, addressing receiving problems, and handling product
-  returns.
+from a reduction in administrative time spent manually inputting data,
+reconciling transactional differences with trade partners, performing
+credit/debit adjustments, addressing receiving problems, and handling product
+returns.
+
 - Improved transaction accuracy. Automated sharing of purchasing data can reduce
 errors that stem from manual data entry.
 
@@ -75,8 +76,9 @@ organizations, leading to faster response times, improved buying decisions and
 production planning, greater customer satisfaction, and visibility into order
 status.
 
-- Improved productivity. Less time spent comparing documents and resolving discrepancies
-means team members can focus on move value-add business opportunities.
+- Improved productivity. Less time spent comparing documents and resolving
+discrepancies means team members can focus on move value-add business
+opportunities.
 
 # Guide-level Explanation
 [guide-level-explanation]: #guide-level-explanation
@@ -107,7 +109,7 @@ to the shared state of a purchase order.
 - Update PO. Allows for the modification of an existing purchase order record.
 - Create Version. Allows for the creation of a new version of a purchase order.
 - Update Version. Allows for the modification of an existing purchase order
-version.
+  version.
 
 ## Workflow
 
@@ -324,11 +326,12 @@ a purchase order’s life. An organization may craft roles within Grid Identity 
 assigning one or more aliases to a user. This permissions design is not
 exhaustive; additional aliases could be introduced in the future.
 
-When creating a purchase order version, mandatory data elements must have a value
-defined. Similarly, when updating a purchase order, a subset of fields cannot be
-edited. These requirements are hard-coded and enforced by smart contract logic.
-Should a source system dictate additional data elements that must remain
-unchanged, validation may be introduced through the integration component.
+When creating a purchase order version, mandatory data elements must have a
+value defined. Similarly, when updating a purchase order, a subset of fields
+cannot be edited. These requirements are hard-coded and enforced by smart
+contract logic. Should a source system dictate additional data elements that
+must remain unchanged, validation may be introduced through the integration
+component.
 
 ## Transactions
 
@@ -339,8 +342,8 @@ following transactions are supported:
 - Create_PO. Create a purchase order record and store it in state.
 - Update_PO. Update the properties of a purchase order already in state.
 - Create_Version. Create a version of a purchase order and store it in state.
-- Update_Version. Update the properties of a purchase order version already
-in state.
+- Update_Version. Update the properties of a purchase order version already in
+state.
 
 ## Examples
 
@@ -357,7 +360,7 @@ Permissions:
     - allowed _organizations: [ ]
     - inherit_from: [ ]
 
-Name: TheGeneralStore.Admin 
+Name: TheGeneralStore.Admin
 Permissions:
     - po.sellerconfirm
     - po.sellermodify
@@ -423,13 +426,14 @@ being the `PurchaseOrder`. `PurchaseOrder` contains the following fields
 - `workflow_status` - Workflow status. Values are defined by the smart contract
 workflows
 - `is_closed` - True if purchase order was closed, false otherwise
-- `accepted_version_number` - The ID of the purchase order that has been accepted
+- `accepted_version_number` - The ID of the purchase order that has been
+accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
 
-```
+```protobuf
 message PurchaseOrder {
-  required string uuid = 1;
+  required string uid = 1;
   required string workflow_status = 2;
   repeated PurchaseOrderVersion versions = 3;
   string accepted_version_number = 4;
@@ -448,7 +452,7 @@ identified by its `version_id` which is globally unique. `revisions` is a list
 of revisions to version, and `current_revision_number` is the identifier of the
 most recent revision.
 
-```
+```protobuf
 message PurchaseOrderVersion {
   string version_id = 1;
   string workflow_status = 2;
@@ -460,10 +464,10 @@ message PurchaseOrderVersion {
 
 ### PurchaseOrderRevision
 
-`PurchaseOrderRevision` holds the editable fields of a purhcase order, the
-time the revision was created, and the public key of the submitter.
+`PurchaseOrderRevision` holds the editable fields of a purchase order, the time
+the revision was created, and the public key of the submitter.
 
-```
+```protobuf
 message PurchaseOrderRevision {
   string revision_id = 1;
   string submitter = 2;
@@ -473,17 +477,17 @@ message PurchaseOrderRevision {
 }
 ```
 
-### PurchaseOrderAlternateId 
+### PurchaseOrderAlternateId
 
-`PurchaseOrderAlternateId ` are the mechanism the smart contract will use to allow
-purchase orders to be created and edited without having to specify a
-purchase order number at creation. This is identical to the mechanism
-outlined in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
+`PurchaseOrderAlternateId ` are the mechanism the smart contract will use to
+allow purchase orders to be created and edited without having to specify a
+purchase order number at creation. This is identical to the mechanism outlined
+in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
 
-The `id_type` is used the specify the field that will be used as an alternate ID,
-and the `id` is the `uuid` of the purchase order.
+The `id_type` is used the specify the field that will be used as an
+alternate ID, and the `id` is the `uid` of the purchase order.
 
-```
+```protobuf
 message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
@@ -498,8 +502,8 @@ an address must be constructed which identifies the storage location of the
 Purchase Order representation.
 
 All Grid addresses are prefixed by the 6-hex-character namespace prefix
-“621dee”. `PurchaseOrder` and `AlternativeID` are further prefixed under
-the Grid namespace with reserved enumeration of `06`.
+“621dee”. `PurchaseOrder` and `AlternativeID` are further prefixed under the
+Grid namespace with reserved enumeration of `06`.
 
 The remaining 62 characters of a `PurchaseOrder` address is calculated by taking
 the first 60 characters of a SHA512 hash of its `uid` and concatenating it with
@@ -524,14 +528,13 @@ the first 60 characters of a SHA512 hash of the `org_id` concatinated with the
 `PurchaseOrderPayload` contains an action `enum` and the associated action
 payload. This allows for the action payload to be dispatched to the appropriate
 logic. Only the defined actions are available and only one action payload should
-be defined in the `PurchaseOrderPayload`. `PurchaseOrderPayload` contains the 
+be defined in the `PurchaseOrderPayload`. `PurchaseOrderPayload` contains the
 following required fields:
 - `action` - Action enum, indicating the payload type
 - `org_id` - The Pike organization that is sending the payload
-- `public_key` - The public key of a Pike agent that is sending the payload
 - `timestamp` - Time the payload was created
 
-```
+```protobuf
 message PurchaseOrderPayload {
   enum Action {
     UNSET_ACTION = 0;
@@ -541,38 +544,41 @@ message PurchaseOrderPayload {
   }
   Action action = 1;
   string org_id = 2;
-  string public_key = 3;
-  uint64 timestamp = 4;
+  uint64 timestamp = 3;
 
-  CreatePurchaseOrderPayload create_po_payload = 5;
-  UpdatePurchaseOrderPayload update_po_payload = 6;
-  CreateVersionPayload create_version_payload = 7;
-  UpdateVersionPayload update_version_payload = 8;
+  CreatePurchaseOrderPayload create_po_payload = 4;
+  UpdatePurchaseOrderPayload update_po_payload = 5;
+  CreateVersionPayload create_version_payload = 6;
+  UpdateVersionPayload update_version_payload = 7;
 }
 
 message CreatePurchaseOrderPayload {
-  string uuid = 1;
+  string uid = 1;
   uint64 created_at = 2;
+  CreateVersionPayload create_version_payload = 3;
 }
 
 message UpdatePurchaseOrderPayload {
-  string workflow_status = 1;
-  bool is_closed = 2;
-  string accepted_version_number = 3;
+  string po_uid = 1;
+  string workflow_status = 2;
+  bool is_closed = 3;
+  string accepted_version_number = 4;
 }
 
 message CreateVersionPayload {
   string version_id = 1;
-  bool is_draft = 2;
-  PayloadRevision revision = 3;
+  string po_uid = 2;
+  bool is_draft = 3;
+  PayloadRevision revision = 4;
 }
 
 message UpdateVersionPayload {
   string version_id = 1;
-  string workflow_status = 2;
-  bool is_draft = 3;
-  string current_revision_id = 4;
-  PayloadRevision revision = 5;
+  string po_uid = 2;
+  string workflow_status = 3;
+  bool is_draft = 4;
+  string current_revision_id = 5;
+  PayloadRevision revision = 6;
 }
 
 message PayloadRevision {
@@ -591,20 +597,24 @@ message PayloadRevision {
 version of the purchase order.
 
 Validation Requirements:
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-create-po` permission
+- The `po_uid` must refer to an existing purchase order
+- The `version_id` must not already exist as a version on the purchase order
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the
-organization designated by `org_id`
-- The Pike agent must have the permission `can-create-po`
-- All fields marked `required` in the `CreatePurchaseOrderPayload` must be supplied
+- All fields marked `required` in the `CreatePurchaseOrderPayload` must be
+supplied
+- The `create_version_payload`, if included, must be valid according to the
+`CreateVersionPayload` validation rules
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Update Purchase Order Payload
 
@@ -612,38 +622,38 @@ Address of Grid Purchase Order `621dee05`
 `workflow_status`, or `accepted_version_number`.
 
 Validation Requirements:
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-update-po` permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- The `public_key` must belong to a Pike agent that is a part of the
-organization designated by `org_id`
-- The Pike agent must have the permission `can-update-po`
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Create Version Payload
 
 `CreateVersionPayload` creates a new `PurchaseOrderVersion`.
 
 Validation Requirements
-- The `org_id` must exist in Pike for it be a valid transaction 
-- The `public_key` must belong to a Pike agent that is a part of the organization designated by `org_id` 
-- The Pike agent must have the permission `can-create-po-version`
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-create-po-version`
+permission
+- The `org_id` must exist in Pike for it be a valid transaction
 - All fields marked `required` in the `CreateVersionPayload` must be supplied
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 ### Update Version Payload
 
@@ -651,18 +661,20 @@ Address of Grid Purchase Order `621dee05`
 with a new revision.
 
 Validation Requirements:
-- The `org_id` must exist in Pike for it be a valid transaction 
-- The `public_key` must belong to a Pike agent that is a part of the organization designated by `org_id` 
+- The signer must be a Pike agent
+- The signing agent must have a Pike role with the `can-update-po-version`
+permission
+- The `org_id` must exist in Pike for it be a valid transaction
 - All fields marked `required` in the `UpdateVersionPayload` must be supplied
 
 Inputs:
 
-Address of Pike `cad11d`
-Address of Grid Purchase Order `621dee05`
+Address of Pike `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 Outputs:
 
-Address of Grid Purchase Order `621dee05`
+Address of Grid Purchase Order `621dee06`
 
 # Drawbacks
 [drawbacks]: #drawbacks
@@ -689,7 +701,8 @@ by using GS1’s Order and Order Response Business Message Standards (XML 3.4).
 The XML standards recognize lower adoption today than other legacy EDI message
 standards used in North America (ANSI) and internationally (EANCOM, EDIFACT).
 However, the standards offer a unified view of data that bridges geographies.
-Note: Data mapping and translation becomes a concern of the integration component.
+Note: Data mapping and translation becomes a concern of the integration
+component.
 
 # Rationale and Alternatives
 [alternatives]: #alternatives
@@ -768,7 +781,8 @@ the community and play nicely with existing business processes?
 
 - Both parties have equal permissions when collaborating on a draft purchase
 order. How will we enforce segregation of duties (e.g. when one party
-transitions the order into Review state then only the other party may take action).
+transitions the order into Review state then only the other party may take
+action).
 
 ## Data Model & Permissions
 
