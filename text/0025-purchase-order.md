@@ -420,11 +420,20 @@ of record and issues an updated purchase order.
 ### PurchaseOrder
 
 Purchase order state is composed of several objects with the primary object
-being the `PurchaseOrder`. `PurchaseOrder` contains the following fields
+being the `PurchaseOrder`. The fields `buyer_org_id` and `seller_org_id` are
+the organizations engaging in the purchase order's transaction; these fields
+are the organizations' Grid Pike ID. A purchase order identifies organization's
+by their `GLN`, Global Location Number. The `GLN` and Grid Pike organization
+IDs included in the `PurchaseOrder` should refer to the same organizations.
+`PurchaseOrder` contains the following fields
 
 - `uid` - Unique identifier for Purchase Order
 - `workflow_status` - Workflow status. Values are defined by the smart contract
 workflows
+- `buyer_org_id` - Grid Pike organization ID associated with the buying
+organization defined by the XML in the purchase order's `order_xml_v3_4` field.
+- `seller_org_id` - Grid Pike organization ID associated with the selling
+organization defined by the XML in the purchase order's `order_xml_v3_4` field.
 - `is_closed` - True if purchase order was closed, false otherwise
 - `accepted_version_number` - The ID of the purchase order that has been
 accepted
@@ -435,10 +444,12 @@ accepted
 message PurchaseOrder {
   required string uid = 1;
   required string workflow_status = 2;
-  repeated PurchaseOrderVersion versions = 3;
-  string accepted_version_number = 4;
-  uint64 created_at = 5;
-  bool is_closed = 6;
+  string buyer_org_id = 3;
+  string seller_org_id = 4;
+  repeated PurchaseOrderVersion versions = 5;
+  string accepted_version_number = 6;
+  uint64 created_at = 7;
+  bool is_closed = 8;
 }
 ```
 
@@ -555,7 +566,9 @@ message PurchaseOrderPayload {
 message CreatePurchaseOrderPayload {
   string uid = 1;
   uint64 created_at = 2;
-  CreateVersionPayload create_version_payload = 3;
+  string buyer_org_id = 3;
+  string seller_org_id = 4;
+  CreateVersionPayload create_version_payload = 5;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -604,6 +617,8 @@ Validation Requirements:
 - The `org_id` must exist in Pike for it be a valid transaction
 - All fields marked `required` in the `CreatePurchaseOrderPayload` must be
 supplied
+- The `buyer_org_id` must exist in Pike for it be a valid transaction
+- The `seller_org_id` must exist in Pike for it be a valid transaction
 - The `create_version_payload`, if included, must be valid according to the
 `CreateVersionPayload` validation rules
 
@@ -750,6 +765,19 @@ ship-to locations creates potential processing problems for the receiver, ASN
 problems for the buyer, billing issues for the supplier, and payable issues for
 the buyer.” This RFC encourages adherence to this best practice. A future RFC
 could outline support for this business scenario as a design enhancement.
+
+- Validate participating organizations using Grid Location. A purchase
+order, per GS1's standards, identifies organizations using a GLN, global
+location number. The GLN attribute is used to define a companies' location. Grid
+Location could be used to identify the purchase order's participating
+organizations using the GLN attribute. Currently, Grid Purchase Order defines
+the organizations using the `buyer_org_id` and `seller_org_id` fields,
+corresponding to a Grid Pike organization ID. Using Grid Location and Grid
+Pike, the purchase order's fields may be further validated to ensure the order
+refers to valid organizations. At the expense of this, Grid Purchase Order is
+initially designed with lightweight dependencies to allow flexibility. The
+extended validation using Grid Location may be added to Grid Purchase Order as
+an optional feature in the future.
 
 What is the impact of not doing this?
 
