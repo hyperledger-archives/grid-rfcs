@@ -612,11 +612,8 @@ version of the purchase order.
 Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-create-po` permission
-- The `po_uid` must refer to an existing purchase order
-- The `version_id` must not already exist as a version on the purchase order
 - The `org_id` must exist in Pike for it be a valid transaction
-- All fields marked `required` in the `CreatePurchaseOrderPayload` must be
-supplied
+- The `uid` must not refer to an existing purchase order
 - The `buyer_org_id` must exist in Pike for it be a valid transaction
 - The `seller_org_id` must exist in Pike for it be a valid transaction
 - The `create_version_payload`, if included, must be valid according to the
@@ -640,6 +637,7 @@ Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-update-po` permission
 - The `org_id` must exist in Pike for it be a valid transaction
+- The `po_uid` must refer to an existing purchase order
 
 Inputs:
 
@@ -659,7 +657,7 @@ Validation Requirements
 - The signing agent must have a Pike role with the `can-create-po-version`
 permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- All fields marked `required` in the `CreateVersionPayload` must be supplied
+- The `po_uid` must refer to an existing purchase order
 
 Inputs:
 
@@ -680,7 +678,7 @@ Validation Requirements:
 - The signing agent must have a Pike role with the `can-update-po-version`
 permission
 - The `org_id` must exist in Pike for it be a valid transaction
-- All fields marked `required` in the `UpdateVersionPayload` must be supplied
+- The `po_uid` must refer to an existing purchase order
 
 Inputs:
 
