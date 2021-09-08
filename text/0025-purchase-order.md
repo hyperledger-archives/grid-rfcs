@@ -542,7 +542,6 @@ logic. Only the defined actions are available and only one action payload should
 be defined in the `PurchaseOrderPayload`. `PurchaseOrderPayload` contains the
 following required fields:
 - `action` - Action enum, indicating the payload type
-- `org_id` - The Pike organization that is sending the payload
 - `timestamp` - Time the payload was created
 
 ```protobuf
@@ -554,13 +553,12 @@ message PurchaseOrderPayload {
     UPDATE_VERSION = 3;
   }
   Action action = 1;
-  string org_id = 2;
-  uint64 timestamp = 3;
+  uint64 timestamp = 2;
 
-  CreatePurchaseOrderPayload create_po_payload = 4;
-  UpdatePurchaseOrderPayload update_po_payload = 5;
-  CreateVersionPayload create_version_payload = 6;
-  UpdateVersionPayload update_version_payload = 7;
+  CreatePurchaseOrderPayload create_po_payload = 3;
+  UpdatePurchaseOrderPayload update_po_payload = 4;
+  CreateVersionPayload create_version_payload = 5;
+  UpdateVersionPayload update_version_payload = 6;
 }
 
 message CreatePurchaseOrderPayload {
@@ -612,7 +610,6 @@ version of the purchase order.
 Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-create-po` permission
-- The `org_id` must exist in Pike for it be a valid transaction
 - The `uid` must not refer to an existing purchase order
 - The `buyer_org_id` must exist in Pike for it be a valid transaction
 - The `seller_org_id` must exist in Pike for it be a valid transaction
@@ -636,7 +633,6 @@ Address of Grid Purchase Order `621dee06`
 Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-update-po` permission
-- The `org_id` must exist in Pike for it be a valid transaction
 - The `po_uid` must refer to an existing purchase order
 
 Inputs:
@@ -656,7 +652,6 @@ Validation Requirements
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-create-po-version`
 permission
-- The `org_id` must exist in Pike for it be a valid transaction
 - The `po_uid` must refer to an existing purchase order
 
 Inputs:
@@ -677,7 +672,6 @@ Validation Requirements:
 - The signer must be a Pike agent
 - The signing agent must have a Pike role with the `can-update-po-version`
 permission
-- The `org_id` must exist in Pike for it be a valid transaction
 - The `po_uid` must refer to an existing purchase order
 
 Inputs:
