@@ -566,7 +566,8 @@ message CreatePurchaseOrderPayload {
   uint64 created_at = 2;
   string buyer_org_id = 3;
   string seller_org_id = 4;
-  CreateVersionPayload create_version_payload = 5;
+  string workflow_status = 5;
+  CreateVersionPayload create_version_payload = 6;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -580,7 +581,8 @@ message CreateVersionPayload {
   string version_id = 1;
   string po_uid = 2;
   bool is_draft = 3;
-  PayloadRevision revision = 4;
+  string workflow_status = 4;
+  PayloadRevision revision = 5;
 }
 
 message UpdateVersionPayload {
