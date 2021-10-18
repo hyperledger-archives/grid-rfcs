@@ -37,9 +37,11 @@ support the following actions:
     - Update of standard versions
     - Accredation of a certfying body
 - Factories
+    - Manage their profile information
     - Creating an audit request
     - Updating the status of a request
 
+For the purpose of this RFC the factory actions will be excluded.
 
 # Motivation
 [motivation]: #motivation
@@ -60,10 +62,33 @@ information later to a sourcing specialist, it makes its easier for them to vet
 potential factories. Certifications can also be extended to the product level. 
 Therefore, certificates becomes a reusable and important component within Grid.
 
+
 # Guide-Level Explanation
 [guide-level-explanation]: #guide-level-explanation
 
+A certification is a business transactions that specifies the details of a factories 
+capabilities. The transaction contains information such as the when the certificate
+was issued, what the certificate is for, and when the certificate expires.
+
+In the simplest business scenario, a standards body creates a standard, then the
+standards body accredits a certifying body. Now that accredited certifying body 
+can go and audit a factory offline, then issue a certificate to that factory for
+all to see on the Splinter network. In more complex business scenarios, a factory
+can request to be audited, manage the status of their request, and profile data.
+
 ## Entities
+
+## Actions
+This design introduces four smart contract actions that, with the appropriate 
+permissions, a user of the system may perform. An action represents a change to 
+the shared state of a certification.
+
+- Create standard. Allows for the creation of a new standard.
+- Update standard. Allows for the modification of an existing standard. This will
+create a new version of the same standard.
+- Accredit certifying body. Allows a certifying body to issue certificates for a 
+given standard.
+- Issue certificate. Allows a certifying body to issue a certificate to a factory.
 
 
 ## Transactions
