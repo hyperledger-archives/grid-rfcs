@@ -428,8 +428,8 @@ IDs included in the `PurchaseOrder` should refer to the same organizations.
 `PurchaseOrder` contains the following fields
 
 - `uid` - Unique identifier for Purchase Order
-- `workflow_status` - Workflow status. Values are defined by the smart contract
-workflows
+- `workflow_state` - Workflow state the purchase order is currently in. Values
+are defined by the smart contract workflows
 - `buyer_org_id` - Grid Pike organization ID associated with the buying
 organization defined by the XML in the purchase order's `order_xml_v3_4` field.
 - `seller_org_id` - Grid Pike organization ID associated with the selling
@@ -443,7 +443,7 @@ accepted
 ```protobuf
 message PurchaseOrder {
   required string uid = 1;
-  required string workflow_status = 2;
+  required string workflow_state = 2;
   string buyer_org_id = 3;
   string seller_org_id = 4;
   repeated PurchaseOrderVersion versions = 5;
@@ -457,16 +457,16 @@ message PurchaseOrder {
 
 `PurchaseOrderVersion` represents a new version of a purchase order.
 `PurchaseOrderVersion`s move through the version workflow if `is_draft` is
-false, or through the draft workflow if `is_draft` is true. Its status within
-those workflows is indicated by `workflow_status`. A `PurchaseOrderVersion` is
-identified by its `version_id` which is globally unique. `revisions` is a list
-of revisions to version, and `current_revision_number` is the identifier of the
-most recent revision.
+false, or through the draft workflow if `is_draft` is true. The current state
+the version is in is indicated by the `workflow_state` field. A
+`PurchaseOrderVersion` is identified by its `version_id` and owning purchase
+order, which is globally unique. `revisions` is a list of revisions to version,
+and `current_revision_number` is the identifier of the most recent revision.
 
 ```protobuf
 message PurchaseOrderVersion {
   string version_id = 1;
-  string workflow_status = 2;
+  string workflow_state = 2;
   bool is_draft = 3;
   string current_revision_id = 4;
   PurchaseOrderRevision revisions = 5;
@@ -571,7 +571,7 @@ message CreatePurchaseOrderPayload {
 
 message UpdatePurchaseOrderPayload {
   string po_uid = 1;
-  string workflow_status = 2;
+  string workflow_state = 2;
   bool is_closed = 3;
   string accepted_version_number = 4;
 }
@@ -586,7 +586,7 @@ message CreateVersionPayload {
 message UpdateVersionPayload {
   string version_id = 1;
   string po_uid = 2;
-  string workflow_status = 3;
+  string workflow_state = 3;
   bool is_draft = 4;
   string current_revision_id = 5;
   PayloadRevision revision = 6;
@@ -627,8 +627,8 @@ Address of Grid Purchase Order `621dee06`
 
 ### Update Purchase Order Payload
 
-`UpdatePurchaseOrderPayload` updates a purchase order's closed status,
-`workflow_status`, or `accepted_version_number`.
+`UpdatePurchaseOrderPayload` updates a purchase order's closed state,
+`workflow_state`, or `accepted_version_number`.
 
 Validation Requirements:
 - The signer must be a Pike agent
