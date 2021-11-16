@@ -282,7 +282,7 @@ to True.
 
 ![PO Record of version Sub-Workflow](../images/0025-purchase-order-rfc/po_sor_sub_workflow_2_of_2.png)
 
-Beginning state. An organization with po.draft permissions created a version
+Beginning state. An organization with po::draft permissions created a version
 for collaboration purposes.
 
 Editable state. The contents of the version are being populated by one or more
@@ -320,11 +320,11 @@ brevity.
 ## Workflow State Permissions
 
 As seen in the above diagrams, this RFC defines a set of permissions at each
-state in a sub-workflow. Permissions are assigned to an alias, such as po.buyer,
-and dictate what actions a user with said permissions may take at that stage of
-a purchase order’s life. An organization may craft roles within Grid Identity by
-assigning one or more aliases to a user. This permissions design is not
-exhaustive; additional aliases could be introduced in the future.
+state in a sub-workflow. Permissions are assigned to an alias, such as
+po::buyer, and dictate what actions a user with said permissions may take at
+that stage of a purchase order’s life. An organization may craft roles within
+Grid Identity by assigning one or more aliases to a user. This permissions
+design is not exhaustive; additional aliases could be introduced in the future.
 
 When creating a purchase order version, mandatory data elements must have a
 value defined. Similarly, when updating a purchase order, a subset of fields
@@ -356,14 +356,14 @@ organizations choose to define roles as follows.
 ```
 Name: FredsFarm.Admin
 Permissions:
-    - po.buyer
+    - po::buyer
     - allowed _organizations: [ ]
     - inherit_from: [ ]
 
 Name: TheGeneralStore.Admin
 Permissions:
-    - po.sellerconfirm
-    - po.sellermodify
+    - po::sellerconfirm
+    - po::sellermodify
 Allowed _organizations: [ ]
 Inherit_from: [ ]
 ```
