@@ -439,6 +439,7 @@ organization defined by the XML in the purchase order's `order_xml_v3_4` field.
 accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
+- `workflow_type` - Indicates the workflow the purchase order belongs to
 
 ```protobuf
 message PurchaseOrder {
@@ -448,8 +449,10 @@ message PurchaseOrder {
   string seller_org_id = 4;
   repeated PurchaseOrderVersion versions = 5;
   string accepted_version_number = 6;
-  uint64 created_at = 7;
-  bool is_closed = 8;
+  repeated PurchaseOrderAlternateId alternate_ids = 7;
+  uint64 created_at = 8;
+  bool is_closed = 9;
+  string workflow_type = 10;
 }
 ```
 
@@ -469,7 +472,7 @@ message PurchaseOrderVersion {
   string workflow_state = 2;
   bool is_draft = 3;
   string current_revision_id = 4;
-  PurchaseOrderRevision revisions = 5;
+  repeated PurchaseOrderRevision revisions = 5;
 }
 ```
 
@@ -495,14 +498,14 @@ allow purchase orders to be created and edited without having to specify a
 purchase order number at creation. This is identical to the mechanism outlined
 in the [Pike 2 RFC](https://github.com/hyperledger/grid-rfcs/pull/23).
 
-The `id_type` is used the specify the field that will be used as an
-alternate ID, and the `id` is the `uid` of the purchase order.
+The `id_type` is used to specify the field that will be used as an
+alternate ID, and the `id` is an identifier for the purchase order.
 
 ```protobuf
 message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
-  string org_id = 3;
+  string po_uid = 3;
 }
 ```
 
@@ -566,7 +569,9 @@ message CreatePurchaseOrderPayload {
   uint64 created_at = 2;
   string buyer_org_id = 3;
   string seller_org_id = 4;
-  CreateVersionPayload create_version_payload = 5;
+  string workflow_state = 5;
+  repeated PurchaseOrderAlternateId alternate_ids = 6;
+  CreateVersionPayload create_version_payload = 7;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -574,13 +579,15 @@ message UpdatePurchaseOrderPayload {
   string workflow_state = 2;
   bool is_closed = 3;
   string accepted_version_number = 4;
+  repeated PurchaseOrderAlternateId alternate_ids = 5;
 }
 
 message CreateVersionPayload {
   string version_id = 1;
   string po_uid = 2;
   bool is_draft = 3;
-  PayloadRevision revision = 4;
+  string workflow_state = 4;
+  PayloadRevision revision = 5;
 }
 
 message UpdateVersionPayload {
@@ -588,8 +595,7 @@ message UpdateVersionPayload {
   string po_uid = 2;
   string workflow_state = 3;
   bool is_draft = 4;
-  string current_revision_id = 5;
-  PayloadRevision revision = 6;
+  PayloadRevision revision = 5;
 }
 
 message PayloadRevision {
