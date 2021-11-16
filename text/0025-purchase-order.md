@@ -34,7 +34,7 @@ request that you comment on how this design does/does not support your
 purchasing needs.
 
 Grid Purchase Order leverages other Hyperledger Grid components including Grid
-Identity, Grid Workflow, Grid Product, and Grid Location. In the near-term, this
+Pike, Grid Workflow, Grid Product, and Grid Location. In the near-term, this
 business capability is focused on solving a need to better communicate and
 collaborate on purchasing information. Looking to the future, it sets the stage
 for further integration, both upstream and downstream, with order fulfillment
@@ -96,7 +96,7 @@ agreement and modify purchase order records. This RFC aims to offer a solution
 to collaboration needs – both simple and complex -- by defining a default
 Purchase Order design. The design leverages Grid Workflow, which requires the
 use of a state transition model, to define the states through which a purchase
-order may flow. The design also leverages Grid Identity to configure role-based
+order may flow. The design also leverages Grid Pike to configure role-based
 access control. The content that follows describes the default design.
 
 ## Actions
@@ -323,7 +323,7 @@ As seen in the above diagrams, this RFC defines a set of permissions at each
 state in a sub-workflow. Permissions are assigned to an alias, such as
 po::buyer, and dictate what actions a user with said permissions may take at
 that stage of a purchase order’s life. An organization may craft roles within
-Grid Identity by assigning one or more aliases to a user. This permissions
+Grid Pike by assigning one or more aliases to a user. This permissions
 design is not exhaustive; additional aliases could be introduced in the future.
 
 When creating a purchase order version, mandatory data elements must have a
@@ -723,7 +723,7 @@ offers a path to co-create versions and present a shared view of the status of a
 purchase order.
 
 - Organizations have flexibility in assigning permissions and roles. Through the
-use of Grid Identity, trade partners may configure and assign permissions within
+use of Grid Pike, trade partners may configure and assign permissions within
 the Purchase Order workflows to reflect the distribution of roles within their
 business partnership. An organization can delegate a role to another
 organization, split permissions across multiple internal roles, etc.
@@ -788,7 +788,7 @@ collaborate in a more systematic way.
 
 - [Grid Product RFC](https://github.com/hyperledger/grid-rfcs/blob/master/text/0005-product.md)
 - [Grid Location RFC](https://github.com/hyperledger/grid-rfcs/blob/master/text/0020-location.md)
-- [Grid Identity RFC](https://github.com/hyperledger/grid-rfcs/pull/23)
+- [Grid Pike RFC](https://github.com/hyperledger/grid-rfcs/pull/23)
 - [Grid Workflow RFC](https://github.com/hyperledger/grid-rfcs/pull/24)
 
 # Unresolved Questions
