@@ -92,6 +92,10 @@ status.
 discrepancies means team members can focus on move value-add business
 opportunities.
 
+- Increased transparency of past transactions. Ability to view past
+transactions allows historical data to be leveraged for current and future
+business and marketing opportunities.
+
 # Guide-level Explanation
 [guide-level-explanation]: #guide-level-explanation
 
