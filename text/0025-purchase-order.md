@@ -22,8 +22,20 @@ creates uncertainty for both buyers and sellers today because they lack a shared
 view of the order’s status and contents. Siloed views of order data can lead to
 misalignment and result in undesirable outcomes such as a customer dispute.
 Hyperledger Grid Purchase Order aims to address this challenge by providing a
-mechanism for trade partners to collaborate on the creation and modification of
-a purchase order, all while enjoying a shared view into the state of the order.
+secure mechanism for trade partners to collaborate on the creation and
+modification of a purchase order, all while enjoying a shared view into the
+state of the order.
+
+Trade partner communication is more secure and streamlined with Hyperledger Grid
+Purchase Order through signed transactions, user permissions, and shared state
+managed by consensus. Grid Purchase Order requires transactions are signed,
+which is supported but not required by traditional communication methods.
+The signing key is further validated against the organization's permissions
+using Hyperledger Grid Pike, ensuring only authorized users are able to make
+changes to the shared state. Once a Grid Purchase Order transaction is
+validated, the shared state is updated and managed by consensus. This removes
+the need for traditional back and forth messages to ensure communication has
+been successful.
 
 The design allows a buyer to order a specified quantity of goods and services
 from a seller for a single shipment to a single location. The business use case
