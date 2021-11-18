@@ -272,9 +272,9 @@ This logic lives outside the scope of Grid at this time and is a concern of
 the Grid Integration component. A seller may take no further action on this
 version.
 
-Obsolete state. A version was either cancelled or replaced by a more recently
-Accepted version. The buyer and seller can take no further action on the
-version.
+Obsolete state. A version was cancelled, replaced by a more recent version, or
+has become otherwise unusable. The buyer and seller can take no further action
+on the version.
 
 Modified state. A version is partially confirmed (often referred to as
 ‘accepted with changes’) and awaiting further approval. At this time, a seller
