@@ -96,7 +96,7 @@ fn apply(
 
    let can_transition = state.can_transition(
        desired_state, pike_permissions);
-   if (can_transition) {
+   if (!can_transition) {
        InvalidTransaction
    }
 }
