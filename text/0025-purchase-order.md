@@ -127,7 +127,7 @@ to the shared state of a purchase order.
 - Update Version. Allows for the modification of an existing purchase order
   version.
 
-## Workflow
+## Workflows
 
 The design introduces three sub-workflows that each play a role in managing the
 shared view of a purchase order. The Purchase Order Sub-Workflow manages the
@@ -177,6 +177,8 @@ set to True.
 has been made final, then this field is set to “True” and further changes to
 the contents of the purchase order are prohibited.
 
+#### States
+
 Beginning state. A buyer is able to create a purchase order record alongside
 the creation of a purchase order version. A seller is able to create a
 purchase order version. Versions enter the Purchase Order System of Record
@@ -190,11 +192,11 @@ new versions and update existing versions in line with their respective workflow
 permissions. A seller contains special permission to transition a purchase order
 into Confirmed state by satisfying the Accepted constraint.
 
-\*Note: Some trade partners operate with a high level of trust and do not
-require confirmation of purchase order contents. In this scenario, a system
-agent could be created and granted permission to auto-transition a purchase
-order from Issued state to Confirmed state, altogether bypassing the Version
-Sub-Workflows introduced below.
+> Note: Some trade partners operate with a high level of trust and do not
+> require confirmation of purchase order contents. In this scenario, a system
+> agent could be created and granted permission to auto-transition a purchase
+> order from Issued state to Confirmed state, altogether bypassing the Version
+> Sub-Workflows introduced below.
 
 Confirmed state. An open purchase order enters Confirmed state when both the
 buyer and seller have fully accepted its contents. It is assumed a separate,
@@ -213,10 +215,9 @@ others may prohibit changes after a 48 hour lead time has elapsed, etc. To
 maintain flexibility, orgs may use the Grid Integration Component to manage
 the rules that control this constraint.
 
-The Purchase Order Sub-Workflow makes the following assumptions.
-
-- Business process states regarding the shipment and/or billing of an order
-belong to the sales order entity, not the purchase order entity.
+> Note: The Purchase Order Sub-Workflow assumes that business process states
+> regarding the shipment and/or billing of an order belong to the sales order
+> entity, not the purchase order entity.
 
 ### Purchase Order System of Record Version Sub-Workflow
 
@@ -245,6 +246,8 @@ elements have a value defined, then this field is set to True.
 agreed to the contents in full, then this field is set to True. Only one version
 may be accepted at a time.
 
+#### States
+
 Beginning state (pre-Proposed). A buyer has permission to create a purchase
 order version and propose it to the seller.
 
@@ -252,10 +255,12 @@ Proposed state. A buyer submitted a version for review and approval by the
 seller. A buyer has permission to update the proposal before the seller takes
 action or can cancel the version in favor of a better one. A seller may reject,
 accept or modify the version to the degree their granular update permissions
-allow. Note: A seller may rely on ERP business logic to determine the
-appropriate transition from Proposed state. This logic, such as checking
-contractual agreements or inventory availability, lives outside of the scope of
-Grid at this time.
+allow.
+
+> Note: A seller may rely on ERP business logic to determine the
+> appropriate transition from Proposed state. This logic, such as checking
+> contractual agreements or inventory availability, lives outside of the scope of
+> Grid at this time.
 
 Rejected state. A version was rejected in full. The buyer and seller can take no
 further action on the version. In the case a seller rejected with a reason and
@@ -298,6 +303,8 @@ to True.
 
 ![PO Record of version Sub-Workflow](../images/0025-purchase-order-rfc/po_sor_sub_workflow_2_of_2.png)
 
+#### Draft States
+
 Beginning state. An organization with po::draft permissions created a version
 for collaboration purposes.
 
@@ -329,9 +336,11 @@ introduced to the version.
 The Collaborative Sub-Workflow offers trade partners a means to manage
 purchase order records exclusively on Grid. Without the need to maintain data
 integrity with external systems of record, more actions are available to trade
-partners. This workflow illustrates a potential long-term vision for this
-business capability on Grid. A detailed explanation has been omitted for
-brevity.
+partners.
+
+> Note: This workflow illustrates a potential long-term vision for this
+> business capability on Grid. A detailed explanation has been omitted for
+> brevity.
 
 ## Workflow State Permissions
 
@@ -341,6 +350,8 @@ po::buyer, and dictate what actions a user with said permissions may take at
 that stage of a purchase order’s life. An organization may craft roles within
 Grid Pike by assigning one or more aliases to a user. This permissions
 design is not exhaustive; additional aliases could be introduced in the future.
+
+## Field Restrictions
 
 When creating a purchase order version, mandatory data elements must have a
 value defined. Similarly, when updating a purchase order, a subset of fields
