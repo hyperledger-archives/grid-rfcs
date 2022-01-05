@@ -273,10 +273,9 @@ seller’s feedback, the buyer may issue a new version.
 **Accepted state:** A seller has reviewed and accepted the version in full. A
 separate sales order entity (out of scope of Grid Purchase Order) may be created
 within the seller’s system. The version is listed in the purchase order's
-`accepted_version` field, replacing a previously accepted purchase order if
-applicable. A buyer is permitted to cancel an accepted purchase order so long as
-the seller has not moved the purchase order to a _Closed_ state. A seller may
-take no further action on the version.
+`accepted_version` field. A buyer is permitted to cancel an accepted purchase
+order so long as the seller has not moved the purchase order to a _Closed_
+state. A seller may take no further action on the version.
 
 **Obsolete state:** A version was cancelled by the buyer for any of a variety
 of reasons. The buyer and seller can take no further action on the version.
@@ -388,8 +387,7 @@ Permissions:
 
 Name: TheGeneralStore.Admin
 Permissions:
-    - po::sellerconfirm
-    - po::sellermodify
+    - po::seller
 Allowed _organizations: [ ]
 Inherit_from: [ ]
 ```
