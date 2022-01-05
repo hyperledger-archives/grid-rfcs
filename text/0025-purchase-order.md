@@ -465,12 +465,12 @@ organization defined by the XML in the purchase order's `order_xml_v3_4` field.
 accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
-- `workflow_type` - Indicates the workflow the purchase order belongs to
+- `workflow_id` - Indicates the workflow the purchase order belongs to
 
 ```protobuf
 message PurchaseOrder {
-  required string uid = 1;
-  required string workflow_state = 2;
+  string uid = 1;
+  string workflow_state = 2;
   string buyer_org_id = 3;
   string seller_org_id = 4;
   repeated PurchaseOrderVersion versions = 5;
@@ -478,7 +478,17 @@ message PurchaseOrder {
   repeated PurchaseOrderAlternateId alternate_ids = 7;
   uint64 created_at = 8;
   bool is_closed = 9;
-  string workflow_type = 10;
+  string workflow_id = 10;
+}
+```
+
+### PurchaseOrderList
+
+`PurchaseOrderList` represents a list of purchase orders.
+
+```protobuf
+message PurchaseOrderList {
+  repeated PurchaseOrder purchase_orders = 1;
 }
 ```
 
@@ -497,7 +507,7 @@ message PurchaseOrderVersion {
   string version_id = 1;
   string workflow_state = 2;
   bool is_draft = 3;
-  string current_revision_id = 4;
+  uint64 current_revision_id = 4;
   repeated PurchaseOrderRevision revisions = 5;
 }
 ```
@@ -509,7 +519,7 @@ the revision was created, and the public key of the submitter.
 
 ```protobuf
 message PurchaseOrderRevision {
-  string revision_id = 1;
+  uint64 revision_id = 1;
   string submitter = 2;
   uint64 created_at = 3;
 
@@ -532,6 +542,17 @@ message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
   string po_uid = 3;
+}
+```
+
+### PurchaseOrderAlternateIdList
+
+`PurhcaseOrderAlternateIdList` represents a list of puchase order alternate
+IDs.
+
+```protobuf
+message PurchaseOrderAlternateIdList {
+  repeated PurchaseOrderAlternateId alternate_ids = 1;
 }
 ```
 
@@ -578,16 +599,17 @@ message PurchaseOrderPayload {
   enum Action {
     UNSET_ACTION = 0;
     CREATE_PO = 1;
-    CREATE_VERSION = 2;
-    UPDATE_VERSION = 3;
+    UPDATE_PO = 2;
+    CREATE_VERSION = 3;
+    UPDATE_VERSION = 4;
   }
   Action action = 1;
-  uint64 timestamp = 2;
+  uint64 timestamp = 3;
 
-  CreatePurchaseOrderPayload create_po_payload = 3;
-  UpdatePurchaseOrderPayload update_po_payload = 4;
-  CreateVersionPayload create_version_payload = 5;
-  UpdateVersionPayload update_version_payload = 6;
+  CreatePurchaseOrderPayload create_po_payload = 4;
+  UpdatePurchaseOrderPayload update_po_payload = 5;
+  CreateVersionPayload create_version_payload = 6;
+  UpdateVersionPayload update_version_payload = 7;
 }
 
 message CreatePurchaseOrderPayload {
@@ -598,6 +620,7 @@ message CreatePurchaseOrderPayload {
   string workflow_state = 5;
   repeated PurchaseOrderAlternateId alternate_ids = 6;
   CreateVersionPayload create_version_payload = 7;
+  string workflow_id = 8;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -606,6 +629,7 @@ message UpdatePurchaseOrderPayload {
   bool is_closed = 3;
   string accepted_version_number = 4;
   repeated PurchaseOrderAlternateId alternate_ids = 5;
+  repeated UpdateVersionPayload version_updates = 6;
 }
 
 message CreateVersionPayload {
@@ -621,11 +645,11 @@ message UpdateVersionPayload {
   string po_uid = 2;
   string workflow_state = 3;
   bool is_draft = 4;
-  PayloadRevision revision = 5;
+  PayloadRevision revision = 6;
 }
 
 message PayloadRevision {
-  string revision_id = 1;
+  uint64 revision_id = 1;
   string submitter = 2;
   uint64 created_at = 3;
 
@@ -647,6 +671,7 @@ Validation Requirements:
 - The `seller_org_id` must exist in Pike for it be a valid transaction
 - The `create_version_payload`, if included, must be valid according to the
 `CreateVersionPayload` validation rules
+- The `workflow_id` must refer to an existing workflow
 
 Inputs:
 
@@ -659,8 +684,10 @@ Address of Grid Purchase Order `621dee06`
 
 ### Update Purchase Order Payload
 
-`UpdatePurchaseOrderPayload` updates a purchase order's closed state,
-`workflow_state`, or `accepted_version_number`.
+`UpdatePurchaseOrderPayload` updates a purchase order's `is_closed` state,
+`workflow_state`, or `accepted_version_number`. It can also contain one or more
+`UpdateVersionPayload`s for updates that require simultaneous changes to the
+purchase order and one or more of its versions.
 
 Validation Requirements:
 - The signer must be a Pike agent
