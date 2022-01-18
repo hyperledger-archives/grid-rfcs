@@ -127,7 +127,7 @@ to the shared state of a purchase order.
 - Update Version. Allows for the modification of an existing purchase order
   version.
 
-## Workflow
+## Workflows
 
 The design introduces three sub-workflows that each play a role in managing the
 shared view of a purchase order. The Purchase Order Sub-Workflow manages the
@@ -158,65 +158,69 @@ life.
 ![Purchase Order Sub-Workflow](../images/0025-purchase-order-rfc/po_sub_workflow.png)
 
 The Purchase Order Sub-Workflow defines the states through which a purchase
-order record may progress. A record is like a container that can hold multiple
-versions of a purchase order, both historical and active in nature. When we
-define a state at the record level, we give meaning to the overall progression
-of the purchase order. This summary state is informed by actions taken on
-underlying versions of the purchase order.
+order record may progress. A purchase order record is like a container that can
+hold multiple versions of the purchase order, both active and historical.
+Defining a state at the record level provides context regarding the overall
+progression of the purchase order. This summary state is informed by actions
+taken on underlying versions of the purchase order.
 
-The sub-workflow consists of the following states: Issued, Confirmed, and
-Closed. Two business rules (also known as constraints) dictate when a purchase
+The sub-workflow consists of the following states: _Issued_, _Confirmed_, and
+_Closed_. Two business rules (also known as constraints) dictate when a purchase
 order may proceed to the next state.
 
-- Accepted. A boolean that must exist on an object. If the Accepted constraint
-field on a purchase order version is set to True, then this field is set to
-True. Only one version of a purchase order may have this workflow constraint
-set to True.
+> Note: This text will use the notation "_contstraint::{xyz}_" to refer to a
+> purchase order sub-workflow constraint.
 
-- Closed. A boolean that must exist on an object. If the purchase order record
-has been made final, then this field is set to “True” and further changes to
-the contents of the purchase order are prohibited.
+- _constraint::Accepted_ - This constraint is met when the purchase order has an
+  accepted version listed in its `accepted_version` field. Only one version of a
+  purchase order may be accepted at a time.
 
-Beginning state. A buyer is able to create a purchase order record alongside
-the creation of a purchase order version. A seller is able to create a
+- _constraint::Closed_ - If the purchase order record has been made final, then
+ its `is_closed` field is set to `true` and further changes to its contents are
+ prohibited.
+
+#### States
+
+**Beginning state:** A buyer is able to create a purchase order record alongside
+a purchase order version. A seller is then able to create a
 purchase order version. Versions enter the Purchase Order System of Record
 Version Sub-Workflow at different points depending on permission assignments
 (more on permissions later).
 
-Issued state\*. When one or more versions have been created and no version
-fulfills the Accepted constraint, then the purchase order record resides in
-Issued state. During this state, buyers and sellers are permitted to create
+**Issued state:** When at least one version exists and no version
+fulfills _constraint::Accepted_, then the purchase order record exists in
+_Issued_ state. In this state, buyers and sellers are permitted to create
 new versions and update existing versions in line with their respective workflow
-permissions. A seller contains special permission to transition a purchase order
-into Confirmed state by satisfying the Accepted constraint.
+permissions. A seller has special permission to transition a purchase order
+into _Confirmed_ state by satisfying _constraint::Accepted_.
 
-\*Note: Some trade partners operate with a high level of trust and do not
-require confirmation of purchase order contents. In this scenario, a system
-agent could be created and granted permission to auto-transition a purchase
-order from Issued state to Confirmed state, altogether bypassing the Version
-Sub-Workflows introduced below.
+> Note: Some trade partners operate with a high level of trust and do not
+> require confirmation of purchase order contents. In this scenario, a system
+> agent could be created and granted permission to auto-transition a purchase
+> order from _Issued_ state to _Confirmed_ state, altogether bypassing the Version
+> Sub-Workflows introduced below.
 
-Confirmed state. An open purchase order enters Confirmed state when both the
-buyer and seller have fully accepted its contents. It is assumed a separate,
-but related, sales order fulfillment process is underway. During this state,
-both a buyer and seller are permitted to request changes to the purchase order
-by issuing a new version. A seller is also permitted to finalize a purchase
-order by transitioning it into Closed state. Note: If an Accepted version is
-cancelled, then the record returns to Issued state.
+**Confirmed state:** A purchase order transitions to the _Confirmed_ state when
+both the buyer and seller have fully accepted its contents. It is assumed a
+separate, but related, sales order fulfillment process is underway. During this
+state, both a buyer and seller are permitted to request changes to the purchase
+order by issuing a new version. A seller is also permitted to finalize a
+purchase order by transitioning it into _Closed_ state. Note: If an _Accepted_
+version is cancelled, then the record returns to _Issued_ state.
 
-Closed state. A purchase order was made final; it can no longer be changed. To
-transition to this state, the Closed constraint must be set to True. Once in
-Closed state, no permissions are available to any persona. In practice,
-organizations apply different business logic to determine when a purchase order
-is closed. Some orgs may accept changes up until one hour before product ships,
-others may prohibit changes after a 48 hour lead time has elapsed, etc. To
-maintain flexibility, orgs may use the Grid Integration Component to manage
-the rules that control this constraint.
+**Closed state:** A purchase order in this state is final; it can no longer be
+changed. To transition to this state, the _constraint::Closed_ must be met. Once
+in _Closed_ state, no permissions are available to any party.
 
-The Purchase Order Sub-Workflow makes the following assumptions.
+In practice, organizations apply different business logic to determine when a
+purchase order is closed. Some orgs may accept changes up until one hour before
+product ships, others may prohibit changes after a 48 hour lead time has
+elapsed, etc. To maintain flexibility, orgs may use the Grid Integration
+Component to manage the rules that control this constraint.
 
-- Business process states regarding the shipment and/or billing of an order
-belong to the sales order entity, not the purchase order entity.
+> Note: The Purchase Order Sub-Workflow assumes that business process states
+> regarding the shipment and/or billing of an order belong to the sales order
+> entity, not the purchase order entity.
 
 ### Purchase Order System of Record Version Sub-Workflow
 
@@ -224,10 +228,10 @@ belong to the sales order entity, not the purchase order entity.
 
 The Purchase Order System of Record Version Sub-Workflow defines how trade
 partners may collaborate on versions of a purchase order. Actions taken within
-this workflow inform valid transitions between business process states. More
-specifically, acceptance of a purchase order in this version workflow enables
-the transition of a purchase order record from Issued state to Confirmed state
-within the Purchase Order Sub-Workflow described above.
+this version sub-workflow inform valid transitions between business process
+states. More specifically, acceptance of a purchase order in this version
+workflow enables the transition of a purchase order record from _Issued_ state
+to _Confirmed_ state within the Purchase Order Sub-Workflow described above.
 
 This workflow is designed with external systems in mind. Given the system of
 record is a buyer’s ERP system, when a seller introduces modifications to a
@@ -236,111 +240,114 @@ version. This rule is enforced via permissions at the two starting positions
 within the sub-workflow. A buyer is permitted to propose a purchase order
 version; a buyer or seller is permitted to initiate a draft for collaboration.
 
-Two constraints control the movement of a version from one state to another.
+Two constraints dictate if a version can move from one state to another:
 
-- Complete. A boolean that must exist on an object. If all mandatory data
-elements have a value defined, then this field is set to True.
+- _constraint::Complete_ - This constraint is met when a version's `is_draft`
+  field is set to `false`.
 
-- Accepted. A boolean that must exist on an object. If both trade partners have
-agreed to the contents in full, then this field is set to True. Only one version
-may be accepted at a time.
+- _constraint::Accepted(version)_ - This constraint is met when a version's
+  state is set to _Accepted_. Only one version
+  may be accepted at a time.
 
-Beginning state (pre-Proposed). A buyer has permission to create a purchase
-order version and propose it to the seller.
+#### States
 
-Proposed state. A buyer submitted a version for review and approval by the
+**Beginning state:** A buyer has permission to create a purchase
+order version in this pre-proposed state.
+
+**Proposed state:** A buyer can submit a version for review and approval by the
 seller. A buyer has permission to update the proposal before the seller takes
-action or can cancel the version in favor of a better one. A seller may reject,
-accept or modify the version to the degree their granular update permissions
-allow. Note: A seller may rely on ERP business logic to determine the
-appropriate transition from Proposed state. This logic, such as checking
-contractual agreements or inventory availability, lives outside of the scope of
-Grid at this time.
+action or can cancel the version in favor of a different one. A seller may
+reject, accept or modify the version to the degree their granular update
+permissions allow.
 
-Rejected state. A version was rejected in full. The buyer and seller can take no
-further action on the version. In the case a seller rejected with a reason and
-the buyer wants to alter the order based on the seller’s feedback, the buyer
-may issue a new version.
+> Note: A seller may rely on ERP business logic to determine the
+> appropriate transition from _Proposed_ state. This logic, such as checking
+> contractual agreements or inventory availability, lives outside of the scope
+> of Grid at this time.
 
-Accepted state. A version was reviewed and accepted in full. A separate sales
-order entity (out of scope of Grid Purchase Order) is created within the
-seller’s system. The version is represented within the Confirmed state within
-the Purchase Order Sub-Workflow and takes the place of a previously accepted
-purchase order (if applicable). A buyer is permitted to cancel an accepted
-purchase order so long as a goods receipt or invoice has yet to be generated.
-This logic lives outside the scope of Grid at this time and is a concern of
-the Grid Integration component. A seller may take no further action on this
-version.
+**Rejected state:** A seller can reject a version in full. Neither the buyer nor
+seller can take further action on the version. In the case where a seller
+rejected with a reason and the buyer wants to alter the order based on the
+seller’s feedback, the buyer may issue a new version.
 
-Obsolete state. A version was cancelled, replaced by a more recent version, or
-has become otherwise unusable. The buyer and seller can take no further action
-on the version.
+**Accepted state:** A seller has reviewed and accepted the version in full. A
+separate sales order entity (out of scope of Grid Purchase Order) may be created
+within the seller’s system. The version is listed in the purchase order's
+`accepted_version` field. A buyer is permitted to cancel an accepted purchase
+order so long as the seller has not moved the purchase order to a _Closed_
+state. A seller may take no further action on the version.
 
-Modified state. A version is partially confirmed (often referred to as
+**Obsolete state:** A version was cancelled by the buyer for any of a variety
+of reasons. The buyer and seller can take no further action on the version.
+
+**Modified state:** A version is partially confirmed (often referred to as
 ‘accepted with changes’) and awaiting further approval. At this time, a seller
 generally creates a related sales order in their system of record. A buyer may
-move the version to Obsolete and issue a new version based on the seller’s
+move the version to _Obsolete_ and issue a new version based on the seller’s
 guidance. A seller may update the suggested modifications so long as the buyer
 has yet to take action. An editor may convert the version into a draft for
 further collaboration.
 
 The second half of the System of Record Version Sub-Workflow provides trade
-partners a shared editing capability where a version may be co-created. The
-flow represents an “offer” process of sorts and benefits non-buying
-organizations who, as part of their business relationship, suggest purchase
-order details to a buying organization to inspire the issuance of a purchase
-order. A new constraint is introduced to control the movement of a version
-from one state to another.
+partners a shared editing capability with which a version can be co-created. The
+flow represents an “offer” process of sorts and benefits sellers who, as part of
+their business relationship, suggest purchase order details to a buyer to
+inspire the issuance of a purchase order from the buyer. An additional
+constraint controls the movement of a version from one state to another.
 
-- Draft. A boolean that must exist on an object. If the purchase order version
-is a draft that exists for collaboration purposes, then this field must be set
-to True.
+- _constraint::Draft_ - This constraint is met when the `is_draft` field for
+  the version is set to `true`.
 
 ![PO Record of version Sub-Workflow](../images/0025-purchase-order-rfc/po_sor_sub_workflow_2_of_2.png)
 
-Beginning state. An organization with po::draft permissions created a version
-for collaboration purposes.
+#### Draft States
 
-Editable state. The contents of the version are being populated by one or more
-organizations. Any organization has permission to submit the draft for review
-or close it in favor of a better version.
+**Beginning state:** An organization with po::draft permissions created a
+version for collaboration purposes.
 
-Review state. An organization has proposed the version for review by another
+**Editable state:** The contents of the version are being populated by one or
+more organizations. Any organization with po::draft permissions can submit the
+draft for review or close it in favor of a different version.
+
+**Review state:** An organization has proposed the version for review by another
 organization. Another organization has permission to approve the version by
-moving it to Composed state. The organization may also decline the version by
-adding a rejection reason (optional) or move it back to Editable state for
-further modification.
+moving it to _Composed_ state. The organization may also decline the version,
+with the option to add a rejection reason, or move it back to _Editable_ state
+for further modification.
 
-Composed state. Both organizations are in agreement on the contents of the
-version. The buying organization retains the decision to issue a formal
-purchase order based on the drafted contents.
+**Composed state:** Both organizations have accepted the contents of the
+version. The buying organization may decide to issue a formal purchase order
+based on the drafted contents.
 
-Declined state. An organization has declined the version content. An
-organization may move it back to Editable state for further modification or
+**Declined state:** An organization has declined the version content. Either
+organization may move it back to _Editable_ state for further modification or
 choose to cancel the version.
 
-Cancelled state. A version is no longer relevant; no further edits may be
-introduced to the version.
+**Cancelled state:** A version is no longer relevant; it is no longer editable.
 
 ### Purchase Order Collaborative Sub-Workflow
 
 ![PO Collaborative Sub-Workflow](../images/0025-purchase-order-rfc/po_collaborative_sub_workflow.png)
 
-The Collaborative Sub-Workflow offers trade partners a means to manage
+The Collaborative Sub-Workflow enables trade partners to manage
 purchase order records exclusively on Grid. Without the need to maintain data
 integrity with external systems of record, more actions are available to trade
-partners. This workflow illustrates a potential long-term vision for this
-business capability on Grid. A detailed explanation has been omitted for
-brevity.
+partners.
+
+> Note: This workflow illustrates a potential long-term vision for this
+> business capability on Grid. A detailed explanation has been omitted for
+> brevity.
 
 ## Workflow State Permissions
 
 As seen in the above diagrams, this RFC defines a set of permissions at each
 state in a sub-workflow. Permissions are assigned to an alias, such as
 po::buyer, and dictate what actions a user with said permissions may take at
-that stage of a purchase order’s life. An organization may craft roles within
-Grid Pike by assigning one or more aliases to a user. This permissions
-design is not exhaustive; additional aliases could be introduced in the future.
+that stage of a purchase order’s  or version's life. An organization may craft
+roles within Grid Pike by assigning one or more aliases to a user. Additional
+aliases may be introduced in the future.
+
+## Field Restrictions
 
 When creating a purchase order version, mandatory data elements must have a
 value defined. Similarly, when updating a purchase order, a subset of fields
@@ -352,14 +359,16 @@ component.
 ## Transactions
 
 Purchase Orders are managed by submitting transactions to Hyperledger Grid,
-which will process them with the Grid Purchase Order smart contract. The
+which will process them via the Grid Purchase Order smart contract. The
 following transactions are supported:
 
-- Create_PO. Create a purchase order record and store it in state.
-- Update_PO. Update the properties of a purchase order already in state.
-- Create_Version. Create a version of a purchase order and store it in state.
-- Update_Version. Update the properties of a purchase order version already in
-state.
+- `po create`: Create a purchase order record and store it in ledger state.
+- `po update`: Update the properties of a purchase order already in ledger
+  state.
+- `po version create`: Create a version of a purchase order and store it in
+  ledger state.
+- `po version update` Update the properties of a purchase order version already
+  in ledger state.
 
 ## Examples
 
@@ -378,8 +387,7 @@ Permissions:
 
 Name: TheGeneralStore.Admin
 Permissions:
-    - po::sellerconfirm
-    - po::sellermodify
+    - po::seller
 Allowed _organizations: [ ]
 Inherit_from: [ ]
 ```
@@ -455,12 +463,12 @@ organization defined by the XML in the purchase order's `order_xml_v3_4` field.
 accepted
 - `versions` - A list of different purchase order versions
 - `created_at` - When the document was created in seconds since January 1, 1970
-- `workflow_type` - Indicates the workflow the purchase order belongs to
+- `workflow_id` - Indicates the workflow the purchase order belongs to
 
 ```protobuf
 message PurchaseOrder {
-  required string uid = 1;
-  required string workflow_state = 2;
+  string uid = 1;
+  string workflow_state = 2;
   string buyer_org_id = 3;
   string seller_org_id = 4;
   repeated PurchaseOrderVersion versions = 5;
@@ -468,7 +476,17 @@ message PurchaseOrder {
   repeated PurchaseOrderAlternateId alternate_ids = 7;
   uint64 created_at = 8;
   bool is_closed = 9;
-  string workflow_type = 10;
+  string workflow_id = 10;
+}
+```
+
+### PurchaseOrderList
+
+`PurchaseOrderList` represents a list of purchase orders.
+
+```protobuf
+message PurchaseOrderList {
+  repeated PurchaseOrder purchase_orders = 1;
 }
 ```
 
@@ -487,7 +505,7 @@ message PurchaseOrderVersion {
   string version_id = 1;
   string workflow_state = 2;
   bool is_draft = 3;
-  string current_revision_id = 4;
+  uint64 current_revision_id = 4;
   repeated PurchaseOrderRevision revisions = 5;
 }
 ```
@@ -499,7 +517,7 @@ the revision was created, and the public key of the submitter.
 
 ```protobuf
 message PurchaseOrderRevision {
-  string revision_id = 1;
+  uint64 revision_id = 1;
   string submitter = 2;
   uint64 created_at = 3;
 
@@ -522,6 +540,17 @@ message PurchaseOrderAlternateId {
   string id_type = 1;
   string id = 2;
   string po_uid = 3;
+}
+```
+
+### PurchaseOrderAlternateIdList
+
+`PurhcaseOrderAlternateIdList` represents a list of puchase order alternate
+IDs.
+
+```protobuf
+message PurchaseOrderAlternateIdList {
+  repeated PurchaseOrderAlternateId alternate_ids = 1;
 }
 ```
 
@@ -568,8 +597,9 @@ message PurchaseOrderPayload {
   enum Action {
     UNSET_ACTION = 0;
     CREATE_PO = 1;
-    CREATE_VERSION = 2;
-    UPDATE_VERSION = 3;
+    UPDATE_PO = 2;
+    CREATE_VERSION = 3;
+    UPDATE_VERSION = 4;
   }
   Action action = 1;
   uint64 timestamp = 2;
@@ -588,6 +618,7 @@ message CreatePurchaseOrderPayload {
   string workflow_state = 5;
   repeated PurchaseOrderAlternateId alternate_ids = 6;
   CreateVersionPayload create_version_payload = 7;
+  string workflow_id = 8;
 }
 
 message UpdatePurchaseOrderPayload {
@@ -596,6 +627,7 @@ message UpdatePurchaseOrderPayload {
   bool is_closed = 3;
   string accepted_version_number = 4;
   repeated PurchaseOrderAlternateId alternate_ids = 5;
+  repeated UpdateVersionPayload version_updates = 6;
 }
 
 message CreateVersionPayload {
@@ -615,7 +647,7 @@ message UpdateVersionPayload {
 }
 
 message PayloadRevision {
-  string revision_id = 1;
+  uint64 revision_id = 1;
   string submitter = 2;
   uint64 created_at = 3;
 
@@ -637,6 +669,7 @@ Validation Requirements:
 - The `seller_org_id` must exist in Pike for it be a valid transaction
 - The `create_version_payload`, if included, must be valid according to the
 `CreateVersionPayload` validation rules
+- The `workflow_id` must refer to an existing workflow
 
 Inputs:
 
@@ -649,8 +682,10 @@ Address of Grid Purchase Order `621dee06`
 
 ### Update Purchase Order Payload
 
-`UpdatePurchaseOrderPayload` updates a purchase order's closed state,
-`workflow_state`, or `accepted_version_number`.
+`UpdatePurchaseOrderPayload` updates a purchase order's `is_closed` state,
+`workflow_state`, or `accepted_version_number`. It can also contain one or more
+`UpdateVersionPayload`s for updates that require simultaneous changes to the
+purchase order and one or more of its versions.
 
 Validation Requirements:
 - The signer must be a Pike agent
