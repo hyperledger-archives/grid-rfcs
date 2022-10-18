@@ -1,3 +1,5 @@
+**Active maintainers**
+
 | Name | GitHub |
 | --- | --- |
 | Adeeb Ahmed | adeebahmed |
@@ -5,10 +7,16 @@
 | Dan Middleton | dcmiddle |
 | Darian Plumb | dplumb94 |
 | Dave Cecchi | davececchi |
-| Gena Morgan | genasmorgan |
 | James Mitchell | jsmitchell |
 | Jason Walker | desktophero |
+| Shawn Amundson | vaporos |
+
+**Emeritus maintainers**
+
+| Name | GitHub |
+| --- | --- |
+| Gena Morgan | genasmorgan |
 | Matt Perron | MattP007 |
 | Melanie Nuce | auntmelmel |
 | Peter Schwarz | peterschwarz |
-| Shawn Amundson | vaporos |
+
