@@ -15,12 +15,12 @@
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
   name: grid-rfcs
-  description: Feature proposal RFCs for Hyperledger Grid
-  homepage: https://github.com/hyperledger/grid
+  description: Grid has moved to end-of-life status.
   private: false
   has_issues: true
   has_projects: false
   has_wiki: false
+  archived: true
   has_downloads: false
   default_branch: main
   allow_squash_merge: false
